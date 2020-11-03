@@ -1,12 +1,18 @@
 import { Request, Response } from "express";
-import { TestApi } from "../controllers/testApi.controller";
+import { MuralController } from "../controllers/mural.controller";
 
 export class Routes {
-  public testApi: TestApi = new TestApi();
+  public muralController: MuralController = new MuralController();
 
   public routes(app: any): void {
-    app.route("/").get(this.testApi.index);
+    app
+      .route("/mural")
+      .get(this.muralController.index)
+      .post(this.muralController.create);
 
-    app.route("/testapi").get(this.testApi.index);
+    app
+      .route("/mural/:id")
+      .get(this.muralController.show)
+      .put(this.muralController.update);
   }
 }

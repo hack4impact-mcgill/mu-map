@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "start": "nodemon ./src/server.ts",
-    "build" : "tsc --project ./"
+    "build": "tsc --project ./"
   },
   "author": "",
   "license": "ISC",
