@@ -4,14 +4,14 @@ import { UpdateOptions } from "sequelize";
 
 export class MuralController {
 
-  // /mural
+  // GET /mural
   public index(req: Request, res: Response) {
     res.json({
       message: "Hello from the mural controller.",
     });
   }
 
-  // /mural
+  // POST /mural
   public create(req: Request, res:  Response) {
     const params: MuralInterface = req.body;
 
@@ -20,7 +20,7 @@ export class MuralController {
     .catch((err: Error) => res.status(500).json(err));
   }
 
-  // /mural/:id     returns mural by id
+  // GET /mural/:id     returns mural by id
   public show(req: Request, res: Response) {
     const muralId: number = Number(req.params.id);
 
@@ -35,14 +35,13 @@ export class MuralController {
       .catch((err: Error) => res.status(500).json(err));
   }
 
-  // /mural/:id   update "name" of mural by id
+  // PUT /mural/:id   update properties of a mural by id
   public update(req: Request, res: Response) {
     const muralId: number = Number(req.params.id);
     const params: MuralInterface = req.body;
 
     const update: UpdateOptions = {
-      where: { id: muralId },
-      limit: 1,
+      where: { id: muralId }
     };
 
     //TODO first check if that id exists
