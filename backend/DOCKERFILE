@@ -2,6 +2,7 @@
 # To use: 
 #   'docker build -t eg_postgresql . '
 #   'docker run --rm -P -p 5301:5432 --name pg_test eg_postgresql'
+#    Next two lines are if you want to test manually connecting to the database, so not required:
 #    If you are running docker toolbox, run 'docker-machine ip' and note the result.
 #   'psql -h <host> -p 5301 -d docker -U docker --password' , but replace <host> with docker-machine ip result, otherwise localhost.
 #
