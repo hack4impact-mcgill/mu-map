@@ -4,12 +4,14 @@ import { UpdateOptions } from "sequelize";
 
 export class MuralController {
 
+  // /mural
   public index(req: Request, res: Response) {
     res.json({
-      message: "hello hello hello!!!!",
+      message: "Hello from the mural controller.",
     });
   }
 
+  // /mural
   public create(req: Request, res:  Response) {
     const params: MuralInterface = req.body;
 
@@ -18,9 +20,8 @@ export class MuralController {
     .catch((err: Error) => res.status(500).json(err));
   }
 
-  //function to return mural by id
+  // /mural/:id     returns mural by id
   public show(req: Request, res: Response) {
-    // todo add middleware to route so this comes in as number, or add another check?
     const muralId: number = Number(req.params.id);
 
     Mural.findByPk<Mural>(muralId)
@@ -34,9 +35,8 @@ export class MuralController {
       .catch((err: Error) => res.status(500).json(err));
   }
 
-  //function to update "name" of mural by id
+  // /mural/:id   update "name" of mural by id
   public update(req: Request, res: Response) {
-    // todo add middleware to route so this comes in as number, or add another check?
     const muralId: number = Number(req.params.id);
     const params: MuralInterface = req.body;
 
@@ -44,6 +44,8 @@ export class MuralController {
       where: { id: muralId },
       limit: 1,
     };
+
+    //TODO first check if that id exists
 
     Mural.update(params, update)
       .then(() => res.status(202).json({ data: "successfully updated" }))

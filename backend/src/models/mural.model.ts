@@ -1,6 +1,9 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 import { database } from "../config/database";
 
+// Example of how to make a model with the sequelize ORM.
+// Obviously we will have to scrap / modify this as the requirements get clearer.
+
 export class Mural extends Model {
   public id!: number;
   public name!: string;
