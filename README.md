@@ -16,12 +16,14 @@ A cross-platform mobile app for Montrealers and visitors to explore murals and f
 - Xin Rui Li
 - Ted Spare
 
-### How To Use
-- (Work in progress but will clean this up)
+### How To Set Up Backend
 - Ensure you have npm and docker installed.
 - Run 'npm install' inside backend folder.
 - Run 'docker build -t eg_postgresql . ' to build the psql image.
-- Run 'docker run --rm -P -p 5301:5432 --name pg_test eg_postgresql' to start the container.
-- Inside of database.ts, the host has to be the result of running 'docker-machine ip' if you're on docker toolbox, 
-otherwise localhost should work fine (untested).
-- Finally, run 'npm start', and the basic api should be functional and connected to the database.
+- Run 'docker run --rm -P -p 5301:5432 --name pg_dev eg_postgresql' to start the container.
+- Create a file called '.env' in the backend root and copy the contents of '.sample-env' in it. NOTE: if you are running the (deprecated) docker
+toolbox instead of docker desktop, type 'docker-machine ip' into your command line, and paste the output into your DB_HOST .env variable.
+
+### How To Run Backend
+- Make sure docker is running and the postgres container exists (which was created in the previous section).
+- Run "npm start". You should see some output about the database tables being created. You are ready to work with the API.
