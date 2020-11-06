@@ -21,72 +21,71 @@ export class Mural extends Model {
 }
 
 Mural.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: {
-        type: new DataTypes.STRING(128),
-        allowNull: false,
-      },
-      artist: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      year: {
-        type: DataTypes.SMALLINT,
-        allowNull: false
-      },
-      address: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      city: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      borough: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      neighbourhood: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      partners: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
-        allowNull: true
-      },
-      assistants: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
-        allowNull: true
-      },
-
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      tableName: "murals",
-      sequelize: database, // this determines the DB you will connect to.
-    }
-  );
-  
-  Mural.sync({ force: true }).then(() => console.log("Mural table created"));
-
-  // this defines what we can see through api calls
-  export interface MuralInterface {
-      name: string;
-      artist: string,
-      year: number;
-      address: string;
-      city: string;
-      borough?: string;
-      neighbourhood?: string;
-      description?: string;
-      partners?: string[];
-      assistants?: string[]
+    name: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    artist: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    year: {
+      type: DataTypes.SMALLINT,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    borough: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    neighbourhood: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    partners: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true,
+    },
+    assistants: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true,
+    },
+  },
+  {
+    tableName: "murals",
+    sequelize: database, // this determines the DB you will connect to.
   }
+);
+
+Mural.sync({ force: true }).then(() => console.log("Mural table created"));
+
+// this defines what we can see through api calls
+export interface MuralInterface {
+  name: string;
+  artist: string;
+  year: number;
+  address: string;
+  city: string;
+  borough?: string;
+  neighbourhood?: string;
+  description?: string;
+  partners?: string[];
+  assistants?: string[];
+}

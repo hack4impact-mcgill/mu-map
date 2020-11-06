@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { Mural, MuralInterface } from "../models/mural.model"
+import { Mural, MuralInterface } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
 
 export class MuralController {
-
   // GET /mural
   public index(req: Request, res: Response) {
     res.json({
@@ -12,12 +11,12 @@ export class MuralController {
   }
 
   // POST /mural
-  public create(req: Request, res:  Response) {
+  public create(req: Request, res: Response) {
     const params: MuralInterface = req.body;
 
     Mural.create<Mural>(params)
-    .then((mural: Mural) => res.status(201).json(mural))
-    .catch((err: Error) => res.status(500).json(err));
+      .then((mural: Mural) => res.status(201).json(mural))
+      .catch((err: Error) => res.status(500).json(err));
   }
 
   // GET /mural/:id     returns mural by id
@@ -41,7 +40,7 @@ export class MuralController {
     const params: MuralInterface = req.body;
 
     const update: UpdateOptions = {
-      where: { id: muralId }
+      where: { id: muralId },
     };
 
     //TODO first check if that id exists
