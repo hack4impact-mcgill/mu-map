@@ -27,3 +27,4 @@ toolbox instead of docker desktop, type 'docker-machine ip' into your command li
 ### How To Run Backend
 - Make sure docker is running and the postgres container exists (which was created in the previous section).
 - Run "npm start". You should see some output about the database tables being created. You are ready to work with the API.
+- Run "npm t" to run unit tests. It will show a sql error at start which is a known issue, but the unit tests should pass.

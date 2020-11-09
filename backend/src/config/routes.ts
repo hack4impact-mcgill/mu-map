@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { MuralController } from "../controllers/mural.controller";
+import { Application } from "express";
 
 export class Routes {
   public muralController: MuralController = new MuralController();
 
-  public routes(app: any): void {
+  public routes(app: Application): void {
     app
       .route("/mural")
       .get(this.muralController.index)
