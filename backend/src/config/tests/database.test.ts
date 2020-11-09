@@ -2,9 +2,9 @@ import { database } from "../database";
 import { Mural } from "../../models/mural.model";
 
 beforeAll(async () => {
-    //TODO need serious help how to eliminate errors from this line...
-    await database.sync();
-})
+  //TODO need serious help how to eliminate errors from this line...
+  await database.sync();
+});
 
 test("create mural", async () => {
   expect.assertions(1);
