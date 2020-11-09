@@ -3,7 +3,6 @@ import {Mural} from "../../models/mural.model"
 
 beforeAll(async () => {
     //TODO need serious help how to eliminate errors from this line...
-    //could it be due to outdated postgres version?
     await database.sync();
 })
 
