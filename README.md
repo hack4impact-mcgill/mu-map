@@ -4,7 +4,7 @@ _For MU MTL's 15th anniversary_ 🎉
 A cross-platform mobile app for Montrealers and visitors to explore murals and follow pre-determined routes.
 
 ### Developers
-- Lin Xiao Zhang
+- Lin Xiao Zheng
 - Tony Ou
 - Gabriel Paquette
 - Jacek Dziewonski
@@ -12,7 +12,7 @@ A cross-platform mobile app for Montrealers and visitors to explore murals and f
 - Yi Fang Yuan
 - Sophearah Suy-Puth
 - Pauline Swen
-- Blanche
+- Blanche Francheterre
 - Xin Rui Li
 - Ted Spare
 
