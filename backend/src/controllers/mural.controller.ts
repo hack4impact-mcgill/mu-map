@@ -27,7 +27,7 @@ export class MuralController {
       res.status(202).json(mural)
     } catch (e) {
       if (e instanceof EmptyResultError) {
-        res.status(404).json(e)
+        res.status(404).json({ error: "Mural not found by id!" })
       }
       res.status(500).json(e)
     }
@@ -42,7 +42,7 @@ export class MuralController {
       res.status(202).json({ data: "successfully updated" });
     } catch (e) {
       if (e instanceof EmptyResultError) {
-        res.status(404).json(e)
+        res.status(404).json({ error: "Mural not found by id!" })
       }
       res.status(500).json(e)
     }
