@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
 
 // Example of how to make a model with the sequelize ORM.

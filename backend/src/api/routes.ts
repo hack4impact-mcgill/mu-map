@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { MuralController } from "../controllers/mural.controller";
 import { Application } from "express";
 
@@ -8,12 +7,11 @@ export class Routes {
   public routes(app: Application): void {
     app
       .route("/mural")
-      .get(this.muralController.index)
-      .post(this.muralController.create);
+      .post(this.muralController.create.bind(this.muralController));
 
     app
       .route("/mural/:id")
-      .get(this.muralController.show)
-      .put(this.muralController.update);
+      .get(this.muralController.show.bind(this.muralController))
+      .put(this.muralController.update.bind(this.muralController));
   }
 }

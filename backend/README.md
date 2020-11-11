@@ -1,6 +1,7 @@
 ### Basic overview
 - The Dockerfile is to help you create a containerized version of the PostresSQL database. Basically, it makes setup easier, and it makes sure the database works the same way for everyone.
 - The 'models' folder will contain objects representing all of our SQL entities and relationships. The 'sequelize' ORM handles translating this typescript code into SQL operations for us.
-- The 'controllers' folder contains classes that map our API endpoints to database operations and executions of business logic.
+-The 'services' folder is where all the classes and functions that perform business logic will go. These will be invoked by the 'controller' classes. Do not handle anything related to HTTP/API in here. Note: Right now, we are letting any exceptions go unhandled in the service layer, but they are caught in the controller layer.
+- The 'controllers' folder contains classes that map our API endpoints to the previously mentioned services. However, the purpose of the controller layer is to handle and validate HTTP requests, and to formulate a HTTP response based on the results of the service execution. Remember to always check for errors.
 - 'routes.ts' defines our API endpoints, and their HTTP methods. These will execute controller methods.
 - 'config/tests' contains some example unit tests, in this case example persistence tests for basic database operations. The important thing to keep in mind with unit tests is that they should be testing small, individual components of code, but not how the different systems interact. We can discuss if we  want one big test folder, or if we want to keep tests in the directory of what is being tested.
