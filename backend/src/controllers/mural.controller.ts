@@ -28,7 +28,9 @@ export class MuralController {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Mural not found by id!" })
       }
-      res.status(500).json(e);
+      else {
+        res.status(500).json(e);
+      }
     }
   }
 
@@ -43,7 +45,9 @@ export class MuralController {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Mural not found by id!" })
       }
-      res.status(500).json(e);
+      else {
+        res.status(500).json(e);
+      }
     }
   }
 }
