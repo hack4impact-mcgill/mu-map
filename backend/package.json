@@ -4,7 +4,7 @@
   "description": "Backend for mu map",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
     "start": "cross-env NODE_ENV=dev nodemon ./src/server.ts",
     "build": "tsc --project ./"
   },
