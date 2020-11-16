@@ -30,11 +30,52 @@ test("create mural", async () => {
   expect(mural.id).toEqual(1);
 });
 
+test("create mural wrong foreign key", async () => {
+    expect.assertions(1);
+    const params = {
+      name: "testmural",
+      BoroughId: "2",
+      ArtistId: "1",
+      year: 1234,
+      city: "montreal",
+      address: "1234 street",
+      partners: ["partner 1", "partner 2"],
+    };
+    await expect(Mural.create<Mural>(params)).rejects.toEqual(expect.any(Error))
+  });
+
+
+  test("create mural missing foreign key", async () => {
+    expect.assertions(1);
+    const params = {
+      name: "testmural",
+      ArtistId: "1",
+      year: 1234,
+      city: "montreal",
+      address: "1234 street",
+      partners: ["partner 1", "partner 2"],
+    };
+    await expect(Mural.create<Mural>(params)).rejects.toEqual(expect.any(Error))
+  });
+
 test("get mural", async () => {
-  //TODO
+  expect.assertions(3);
+  const mural = await Mural.findByPk(1);
+  expect(mural).not.toEqual(null);
+  expect(mural!.id).toEqual(1);
+  expect(mural!.name).toEqual("testmural");
 });
 
-//TODO: more tests for other fucntions and edge cases
+test("delete cascade", async () => {
+    Borough.destroy({
+        where : {
+            id : 1
+        }
+    })
+    expect(Mural.findByPk(1)).rejects
+})
+
+//TODO can we think of more tests to make sure our database works as expected?
 
 afterAll(async () => {
   await database.close();

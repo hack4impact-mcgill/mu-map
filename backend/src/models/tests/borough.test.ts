@@ -24,6 +24,8 @@ test("get borough", async () => {
   expect(artist!.name).toEqual("test");
 });
 
+//TODO can we think of more tests to make sure our database works as expected?
+
 afterAll(async () => {
   await database.close();
 });

@@ -1,6 +1,5 @@
 import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
-import { Mural } from "./mural.model";
 
 export class Artist extends Model {
     public id!: number;

@@ -67,10 +67,10 @@ Mural.init(
 );
 
 // name of foreign key column is "ArtistId"
-Mural.belongsTo(Artist)
+Mural.belongsTo(Artist,{ foreignKey: { allowNull: false }})
 
 //name of foreign key column is "BoroughId"
-Mural.belongsTo(Borough)
+Mural.belongsTo(Borough,{ foreignKey: { allowNull: false }})
 
 // this defines what we can see through api calls
 export interface MuralInterface {
