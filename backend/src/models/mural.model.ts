@@ -1,5 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
+import { Artist } from "./artist.model";
+import {Borough} from "./borough.model"
 
 // Example of how to make a model with the sequelize ORM.
 // Obviously we will have to scrap / modify this as the requirements get clearer.
@@ -7,11 +9,9 @@ import { database } from "../config/database";
 export class Mural extends Model {
   public id!: number;
   public name!: string;
-  public artist!: string;
   public year!: number;
   public address!: string;
   public city!: string;
-  public borough!: string;
   public neighbourhood!: string;
   public description!: string;
   public partners!: string[];
@@ -31,10 +31,6 @@ Mural.init(
       type: new DataTypes.STRING(128),
       allowNull: false,
     },
-    artist: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
     year: {
       type: DataTypes.SMALLINT,
       allowNull: false,
@@ -46,10 +42,6 @@ Mural.init(
     city: {
       type: DataTypes.TEXT,
       allowNull: false,
-    },
-    borough: {
-      type: DataTypes.TEXT,
-      allowNull: true,
     },
     neighbourhood: {
       type: DataTypes.TEXT,
@@ -74,16 +66,20 @@ Mural.init(
   }
 );
 
-Mural.sync({ force: true }).then(() => console.log("Mural table created"));
+// name of foreign key column is "ArtistId"
+Mural.belongsTo(Artist)
+
+//name of foreign key column is "BoroughId"
+Mural.belongsTo(Borough)
 
 // this defines what we can see through api calls
 export interface MuralInterface {
   name: string;
-  artist: string;
+  ArtistId: number;
   year: number;
   address: string;
   city: string;
-  borough?: string;
+  BoroughId: number;
   neighbourhood?: string;
   description?: string;
   partners?: string[];
