@@ -2,7 +2,7 @@ import { Borough } from "../borough.model";
 import { database } from "../../config/database";
 
 beforeAll(async () => {
-  await Borough.sync({force: true});
+  await Borough.sync({ force: true });
 });
 
 test("create borough", async () => {

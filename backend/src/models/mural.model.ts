@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
 import { Artist } from "./artist.model";
-import {Borough} from "./borough.model"
+import { Borough } from "./borough.model";
 
 // Example of how to make a model with the sequelize ORM.
 // Obviously we will have to scrap / modify this as the requirements get clearer.
@@ -67,10 +67,10 @@ Mural.init(
 );
 
 // name of foreign key column is "ArtistId"
-Mural.belongsTo(Artist,{ foreignKey: { allowNull: false }})
+Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
 
 //name of foreign key column is "BoroughId"
-Mural.belongsTo(Borough,{ foreignKey: { allowNull: false }})
+Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
 
 // this defines what we can see through api calls
 export interface MuralInterface {

@@ -16,9 +16,9 @@ class App {
     this.routePrv.routes(this.app);
     //make sure models sync in correct order
     //todo: encapsulate this logic in a class or function, since we don't want force: true in production
-    Borough.sync({ force: true })
-    Artist.sync({ force: true })
-    Mural.sync({ force: true })
+    Borough.sync({ force: true });
+    Artist.sync({ force: true });
+    Mural.sync({ force: true });
   }
 
   private config(): void {

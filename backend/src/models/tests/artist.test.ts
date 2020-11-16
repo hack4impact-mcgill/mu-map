@@ -2,7 +2,7 @@ import { Artist } from "../artist.model";
 import { database } from "../../config/database";
 
 beforeAll(async () => {
-  await Artist.sync({force: true});
+  await Artist.sync({ force: true });
 });
 
 test("create artist", async () => {
