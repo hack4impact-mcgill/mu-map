@@ -5,6 +5,8 @@ import { Artist } from "../artist.model";
 
 beforeAll(async () => {
   //order is important as mural relies on the other 2
+  await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
+  await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
   await Borough.sync({ force: true });
   await Artist.sync({ force: true });
   await Mural.sync({ force: true });
@@ -66,12 +68,11 @@ test("get mural", async () => {
 });
 
 test("delete cascade", async () => {
-  Borough.destroy({
+  await expect(Borough.destroy({
     where: {
       id: 1,
     },
-  });
-  expect(Mural.findByPk(1)).rejects;
+  })).rejects.toEqual(expect.any(Error));
 });
 
 //TODO can we think of more tests to make sure our database works as expected?
