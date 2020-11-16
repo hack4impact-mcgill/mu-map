@@ -10,13 +10,13 @@ MuralsInCollection.init(
   {
     muralId: {
       type: DataTypes.INTEGER,
-      references : {model : "murals", key : "id"},
-      onDelete: 'CASCADE',
+      references: { model: "murals", key: "id" },
+      onDelete: "CASCADE",
     },
     collectionId: {
-        type: DataTypes.INTEGER,
-        references : {model : "muralcollections", key : "id"},
-        onDelete: 'CASCADE',
+      type: DataTypes.INTEGER,
+      references: { model: "muralcollections", key: "id" },
+      onDelete: "CASCADE",
     },
   },
   {
@@ -26,6 +26,6 @@ MuralsInCollection.init(
 );
 
 export interface MuralsInCollectionInterface {
-  muralId: number,
-  collectionId: number,
+  muralId: number;
+  collectionId: number;
 }
