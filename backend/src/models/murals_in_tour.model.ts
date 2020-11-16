@@ -10,13 +10,13 @@ MuralsInTour.init(
   {
     muralId: {
       type: DataTypes.INTEGER,
-      references : {model : "murals", key : "id"},
-      onDelete: 'CASCADE',
+      references: { model: "murals", key: "id" },
+      onDelete: "CASCADE",
     },
     tourId: {
-        type: DataTypes.INTEGER,
-        references : {model : "tours", key : "id"},
-        onDelete: 'CASCADE',
+      type: DataTypes.INTEGER,
+      references: { model: "tours", key: "id" },
+      onDelete: "CASCADE",
     },
   },
   {
@@ -26,6 +26,6 @@ MuralsInTour.init(
 );
 
 export interface MuralsInTourInterface {
-  muralId: number,
-  tourId: number,
+  muralId: number;
+  tourId: number;
 }

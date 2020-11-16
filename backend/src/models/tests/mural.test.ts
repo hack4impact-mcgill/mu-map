@@ -68,11 +68,13 @@ test("get mural", async () => {
 });
 
 test("ensure foreign key constraint", async () => {
-  await expect(Borough.destroy({
-    where: {
-      id: 1,
-    },
-  })).rejects.toEqual(expect.any(Error));
+  await expect(
+    Borough.destroy({
+      where: {
+        id: 1,
+      },
+    })
+  ).rejects.toEqual(expect.any(Error));
 });
 
 //TODO can we think of more tests to make sure our database works as expected?
