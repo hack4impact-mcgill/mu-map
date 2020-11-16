@@ -1,10 +1,9 @@
-
 import { Borough } from "./borough.model";
 import { Artist } from "./artist.model";
 import { Tour } from "./tour.model";
 import { Mural } from "./mural.model";
 import { MuralCollection } from "./muralcollection.model";
-import {database} from "../config/database"
+import { database } from "../config/database";
 
 export class AssociationSetup {
     public async sync() {
@@ -29,7 +28,7 @@ export class AssociationSetup {
         database.sync({force:true})
     }
 
-    public close() {
-        database.close()
-    }
+  public close() {
+    database.close();
+  }
 }

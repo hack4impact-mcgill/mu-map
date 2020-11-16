@@ -2,10 +2,10 @@ import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
 
 export class MuralCollection extends Model {
-    public id!: number;
-    public name!: string;
-    public description!: string;
-  }
+  public id!: number;
+  public name!: string;
+  public description!: string;
+}
 
 MuralCollection.init(
   {
@@ -21,17 +21,15 @@ MuralCollection.init(
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    }
-  }
-  ,
+    },
+  },
   {
     tableName: "muralcollections",
     sequelize: database, // this determines the DB you will connect to.
   }
-)
- 
+);
 
 export interface MuralCollectionInterface {
-  name: string,
+  name: string;
   description: string;
 }
