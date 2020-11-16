@@ -67,7 +67,7 @@ test("get mural", async () => {
   expect(mural!.name).toEqual("testmural");
 });
 
-test("delete cascade", async () => {
+test("ensure foreign key constraint", async () => {
   await expect(Borough.destroy({
     where: {
       id: 1,
