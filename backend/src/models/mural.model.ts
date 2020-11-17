@@ -7,11 +7,9 @@ import { database } from "../config/database";
 export class Mural extends Model {
   public id!: number;
   public name!: string;
-  public artist!: string;
   public year!: number;
   public address!: string;
   public city!: string;
-  public borough!: string;
   public neighbourhood!: string;
   public description!: string;
   public partners!: string[];
@@ -31,10 +29,6 @@ Mural.init(
       type: new DataTypes.STRING(128),
       allowNull: false,
     },
-    artist: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
     year: {
       type: DataTypes.SMALLINT,
       allowNull: false,
@@ -46,10 +40,6 @@ Mural.init(
     city: {
       type: DataTypes.TEXT,
       allowNull: false,
-    },
-    borough: {
-      type: DataTypes.TEXT,
-      allowNull: true,
     },
     neighbourhood: {
       type: DataTypes.TEXT,
@@ -74,16 +64,14 @@ Mural.init(
   }
 );
 
-Mural.sync({ force: true }).then(() => console.log("Mural table created"));
-
 // this defines what we can see through api calls
 export interface MuralInterface {
   name: string;
-  artist: string;
+  artistId: number;
   year: number;
   address: string;
   city: string;
-  borough?: string;
+  boroughId: number;
   neighbourhood?: string;
   description?: string;
   partners?: string[];
