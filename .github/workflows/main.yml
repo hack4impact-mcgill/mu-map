@@ -17,6 +17,6 @@ jobs:
       uses: creyD/prettier_action@v3.0
       with:
         # this formats all ts files everywhere, change it to just backend?
-        prettier_options: --write **/*.ts
+        dry: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
