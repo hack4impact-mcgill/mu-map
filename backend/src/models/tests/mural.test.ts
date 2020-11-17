@@ -7,7 +7,7 @@ beforeEach(async () => {
   //order is important as mural relies on the other 2
   await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
   await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
-  await database.sync({force : true})
+  await database.sync({ force: true });
   //we can assume the following lines work, they are tested in another test suite
   const artist = await Artist.create<Artist>({ name: "testartist" });
   const borough = await Borough.create<Borough>({ name: "testborough" });
