@@ -5,8 +5,12 @@ import { Artist } from "../artist.model";
 import { Tour } from "../tour.model";
 
 beforeAll(async () => {
-  await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
-  await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
+  await Mural.belongsTo(Borough, {
+    foreignKey: { allowNull: false, name: "boroughId" },
+  });
+  await Mural.belongsTo(Artist, {
+    foreignKey: { allowNull: false, name: "artistId" },
+  });
   Mural.belongsToMany(Tour, {
     foreignKey: "muralId",
     through: "murals_in_tour",
@@ -26,8 +30,8 @@ beforeEach(async () => {
   await Borough.create<Borough>({ name: "testborough" });
   const params = {
     name: "testmural",
-    BoroughId: "1",
-    ArtistId: "1",
+    boroughId: "1",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",
@@ -68,8 +72,8 @@ test("find tour associated with mural", async () => {
   const mural = await Mural.create<Mural>(
     {
       name: "testmural2",
-      BoroughId: "1",
-      ArtistId: "1",
+      boroughId: "1",
+      artistId: "1",
       year: 1234,
       city: "montreal",
       address: "1234 street",

@@ -3,10 +3,16 @@ import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
 
+beforeAll(async () => {
+  await Mural.belongsTo(Borough, {
+    foreignKey: { allowNull: false, name: "boroughId" },
+  });
+  await Mural.belongsTo(Artist, {
+    foreignKey: { allowNull: false, name: "artistId" },
+  });
+});
+
 beforeEach(async () => {
-  //order is important as mural relies on the other 2
-  await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
-  await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
   await database.sync({ force: true });
   //we can assume the following lines work, they are tested in another test suite
   const artist = await Artist.create<Artist>({ name: "testartist" });
@@ -17,8 +23,8 @@ test("create mural", async () => {
   expect.assertions(1);
   const params = {
     name: "testmural",
-    BoroughId: "1",
-    ArtistId: "1",
+    boroughId: "1",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",
@@ -34,8 +40,8 @@ test("create mural wrong foreign key", async () => {
   expect.assertions(1);
   const params = {
     name: "testmural",
-    BoroughId: "2",
-    ArtistId: "1",
+    boroughId: "2",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",
@@ -48,7 +54,7 @@ test("create mural missing foreign key", async () => {
   expect.assertions(1);
   const params = {
     name: "testmural",
-    ArtistId: "1",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",
@@ -61,8 +67,8 @@ test("get mural", async () => {
   expect.assertions(3);
   const params = {
     name: "testmural",
-    BoroughId: "1",
-    ArtistId: "1",
+    boroughId: "1",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",
@@ -81,8 +87,8 @@ test("ensure foreign key constraint", async () => {
   //make sure it doesnt let us destroy a borough while a mural points to it
   const params = {
     name: "testmural",
-    BoroughId: "1",
-    ArtistId: "1",
+    boroughId: "1",
+    artistId: "1",
     year: 1234,
     city: "montreal",
     address: "1234 street",

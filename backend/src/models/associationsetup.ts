@@ -7,8 +7,12 @@ import { database } from "../config/database";
 
 export class AssociationSetup {
   public async sync() {
-    Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
-    Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
+    Mural.belongsTo(Borough, {
+      foreignKey: { allowNull: false, name: "boroughId" },
+    });
+    Mural.belongsTo(Artist, {
+      foreignKey: { allowNull: false, name: "artistId" },
+    });
     Mural.belongsToMany(MuralCollection, {
       foreignKey: "muralId",
       through: "murals_in_collection",

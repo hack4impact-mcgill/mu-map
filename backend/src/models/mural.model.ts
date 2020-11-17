@@ -57,6 +57,14 @@ Mural.init(
       type: DataTypes.ARRAY(DataTypes.TEXT),
       allowNull: true,
     },
+    artistId: {
+      type: DataTypes.INTEGER,
+      references: { model: "artists", key: "id" },
+    },
+    boroughId: {
+      type: DataTypes.INTEGER,
+      references: { model: "boroughs", key: "id" },
+    },
   },
   {
     tableName: "murals",
