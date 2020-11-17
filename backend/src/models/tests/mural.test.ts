@@ -7,9 +7,7 @@ beforeAll(async () => {
   //order is important as mural relies on the other 2
   await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
   await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
-  await Borough.sync({ force: true });
-  await Artist.sync({ force: true });
-  await Mural.sync({ force: true });
+  await database.sync({force : true})
   //we can assume the following lines work, they are tested in another test suite
   const artist = await Artist.create<Artist>({ name: "testartist" });
   const borough = await Borough.create<Borough>({ name: "testborough" });
@@ -68,6 +66,7 @@ test("get mural", async () => {
 });
 
 test("ensure foreign key constraint", async () => {
+  //make sure it doesnt let us destroy a borough while a mural points to it
   await expect(
     Borough.destroy({
       where: {
