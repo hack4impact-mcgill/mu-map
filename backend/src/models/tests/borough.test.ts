@@ -21,7 +21,7 @@ test("get borough", async () => {
   const params = {
     name: "test",
   };
-  await Borough.create<Borough>(params)
+  await Borough.create<Borough>(params);
   const artist = await Borough.findByPk(1);
   expect(artist).not.toEqual(null);
   expect(artist!.id).toEqual(1);

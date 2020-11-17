@@ -58,7 +58,8 @@ test("create mural missing foreign key", async () => {
 });
 
 test("get mural", async () => {
-  expect.assertions(3);const params = {
+  expect.assertions(3);
+  const params = {
     name: "testmural",
     BoroughId: "1",
     ArtistId: "1",
