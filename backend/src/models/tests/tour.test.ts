@@ -35,27 +35,7 @@ beforeEach(async () => {
       };
     await Mural.create<Mural>(params)
   });
-  Tour.belongsToMany(Mural, {
-    foreignKey: "tourId",
-    through: "murals_in_tour",
-    as: "murals",
-  });
-  await database.sync({ force: true });
 
-  //we can assume the following lines work, they are tested in another test suite
-  const artist = await Artist.create<Artist>({ name: "testartist" });
-  const borough = await Borough.create<Borough>({ name: "testborough" });
-  const params = {
-    name: "testmural",
-    BoroughId: "1",
-    ArtistId: "1",
-    year: 1234,
-    city: "montreal",
-    address: "1234 street",
-    partners: ["partner 1", "partner 2"],
-  };
-  const mural = await Mural.create<Mural>(params);
-});
 
 test("create tour", async () => {
   expect.assertions(1);
@@ -83,16 +63,6 @@ test("create tour", async () => {
     expect(artist!.id).toEqual(1);
     expect(artist!.name).toEqual("testtour");
   });
-
-  test("find tour associated with mural", async () => {
-
-test("get tour", async () => {
-  expect.assertions(3);
-  const artist = await Tour.findByPk(1);
-  expect(artist).not.toEqual(null);
-  expect(artist!.id).toEqual(1);
-  expect(artist!.name).toEqual("testtour");
-});
 
 test("find tour associated with mural", async () => {
   //note how we create a new tour here at same time we create a new mural!
@@ -126,4 +96,4 @@ test("find tour associated with mural", async () => {
 
 afterAll(async () => {
   await database.close();
-});
+})
