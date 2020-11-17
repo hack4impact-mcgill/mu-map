@@ -7,13 +7,13 @@ import { AssociationSetup } from "./models/associationsetup";
 class App {
   public app: express.Application;
   public routePrv: Routes = new Routes();
-  public associationsetup: AssociationSetup = new AssociationSetup();
+  public associationSetup: AssociationSetup = new AssociationSetup();
 
   constructor() {
     this.app = express();
     this.config();
     this.routePrv.routes(this.app);
-    this.associationsetup.sync();
+    this.associationSetup.sync();
   }
   private config(): void {
     this.app.use(bodyParser.json());

@@ -67,11 +67,11 @@ Mural.init(
 // this defines what we can see through api calls
 export interface MuralInterface {
   name: string;
-  ArtistId: number;
+  artistId: number;
   year: number;
   address: string;
   city: string;
-  BoroughId: number;
+  boroughId: number;
   neighbourhood?: string;
   description?: string;
   partners?: string[];
