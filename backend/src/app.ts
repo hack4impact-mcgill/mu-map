@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import { Routes } from "./api/routes";
-import { AssociationSetup } from "./models/associationsetup";
+import { AssociationSetup } from "./models/associationSetup";
 
 class App {
   public app: express.Application;
