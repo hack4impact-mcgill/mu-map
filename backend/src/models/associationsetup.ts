@@ -20,12 +20,12 @@ export class AssociationSetup {
     Mural.belongsToMany(Tour, {
       foreignKey: "muralId",
       through: "murals_in_tour",
-      as: "tours"
+      as: "tours",
     });
     Tour.belongsToMany(Mural, {
       foreignKey: "tourId",
       through: "murals_in_tour",
-      as: "murals"
+      as: "murals",
     });
     database.sync({ force: true });
   }
