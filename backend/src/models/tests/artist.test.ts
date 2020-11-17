@@ -1,7 +1,7 @@
 import { Artist } from "../artist.model";
 import { database } from "../../config/database";
 
-beforeAll(async () => {
+beforeEach(async () => {
   await Artist.sync({ force: true });
 });
 
@@ -18,6 +18,10 @@ test("create artist", async () => {
 
 test("get artist", async () => {
   expect.assertions(3);
+  const params = {
+    name: "testartist",
+  };
+  await Artist.create<Artist>(params)
   const artist = await Artist.findByPk(1);
   expect(artist).not.toEqual(null);
   expect(artist!.id).toEqual(1);

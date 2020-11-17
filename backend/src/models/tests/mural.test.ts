@@ -3,7 +3,7 @@ import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
 
-beforeAll(async () => {
+beforeEach(async () => {
   //order is important as mural relies on the other 2
   await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
   await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
@@ -58,7 +58,18 @@ test("create mural missing foreign key", async () => {
 });
 
 test("get mural", async () => {
-  expect.assertions(3);
+  expect.assertions(3);const params = {
+    name: "testmural",
+    BoroughId: "1",
+    ArtistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
   const mural = await Mural.findByPk(1);
   expect(mural).not.toEqual(null);
   expect(mural!.id).toEqual(1);
@@ -67,6 +78,18 @@ test("get mural", async () => {
 
 test("ensure foreign key constraint", async () => {
   //make sure it doesnt let us destroy a borough while a mural points to it
+  const params = {
+    name: "testmural",
+    BoroughId: "1",
+    ArtistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
   await expect(
     Borough.destroy({
       where: {

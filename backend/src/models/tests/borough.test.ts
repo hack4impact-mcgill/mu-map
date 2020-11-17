@@ -1,7 +1,7 @@
 import { Borough } from "../borough.model";
 import { database } from "../../config/database";
 
-beforeAll(async () => {
+beforeEach(async () => {
   await Borough.sync({ force: true });
 });
 
@@ -18,6 +18,10 @@ test("create borough", async () => {
 
 test("get borough", async () => {
   expect.assertions(3);
+  const params = {
+    name: "test",
+  };
+  await Borough.create<Borough>(params)
   const artist = await Borough.findByPk(1);
   expect(artist).not.toEqual(null);
   expect(artist!.id).toEqual(1);

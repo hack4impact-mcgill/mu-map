@@ -3,10 +3,8 @@ import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
 import { Tour } from "../tour.model"
-import {MuralsInTour} from "../murals_in_tour.model"
 
 beforeAll(async () => {
-
     await Mural.belongsTo(Borough, { foreignKey: { allowNull: false } });
     await Mural.belongsTo(Artist, { foreignKey: { allowNull: false } });
     Mural.belongsToMany(Tour, {
@@ -19,11 +17,13 @@ beforeAll(async () => {
         through: "murals_in_tour",
         as: "murals"
         });
-    await database.sync({force : true})
+})
 
+beforeEach(async () => {
+    await database.sync({force : true})
     //we can assume the following lines work, they are tested in another test suite
-    const artist = await Artist.create<Artist>({ name: "testartist" });
-    const borough = await Borough.create<Borough>({ name: "testborough" });
+    await Artist.create<Artist>({ name: "testartist" });
+    await Borough.create<Borough>({ name: "testborough" });
     const params = {
         name: "testmural",
         BoroughId: "1",
@@ -33,7 +33,7 @@ beforeAll(async () => {
         address: "1234 street",
         partners: ["partner 1", "partner 2"],
       };
-      const mural = await Mural.create<Mural>(params)
+    await Mural.create<Mural>(params)
   });
 
   test("create tour", async () => {
@@ -50,6 +50,13 @@ beforeAll(async () => {
 
   test("get tour", async () => {
     expect.assertions(3);
+    const params = {
+        name: "testtour",
+        description: "asd"
+      };
+     await Tour.create<Tour>(params).catch((err: Error) =>
+      fail("Creating tour failed.")
+    );
     const artist = await Tour.findByPk(1);
     expect(artist).not.toEqual(null);
     expect(artist!.id).toEqual(1);
