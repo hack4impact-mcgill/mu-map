@@ -1,5 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import { DEFAULT_LONGITUDE, DEFAULT_LATITUDE, DEFAULT_ZOOM } from 'constants/constants';
 import './Map.css';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '';
@@ -19,9 +20,9 @@ class Map extends React.Component<IMapProps, IMapState> {
     constructor(props: IMapProps) {
         super(props);
         this.state = {
-            lng: -73.58,
-            lat: 45.51,
-            zoom: 10
+            lng: DEFAULT_LONGITUDE,
+            lat: DEFAULT_LATITUDE,
+            zoom: DEFAULT_ZOOM
         };
         this.mapContainer = '';
     }
