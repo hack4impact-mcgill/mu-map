@@ -6,4 +6,9 @@ export class TourService {
     const createdTour: Tour = await Tour.create<Tour>(tour);
     return { success: true, body: createdTour };
   }
+
+  public async get(tour: TourInterface){
+    const getTour: Tour = await Tour.get<Tour>(tour.name);
+    return { success: true, body: getTour };
+  }
 }

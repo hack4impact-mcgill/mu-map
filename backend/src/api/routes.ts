@@ -19,5 +19,9 @@ export class Routes {
     app
       .route("/route")
       .post(this.tourController.create.bind(this.tourController));
+
+    app
+      .route("/route")
+      .get(this.tourController.get.bind(this.tourController))
   }
 }
