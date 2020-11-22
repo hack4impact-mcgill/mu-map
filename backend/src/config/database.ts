@@ -9,7 +9,7 @@ export const database = new Sequelize(
     port: Number(process.env.DB_PORT) || 5301,
     dialect: "postgres",
     dialectOptions: {
-      ssl: process.env.DB_SSL == "true",
+      ssl: { require: process.env.DB_SSL == "true", rejectUnauthorized: false },
     },
   }
 );
