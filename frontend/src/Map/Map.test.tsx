@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import Map from './Map';
 
 test('renders learn react link', () => {
-  render(<App />);
-  expect(<App />).toBeInTheDocument();
+    render(<Map />);
+    expect(<Map />).toBeInTheDocument();
 });
