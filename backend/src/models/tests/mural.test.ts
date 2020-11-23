@@ -117,6 +117,8 @@ test("ensure foreign key constraint", async () => {
   ).rejects.toEqual(expect.any(Error));
 });
 
+// The sequelize functions on the mural side should not be used...
+// A mural should not "know" its tours, instead, add murals to tours / collections using their functions
 test("test virtual sequelize functions for tour association", async () => {
   const params = {
     name: "testmural",

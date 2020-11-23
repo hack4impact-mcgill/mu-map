@@ -16,10 +16,12 @@ export class AssociationSetup {
     Mural.belongsToMany(MuralCollection, {
       foreignKey: "muralId",
       through: "murals_in_collection",
+      as: "collections",
     });
     MuralCollection.belongsToMany(Mural, {
       foreignKey: "collectionId",
       through: "murals_in_collection",
+      as: "murals",
     });
     Mural.belongsToMany(Tour, {
       foreignKey: "muralId",
