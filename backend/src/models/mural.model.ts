@@ -1,9 +1,15 @@
-import { Model, DataTypes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  BelongsToManyCountAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+} from "sequelize";
 import { database } from "../config/database";
+import { Tour } from "./tour.model";
 
-// Example of how to make a model with the sequelize ORM.
-// Obviously we will have to scrap / modify this as the requirements get clearer.
-// Definitely consider making stuff like neighbourhood its own model, but idk if its required for what we need
 export class Mural extends Model {
   public id!: number;
   public name!: string;
@@ -16,6 +22,15 @@ export class Mural extends Model {
   public assistants!: string[];
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  //pure virtual functions so that typescript can detect sequelize's magical runtime association functions at compile time.
+  public getTours!: BelongsToManyGetAssociationsMixin<Tour>;
+  public addTours!: BelongsToManyAddAssociationMixin<Tour, number>;
+  public hasTour!: BelongsToManyHasAssociationMixin<Tour, number>;
+  public countTours!: BelongsToManyCountAssociationsMixin;
+  public createTour!: BelongsToManyCreateAssociationMixin<Tour>;
+
+  public readonly tours?: Tour[];
 }
 
 Mural.init(

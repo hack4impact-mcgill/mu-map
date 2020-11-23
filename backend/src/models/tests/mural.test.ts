@@ -2,6 +2,7 @@ import { database } from "../../config/database";
 import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
+import { Tour } from "../tour.model";
 
 beforeAll(async () => {
   await Mural.belongsTo(Borough, {
@@ -9,6 +10,16 @@ beforeAll(async () => {
   });
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
+  });
+  Mural.belongsToMany(Tour, {
+    foreignKey: "muralId",
+    through: "murals_in_tour",
+    as: "tours",
+  });
+  Tour.belongsToMany(Mural, {
+    foreignKey: "tourId",
+    through: "murals_in_tour",
+    as: "murals",
   });
 });
 
