@@ -19,13 +19,15 @@ test("create borough", async () => {
 test("get borough", async () => {
   expect.assertions(3);
   const params = {
-    name: "test",
+    name: "testborough",
   };
-  await Borough.create<Borough>(params);
+  await Borough.create<Borough>(params).catch((err: Error) =>
+    fail("Creating borough failed.")
+  );
   const artist = await Borough.findByPk(1);
   expect(artist).not.toEqual(null);
   expect(artist!.id).toEqual(1);
-  expect(artist!.name).toEqual("test");
+  expect(artist!.name).toEqual("testborough");
 });
 
 //TODO can we think of more tests to make sure our database works as expected?
