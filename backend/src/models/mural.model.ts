@@ -25,10 +25,9 @@ export class Mural extends Model {
 
   //pure virtual functions so that typescript can detect sequelize's magical runtime association functions at compile time.
   public getTours!: BelongsToManyGetAssociationsMixin<Tour>;
-  public addTours!: BelongsToManyAddAssociationMixin<Tour, number>;
+  public addTour!: BelongsToManyAddAssociationMixin<Tour, number>;
   public hasTour!: BelongsToManyHasAssociationMixin<Tour, number>;
   public countTours!: BelongsToManyCountAssociationsMixin;
-  public createTour!: BelongsToManyCreateAssociationMixin<Tour>;
 
   public readonly tours?: Tour[];
 }

@@ -117,6 +117,36 @@ test("ensure foreign key constraint", async () => {
   ).rejects.toEqual(expect.any(Error));
 });
 
+test("test virtual sequelize functions for tour association", async () => {
+  const params = {
+    name: "testmural",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  const mural = await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
+  const tourparams = {
+    name: "testtour",
+    description: "asd",
+  };
+  const tour = await Tour.create<Tour>(tourparams).catch((err: Error) =>
+    fail("Creating tour failed.")
+  );
+  await mural.addTour(1);
+  let tourarray = await mural.getTours();
+  let hasTour = await mural.hasTour(1);
+  let tourCnt = await mural.countTours();
+  expect(tourarray[0].name).toEqual("testtour");
+  expect(tourarray.length).toEqual(1);
+  expect(hasTour).toEqual(true);
+  expect(tourCnt).toEqual(1);
+});
+
 //TODO can we think of more tests to make sure our database works as expected?
 
 afterAll(async () => {
