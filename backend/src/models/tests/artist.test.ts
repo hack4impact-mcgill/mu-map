@@ -21,7 +21,9 @@ test("get artist", async () => {
   const params = {
     name: "testartist",
   };
-  await Artist.create<Artist>(params);
+  await Artist.create<Artist>(params).catch((err: Error) =>
+    fail("Creating artist failed.")
+  );
   const artist = await Artist.findByPk(1);
   expect(artist).not.toEqual(null);
   expect(artist!.id).toEqual(1);
