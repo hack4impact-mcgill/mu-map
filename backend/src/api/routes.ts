@@ -39,7 +39,12 @@ export class Routes {
       .put(this.artistController.update.bind(this.artistController));
 
     app
-      .route("/route")
+      .route("/tour")
       .post(this.tourController.create.bind(this.tourController));
+
+    app
+      .route("/tour/:id")
+      .get(this.tourController.show.bind(this.tourController))
+      .put(this.tourController.update.bind(this.tourController));
   }
 }
