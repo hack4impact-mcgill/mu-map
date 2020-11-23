@@ -28,4 +28,3 @@ export class TourService {
         return { success: true };
     }
 }
-

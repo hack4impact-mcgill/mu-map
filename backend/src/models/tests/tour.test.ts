@@ -95,7 +95,69 @@ test("find tour associated with mural", async () => {
   expect(tour!.name).toEqual("findme");
 });
 
-//TODO more tests!!
+test("associate already existing mural with tour", async () => {
+  const params = {
+    name: "testtour",
+    description: "asd",
+  };
+  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
+    fail("Creating tour failed.")
+  );
+  await tour.addMural(1);
+  let res = await tour.getMurals();
+  let res2 = await tour.hasMural(1);
+  let res3 = await tour.countMurals();
+  expect(res[0].name).toEqual("testmural");
+  expect(res.length).toEqual(1);
+  expect(res2).toEqual(true);
+  expect(res3).toEqual(1);
+
+  const mural = await Mural.create<Mural>({
+    name: "testmural2",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  });
+
+  await tour.addMural(2);
+  res = await tour.getMurals();
+  res2 = await tour.hasMural(2);
+  res3 = await tour.countMurals();
+  expect(res[1].name).toEqual("testmural2");
+  expect(res.length).toEqual(2);
+  expect(res2).toEqual(true);
+  expect(res3).toEqual(2);
+});
+
+test("create and associate new mural to tour", async () => {
+  const params = {
+    name: "testtour",
+    description: "asd",
+  };
+
+  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
+    fail("Creating tour failed.")
+  );
+  await tour.createMural({
+    name: "testmural123",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  });
+  let res = await tour.getMurals();
+  let res2 = await tour.hasMural(2);
+  let res3 = await tour.countMurals();
+  expect(res[0].name).toEqual("testmural123");
+  expect(res.length).toEqual(1);
+  expect(res2).toEqual(true);
+  expect(res3).toEqual(1);
+});
 
 afterAll(async () => {
   await database.close();
