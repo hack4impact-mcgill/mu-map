@@ -1,11 +1,13 @@
 import { MuralController } from "../controllers/mural.controller";
 import { BoroughController } from "../controllers/borough.controller";
+import { ArtistController } from "../controllers/artist.controller";
 import { TourController } from "../controllers/tour.controller";
 import { Application } from "express";
 
 export class Routes {
   public muralController: MuralController = new MuralController();
   public boroughController: BoroughController = new BoroughController();
+  public artistController: ArtistController = new ArtistController();
   public tourController: TourController = new TourController();
 
   public routes(app: Application): void {
@@ -26,6 +28,15 @@ export class Routes {
       .route("/borough/:id")
       .get(this.boroughController.show.bind(this.boroughController))
       .put(this.boroughController.update.bind(this.boroughController));
+
+    app
+      .route("/artist")
+      .post(this.artistController.create.bind(this.artistController));
+
+    app
+      .route("/artist/:id")
+      .get(this.artistController.show.bind(this.artistController))
+      .put(this.artistController.update.bind(this.artistController));
 
     app
       .route("/route")
