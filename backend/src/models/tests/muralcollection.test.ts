@@ -2,7 +2,7 @@ import { database } from "../../config/database";
 import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
-import { Tour } from "../tour.model";
+import { MuralCollection } from "../muralcollection.model";
 
 beforeAll(async () => {
   await Mural.belongsTo(Borough, {
@@ -11,14 +11,14 @@ beforeAll(async () => {
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
   });
-  await Mural.belongsToMany(Tour, {
+  await Mural.belongsToMany(MuralCollection, {
     foreignKey: "muralId",
-    through: "murals_in_tour",
-    as: "tours",
+    through: "murals_in_collection",
+    as: "collections",
   });
-  await Tour.belongsToMany(Mural, {
-    foreignKey: "tourId",
-    through: "murals_in_tour",
+  await MuralCollection.belongsToMany(Mural, {
+    foreignKey: "collectionId",
+    through: "murals_in_collection",
     as: "murals",
   });
 });
@@ -40,36 +40,36 @@ beforeEach(async () => {
   await Mural.create<Mural>(params);
 });
 
-test("create tour", async () => {
+test("create collection", async () => {
   expect.assertions(1);
   const params = {
-    name: "testtour",
+    name: "testcol",
     description: "asd",
   };
-  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
-    fail("Creating tour failed.")
-  );
-  expect(tour.id).toEqual(1);
+  const coll = await MuralCollection.create<MuralCollection>(
+    params
+  ).catch((err: Error) => fail("Creating collection failed."));
+  expect(coll.id).toEqual(1);
 });
 
-test("get tour", async () => {
+test("get collection", async () => {
   expect.assertions(3);
   const params = {
-    name: "testtour",
+    name: "testCollection",
     description: "asd",
   };
-  await Tour.create<Tour>(params).catch((err: Error) =>
-    fail("Creating tour failed.")
+  await MuralCollection.create<MuralCollection>(params).catch((err: Error) =>
+    fail("Creating collection failed.")
   );
-  const artist = await Tour.findByPk(1);
-  expect(artist).not.toEqual(null);
-  expect(artist!.id).toEqual(1);
-  expect(artist!.name).toEqual("testtour");
+  const collection = await MuralCollection.findByPk(1);
+  expect(collection).not.toEqual(null);
+  expect(collection!.id).toEqual(1);
+  expect(collection!.name).toEqual("testCollection");
 });
 
-test("find tour associated with mural", async () => {
+test("find collection associated with mural", async () => {
   expect.assertions(3);
-  //note how we create a new tour here at same time we create a new mural!
+  //note how we create a new collection here at same time we create a new mural!
   const mural = await Mural.create<Mural>(
     {
       name: "testmural2",
@@ -79,36 +79,36 @@ test("find tour associated with mural", async () => {
       city: "montreal",
       address: "1234 street",
       partners: ["partner 1", "partner 2"],
-      tours: [{ name: "findme", description: "asdasdasd2" }],
+      collections: [{ name: "findme", description: "asdasdasd2" }],
     },
     {
-      include: [{ model: Tour, as: "tours" }],
+      include: [{ model: MuralCollection, as: "collections" }],
     }
   );
 
-  const tour = await Tour.findOne({
+  const collection = await MuralCollection.findOne({
     where: {
       name: "findme",
     },
   });
-  expect(tour).not.toEqual(null);
-  expect(tour!.description).toEqual("asdasdasd2");
-  expect(tour!.name).toEqual("findme");
+  expect(collection).not.toEqual(null);
+  expect(collection!.description).toEqual("asdasdasd2");
+  expect(collection!.name).toEqual("findme");
 });
 
-test("associate already existing mural with tour", async () => {
+test("associate already existing mural with collection", async () => {
   expect.assertions(8);
   const params = {
-    name: "testtour",
+    name: "testCollection",
     description: "asd",
   };
-  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
-    fail("Creating tour failed.")
-  );
-  await tour.addMural(1);
-  let res = await tour.getMurals();
-  let res2 = await tour.hasMural(1);
-  let res3 = await tour.countMurals();
+  const collection = await MuralCollection.create<MuralCollection>(
+    params
+  ).catch((err: Error) => fail("Creating collection failed."));
+  await collection.addMural(1);
+  let res = await collection.getMurals();
+  let res2 = await collection.hasMural(1);
+  let res3 = await collection.countMurals();
   expect(res[0].name).toEqual("testmural");
   expect(res.length).toEqual(1);
   expect(res2).toEqual(true);
@@ -124,10 +124,10 @@ test("associate already existing mural with tour", async () => {
     partners: ["partner 1", "partner 2"],
   });
 
-  await tour.addMural(2);
-  res = await tour.getMurals();
-  res2 = await tour.hasMural(2);
-  res3 = await tour.countMurals();
+  await collection.addMural(2);
+  res = await collection.getMurals();
+  res2 = await collection.hasMural(2);
+  res3 = await collection.countMurals();
   expect(res[1].name).toEqual("testmural2");
   expect(res.length).toEqual(2);
   expect(res2).toEqual(true);
@@ -137,14 +137,14 @@ test("associate already existing mural with tour", async () => {
 test("create and associate new mural to tour", async () => {
   expect.assertions(4);
   const params = {
-    name: "testtour",
+    name: "testCollection",
     description: "asd",
   };
 
-  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
-    fail("Creating tour failed.")
-  );
-  await tour.createMural({
+  const collection = await MuralCollection.create<MuralCollection>(
+    params
+  ).catch((err: Error) => fail("Creating collection failed."));
+  await collection.createMural({
     name: "testmural123",
     boroughId: "1",
     artistId: "1",
@@ -153,9 +153,9 @@ test("create and associate new mural to tour", async () => {
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
   });
-  let res = await tour.getMurals();
-  let res2 = await tour.hasMural(2);
-  let res3 = await tour.countMurals();
+  let res = await collection.getMurals();
+  let res2 = await collection.hasMural(2);
+  let res3 = await collection.countMurals();
   expect(res[0].name).toEqual("testmural123");
   expect(res.length).toEqual(1);
   expect(res2).toEqual(true);
@@ -165,23 +165,23 @@ test("create and associate new mural to tour", async () => {
 test("remove associated mural", async () => {
   expect.assertions(4);
   const params = {
-    name: "testTour",
+    name: "testCollection",
     description: "asd",
   };
 
-  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
-    fail("Creating tour failed.")
-  );
+  const collection = await MuralCollection.create<MuralCollection>(
+    params
+  ).catch((err: Error) => fail("Creating collection failed."));
 
-  await tour.addMural(1);
-  let hasMural = await tour.hasMural(1);
-  let muralCnt = await tour.countMurals();
+  await collection.addMural(1);
+  let hasMural = await collection.hasMural(1);
+  let muralCnt = await collection.countMurals();
   expect(hasMural).toEqual(true);
   expect(muralCnt).toEqual(1);
 
-  await tour.removeMural(1);
-  hasMural = await tour.hasMural(1);
-  muralCnt = await tour.countMurals();
+  await collection.removeMural(1);
+  hasMural = await collection.hasMural(1);
+  muralCnt = await collection.countMurals();
   expect(hasMural).toEqual(false);
   expect(muralCnt).toEqual(0);
 });
