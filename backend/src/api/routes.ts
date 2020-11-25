@@ -21,7 +21,7 @@ export class Routes {
       .route("/mural/:id")
       .get(this.muralController.show.bind(this.muralController))
       .put(this.muralController.update.bind(this.muralController));
-      
+
     app
       .route("/borough")
       .post(this.boroughController.create.bind(this.boroughController));
@@ -50,7 +50,12 @@ export class Routes {
       .put(this.tourController.update.bind(this.tourController));
 
     app
-      .route("/collection")
+      .route("/collection/:muralids")
       .post(this.collectionController.create.bind(this.collectionController));
+
+    app
+      .route("/collection/:id")
+      .get(this.collectionController.show.bind(this.collectionController))
+      .put(this.collectionController.update.bind(this.collectionController));
   }
 }
