@@ -11,12 +11,12 @@ beforeAll(async () => {
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
   });
-  Mural.belongsToMany(Tour, {
+  await Mural.belongsToMany(Tour, {
     foreignKey: "muralId",
     through: "murals_in_tour",
     as: "tours",
   });
-  Tour.belongsToMany(Mural, {
+  await Tour.belongsToMany(Mural, {
     foreignKey: "tourId",
     through: "murals_in_tour",
     as: "murals",
@@ -95,6 +95,7 @@ test("get mural", async () => {
 });
 
 test("ensure foreign key constraint", async () => {
+  expect.assertions(1);
   //make sure it doesnt let us destroy a borough while a mural points to it
   const params = {
     name: "testmural",
@@ -117,7 +118,10 @@ test("ensure foreign key constraint", async () => {
   ).rejects.toEqual(expect.any(Error));
 });
 
+// The sequelize functions on the mural side should not be used...
+// A mural should not "know" its tours, instead, add murals to tours / collections using their functions
 test("test virtual sequelize functions for tour association", async () => {
+  expect.assertions(4);
   const params = {
     name: "testmural",
     boroughId: "1",

@@ -7,31 +7,33 @@ import { database } from "../config/database";
 
 export class AssociationSetup {
   public async sync() {
-    Mural.belongsTo(Borough, {
+    await Mural.belongsTo(Borough, {
       foreignKey: { allowNull: false, name: "boroughId" },
     });
-    Mural.belongsTo(Artist, {
+    await Mural.belongsTo(Artist, {
       foreignKey: { allowNull: false, name: "artistId" },
     });
-    Mural.belongsToMany(MuralCollection, {
+    await Mural.belongsToMany(MuralCollection, {
       foreignKey: "muralId",
       through: "murals_in_collection",
+      as: "collections",
     });
-    MuralCollection.belongsToMany(Mural, {
+    await MuralCollection.belongsToMany(Mural, {
       foreignKey: "collectionId",
       through: "murals_in_collection",
+      as: "murals",
     });
-    Mural.belongsToMany(Tour, {
+    await Mural.belongsToMany(Tour, {
       foreignKey: "muralId",
       through: "murals_in_tour",
       as: "tours",
     });
-    Tour.belongsToMany(Mural, {
+    await Tour.belongsToMany(Mural, {
       foreignKey: "tourId",
       through: "murals_in_tour",
       as: "murals",
     });
-    database.sync({ force: true });
+    await database.sync({ force: true });
   }
 
   public close() {
