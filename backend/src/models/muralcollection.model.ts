@@ -7,6 +7,7 @@ import {
   BelongsToManyCreateAssociationMixin,
   BelongsToManyGetAssociationsMixin,
   BelongsToManyHasAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
 } from "sequelize";
 import { Mural } from "./mural.model";
 import { database } from "../config/database";
@@ -22,6 +23,7 @@ export class MuralCollection extends Model {
   public hasMural!: BelongsToManyHasAssociationMixin<Mural, number>;
   public countMurals!: BelongsToManyCountAssociationsMixin;
   public createMural!: BelongsToManyCreateAssociationMixin<Mural>;
+  public removeMural!: BelongsToManyRemoveAssociationMixin<Mural, number>;
 
   public readonly murals?: Mural[];
 

@@ -11,12 +11,12 @@ beforeAll(async () => {
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
   });
-  Mural.belongsToMany(Tour, {
+  await Mural.belongsToMany(Tour, {
     foreignKey: "muralId",
     through: "murals_in_tour",
     as: "tours",
   });
-  Tour.belongsToMany(Mural, {
+  await Tour.belongsToMany(Mural, {
     foreignKey: "tourId",
     through: "murals_in_tour",
     as: "murals",
@@ -68,6 +68,7 @@ test("get tour", async () => {
 });
 
 test("find tour associated with mural", async () => {
+  expect.assertions(3);
   //note how we create a new tour here at same time we create a new mural!
   const mural = await Mural.create<Mural>(
     {
@@ -96,6 +97,7 @@ test("find tour associated with mural", async () => {
 });
 
 test("associate already existing mural with tour", async () => {
+  expect.assertions(8);
   const params = {
     name: "testtour",
     description: "asd",
@@ -133,6 +135,7 @@ test("associate already existing mural with tour", async () => {
 });
 
 test("create and associate new mural to tour", async () => {
+  expect.assertions(4);
   const params = {
     name: "testtour",
     description: "asd",
@@ -157,6 +160,30 @@ test("create and associate new mural to tour", async () => {
   expect(res.length).toEqual(1);
   expect(res2).toEqual(true);
   expect(res3).toEqual(1);
+});
+
+test("remove associated mural", async () => {
+  expect.assertions(4);
+  const params = {
+    name: "testTour",
+    description: "asd",
+  };
+
+  const tour = await Tour.create<Tour>(params).catch((err: Error) =>
+    fail("Creating tour failed.")
+  );
+
+  await tour.addMural(1);
+  let hasMural = await tour.hasMural(1);
+  let muralCnt = await tour.countMurals();
+  expect(hasMural).toEqual(true);
+  expect(muralCnt).toEqual(1);
+
+  await tour.removeMural(1);
+  hasMural = await tour.hasMural(1);
+  muralCnt = await tour.countMurals();
+  expect(hasMural).toEqual(false);
+  expect(muralCnt).toEqual(0);
 });
 
 afterAll(async () => {

@@ -11,12 +11,12 @@ beforeAll(async () => {
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
   });
-  Mural.belongsToMany(MuralCollection, {
+  await Mural.belongsToMany(MuralCollection, {
     foreignKey: "muralId",
     through: "murals_in_collection",
     as: "collections",
   });
-  MuralCollection.belongsToMany(Mural, {
+  await MuralCollection.belongsToMany(Mural, {
     foreignKey: "collectionId",
     through: "murals_in_collection",
     as: "murals",
@@ -68,6 +68,7 @@ test("get collection", async () => {
 });
 
 test("find collection associated with mural", async () => {
+  expect.assertions(3);
   //note how we create a new collection here at same time we create a new mural!
   const mural = await Mural.create<Mural>(
     {
@@ -96,6 +97,7 @@ test("find collection associated with mural", async () => {
 });
 
 test("associate already existing mural with collection", async () => {
+  expect.assertions(8);
   const params = {
     name: "testCollection",
     description: "asd",
@@ -133,6 +135,7 @@ test("associate already existing mural with collection", async () => {
 });
 
 test("create and associate new mural to tour", async () => {
+  expect.assertions(4);
   const params = {
     name: "testCollection",
     description: "asd",
@@ -157,6 +160,30 @@ test("create and associate new mural to tour", async () => {
   expect(res.length).toEqual(1);
   expect(res2).toEqual(true);
   expect(res3).toEqual(1);
+});
+
+test("remove associated mural", async () => {
+  expect.assertions(4);
+  const params = {
+    name: "testCollection",
+    description: "asd",
+  };
+
+  const collection = await MuralCollection.create<MuralCollection>(
+    params
+  ).catch((err: Error) => fail("Creating collection failed."));
+
+  await collection.addMural(1);
+  let hasMural = await collection.hasMural(1);
+  let muralCnt = await collection.countMurals();
+  expect(hasMural).toEqual(true);
+  expect(muralCnt).toEqual(1);
+
+  await collection.removeMural(1);
+  hasMural = await collection.hasMural(1);
+  muralCnt = await collection.countMurals();
+  expect(hasMural).toEqual(false);
+  expect(muralCnt).toEqual(0);
 });
 
 afterAll(async () => {
