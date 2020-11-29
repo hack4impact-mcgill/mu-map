@@ -1,9 +1,14 @@
 import { Tour, TourInterface } from "../models/tour.model";
+import { Mural } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
 
 export class TourService {
-    public async create(tour: TourInterface) {
+    public async create(tour: TourInterface, murals: number[]) {
         const createdTour = await Tour.create<Tour>(tour);
+        murals.forEach(async (muralId) => {
+            const mural = await Mural.findByPk<Mural>(muralId, { rejectOnEmpty: true });
+            createdTour.addMural(mural);
+        })
         return { success: true, body: createdTour };
     }
     public async show(tourId: number) {
