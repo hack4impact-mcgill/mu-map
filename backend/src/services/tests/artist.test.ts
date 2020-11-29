@@ -2,9 +2,6 @@ import { database } from "../../config/database";
 import { Artist } from "../../models/artist.model";
 import { ArtistService } from "../artist.service";
 
-// Not sure how to use jest.mock
-// create() does not accept params if name is missing so test for invalid params is omitted
-
 beforeEach(async () => {
   await Artist.sync({ force: true });
 });
@@ -21,13 +18,14 @@ test("create artist", async () => {
   expect(create.body!.name).toEqual("testartist");
 });
 
+// create() does not accept params if name is missing
+
 test("show valid artist", async () => {
   expect.assertions(3);
   const artistService: ArtistService = new ArtistService();
   const params = {
     name: "testartist",
   };
-  // not sure if I should be using this or Artist.create to do this
   const create = await artistService.create(params);
   if (!create.success) {
     fail("Creating artist failed.");
