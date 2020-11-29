@@ -11,9 +11,10 @@ export class TourController {
 
   // POST
   public async create(req: Request, res: Response) {
-    const params: TourInterface = req.body;
+    const tour: TourInterface = req.body.tour;
+    const murals: number[] = req.body.murals;
     try {
-      const createdTour = await this.tourService.create(params);
+      const createdTour = await this.tourService.create(tour, murals);
       res.status(201).json(createdTour);
     } catch (e) {
       res.status(500).json(e);
