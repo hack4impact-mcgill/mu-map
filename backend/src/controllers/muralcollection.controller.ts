@@ -8,7 +8,7 @@ export class MuralCollectionController {
 
   // POST /collection
   public async create(req: Request, res: Response) {
-    const collection: MuralCollectionInterface = req.body.tour;
+    const collection: MuralCollectionInterface = req.body.collection;
     const murals: number[] = req.body.murals;
 
     try {
