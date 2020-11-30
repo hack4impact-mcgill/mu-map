@@ -1,10 +1,35 @@
-import { Model, DataTypes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  BelongsToManyCountAssociationsMixin,
+  Association,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+} from "sequelize";
+import { Mural } from "./mural.model";
 import { database } from "../config/database";
 
 export class MuralCollection extends Model {
   public id!: number;
   public name!: string;
   public description!: string;
+
+  //pure virtual functions so that typescript can detect sequelize's magical runtime association functions at compile time.
+  public getMurals!: BelongsToManyGetAssociationsMixin<Mural>;
+  public addMural!: BelongsToManyAddAssociationMixin<Mural, number>;
+  public hasMural!: BelongsToManyHasAssociationMixin<Mural, number>;
+  public countMurals!: BelongsToManyCountAssociationsMixin;
+  public createMural!: BelongsToManyCreateAssociationMixin<Mural>;
+  public removeMural!: BelongsToManyRemoveAssociationMixin<Mural, number>;
+
+  public readonly murals?: Mural[];
+
+  public static associations: {
+    murals: Association<MuralCollection, Mural>;
+  };
 }
 
 MuralCollection.init(

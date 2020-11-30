@@ -2,6 +2,7 @@ import { database } from "../../config/database";
 import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
+import { Tour } from "../tour.model";
 
 beforeAll(async () => {
   await Mural.belongsTo(Borough, {
@@ -9,6 +10,16 @@ beforeAll(async () => {
   });
   await Mural.belongsTo(Artist, {
     foreignKey: { allowNull: false, name: "artistId" },
+  });
+  await Mural.belongsToMany(Tour, {
+    foreignKey: "muralId",
+    through: "murals_in_tour",
+    as: "tours",
+  });
+  await Tour.belongsToMany(Mural, {
+    foreignKey: "tourId",
+    through: "murals_in_tour",
+    as: "murals",
   });
 });
 
@@ -84,6 +95,7 @@ test("get mural", async () => {
 });
 
 test("ensure foreign key constraint", async () => {
+  expect.assertions(1);
   //make sure it doesnt let us destroy a borough while a mural points to it
   const params = {
     name: "testmural",
@@ -104,6 +116,39 @@ test("ensure foreign key constraint", async () => {
       },
     })
   ).rejects.toEqual(expect.any(Error));
+});
+
+// The sequelize functions on the mural side should not be used...
+// A mural should not "know" its tours, instead, add murals to tours / collections using their functions
+test("test virtual sequelize functions for tour association", async () => {
+  expect.assertions(4);
+  const params = {
+    name: "testmural",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  const mural = await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
+  const tourparams = {
+    name: "testtour",
+    description: "asd",
+  };
+  const tour = await Tour.create<Tour>(tourparams).catch((err: Error) =>
+    fail("Creating tour failed.")
+  );
+  await mural.addTour(1);
+  let tourarray = await mural.getTours();
+  let hasTour = await mural.hasTour(1);
+  let tourCnt = await mural.countTours();
+  expect(tourarray[0].name).toEqual("testtour");
+  expect(tourarray.length).toEqual(1);
+  expect(hasTour).toEqual(true);
+  expect(tourCnt).toEqual(1);
 });
 
 //TODO can we think of more tests to make sure our database works as expected?
