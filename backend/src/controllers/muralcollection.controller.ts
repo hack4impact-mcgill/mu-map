@@ -6,27 +6,19 @@ import { MuralCollectionService } from "../services/muralcollection.service";
 export class MuralCollectionController {
   public collectionService: MuralCollectionService = new MuralCollectionService();
 
-  // POST /collection/:muralids
+  // POST /collection
   public async create(req: Request, res: Response) {
-    //muralids should be passed in seperated by commas
-    const muralIDList: Array<string> = req.params.muralids.split(",");
-    const newMuralIDList: Array<number> = [];
-    const params: MuralCollectionInterface = req.body;
-    muralIDList.forEach((value: string) => {
-      newMuralIDList.push(parseInt(value));
-    });
+    const collection: MuralCollectionInterface = req.body.tour;
+    const murals: number[] = req.body.murals;
+
     try {
       const createdCollection = await this.collectionService.create(
-        params,
-        newMuralIDList
+        collection,
+        murals
       );
       res.status(201).json(createdCollection);
     } catch (e) {
-      if (e instanceof EmptyResultError) {
-        res.status(404).json({ error: "Some IDs doesn't correspond to a mural" });
-      } else {
-        res.status(500).json(e);
-      }
+      res.status(500).json(e);
     }
   }
 

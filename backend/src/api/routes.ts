@@ -50,7 +50,7 @@ export class Routes {
       .put(this.tourController.update.bind(this.tourController));
 
     app
-      .route("/collection/:muralids")
+      .route("/collection")
       .post(this.collectionController.create.bind(this.collectionController));
 
     app
