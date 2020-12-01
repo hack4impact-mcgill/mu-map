@@ -1,4 +1,5 @@
 import { MuralController } from "../controllers/mural.controller";
+import { MuralCollectionController } from "../controllers/muralcollection.controller";
 import { BoroughController } from "../controllers/borough.controller";
 import { ArtistController } from "../controllers/artist.controller";
 import { TourController } from "../controllers/tour.controller";
@@ -6,6 +7,7 @@ import { Application } from "express";
 
 export class Routes {
   public muralController: MuralController = new MuralController();
+  public collectionController: MuralCollectionController = new MuralCollectionController();
   public boroughController: BoroughController = new BoroughController();
   public artistController: ArtistController = new ArtistController();
   public tourController: TourController = new TourController();
@@ -46,5 +48,14 @@ export class Routes {
       .route("/tour/:id")
       .get(this.tourController.show.bind(this.tourController))
       .put(this.tourController.update.bind(this.tourController));
+
+    app
+      .route("/collection")
+      .post(this.collectionController.create.bind(this.collectionController));
+
+    app
+      .route("/collection/:id")
+      .get(this.collectionController.show.bind(this.collectionController))
+      .put(this.collectionController.update.bind(this.collectionController));
   }
 }
