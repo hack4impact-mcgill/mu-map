@@ -1,10 +1,9 @@
 import { database } from "../../config/database";
 import { MuralCollection } from "../../models/muralcollection.model";
 import { MuralCollectionService } from "../muralcollection.service";
-import {Mural} from '../../models/mural.model'
+import { Mural } from "../../models/mural.model";
 import { Borough } from "../../models/borough.model";
 import { Artist } from "../../models/artist.model";
-
 
 beforeAll(async () => {
   await Mural.belongsTo(Borough, {
@@ -26,7 +25,6 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-
   await MuralCollection.sync({ force: true });
   const params = {
     name: "testmural",
