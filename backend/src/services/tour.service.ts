@@ -15,7 +15,8 @@ export class TourService {
   }
   public async show(tourId: number) {
     const tour = await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    return { success: true, tour: tour };
+    const murals = await tour.getMurals()
+    return { success: true, tour: tour, murals: murals };
   }
 
   public async update(tourId: number, params: TourInterface) {
