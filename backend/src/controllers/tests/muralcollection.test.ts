@@ -133,7 +133,7 @@ test("valid PUT request", async () => {
 
   const collectionController: MuralCollectionController = new MuralCollectionController();
   collectionController.collectionService.update = jest.fn().mockResolvedValue({
-      success: true,
+    success: true,
   });
 
   await collectionController.update(req, res);
@@ -145,19 +145,21 @@ test("valid PUT request", async () => {
 });
 
 test("collection not found PUT request", async () => {
-    expect.assertions(1)
-    const req = mockPUTRequest(1, "testCollection");
-    const res = mockResponse();
+  expect.assertions(1);
+  const req = mockPUTRequest(1, "testCollection");
+  const res = mockResponse();
 
-    const collectionController: MuralCollectionController = new MuralCollectionController();
-    collectionController.collectionService.update = jest.fn().mockImplementation(() => {
-        throw new Error();
+  const collectionController: MuralCollectionController = new MuralCollectionController();
+  collectionController.collectionService.update = jest
+    .fn()
+    .mockImplementation(() => {
+      throw new Error();
     });
-    await collectionController.update(req, res);
+  await collectionController.update(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(500);
+  expect(res.status).toHaveBeenCalledWith(500);
 });
 
 afterAll(async () => {
-    await database.close();
-  });
+  await database.close();
+});
