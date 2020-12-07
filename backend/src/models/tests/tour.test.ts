@@ -36,6 +36,10 @@ beforeEach(async () => {
     city: "montreal",
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
   };
   await Mural.create<Mural>(params);
 });
@@ -79,6 +83,10 @@ test("find tour associated with mural", async () => {
       city: "montreal",
       address: "1234 street",
       partners: ["partner 1", "partner 2"],
+      coordinates: {
+        type: "Point",
+        coordinates: [-87.123123, 41.232454],
+      },
       tours: [{ name: "findme", description: "asdasdasd2" }],
     },
     {
@@ -122,6 +130,10 @@ test("associate already existing mural with tour", async () => {
     city: "montreal",
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
   });
 
   await tour.addMural(2);
@@ -152,6 +164,10 @@ test("create and associate new mural to tour", async () => {
     city: "montreal",
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
   });
   let res = await tour.getMurals();
   let res2 = await tour.hasMural(2);

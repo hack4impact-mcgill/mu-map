@@ -82,13 +82,13 @@ Mural.init(
       references: { model: "boroughs", key: "id" },
     },
     coordinates: {
-      type: DataTypes.GEOMETRY('POINT', 4326),
-      allowNull: true
+      type: DataTypes.GEOMETRY("POINT", 4326),
+      allowNull: false,
     },
     imgUrl: {
       type: DataTypes.TEXT,
-      allowNull: true
-    }
+      allowNull: true,
+    },
   },
   {
     tableName: "murals",
