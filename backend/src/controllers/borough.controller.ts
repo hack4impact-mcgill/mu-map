@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BoroughInterface } from "../models/borough.model";
-import { EmptyResultError } from "sequelize";
+import { EmptyResultError, ValidationError } from "sequelize";
 import { BoroughService } from "../services/borough.service";
 
 export class BoroughController {
@@ -13,7 +13,11 @@ export class BoroughController {
       const createdBorough = await this.boroughService.create(params);
       res.status(201).json(createdBorough);
     } catch (e) {
-      res.status(500).json(e);
+      if (e instanceof ValidationError) {
+        res.status(500).json({ error: "Invalid body parameters!" });
+      } else {
+        res.status(500).json(e);
+      }
     }
   }
 

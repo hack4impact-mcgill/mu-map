@@ -1,15 +1,16 @@
 import { Borough } from "../borough.model";
 import { database } from "../../config/database";
 
+const params = {
+  name: "testborough",
+};
+
 beforeEach(async () => {
   await Borough.sync({ force: true });
 });
 
 test("create borough", async () => {
   expect.assertions(1);
-  const params = {
-    name: "test",
-  };
   const artist = await Borough.create<Borough>(params).catch((err: Error) =>
     fail("Creating borough failed.")
   );
@@ -18,9 +19,6 @@ test("create borough", async () => {
 
 test("get borough", async () => {
   expect.assertions(3);
-  const params = {
-    name: "testborough",
-  };
   await Borough.create<Borough>(params).catch((err: Error) =>
     fail("Creating borough failed.")
   );

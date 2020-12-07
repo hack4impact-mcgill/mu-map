@@ -3,6 +3,21 @@ import { Mural } from "../mural.model";
 import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
 import { Tour } from "../tour.model";
+import { UpdateOptions } from "sequelize";
+
+const params = {
+  name: "testmural",
+  boroughId: "1",
+  artistId: "1",
+  year: 1234,
+  city: "montreal",
+  address: "1234 street",
+  partners: ["partner 1", "partner 2"],
+  coordinates: {
+    type: "Point",
+    coordinates: [-87.123123, 41.232454],
+  },
+};
 
 beforeAll(async () => {
   await Mural.belongsTo(Borough, {
@@ -32,15 +47,6 @@ beforeEach(async () => {
 
 test("create mural", async () => {
   expect.assertions(1);
-  const params = {
-    name: "testmural",
-    boroughId: "1",
-    artistId: "1",
-    year: 1234,
-    city: "montreal",
-    address: "1234 street",
-    partners: ["partner 1", "partner 2"],
-  };
   const mural = await Mural.create<Mural>(params).catch((err: Error) =>
     fail("Creating mural failed.")
   );
@@ -49,7 +55,7 @@ test("create mural", async () => {
 
 test("create mural wrong foreign key", async () => {
   expect.assertions(1);
-  const params = {
+  const params2 = {
     name: "testmural",
     boroughId: "2",
     artistId: "1",
@@ -58,12 +64,12 @@ test("create mural wrong foreign key", async () => {
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
   };
-  await expect(Mural.create<Mural>(params)).rejects.toEqual(expect.any(Error));
+  await expect(Mural.create<Mural>(params2)).rejects.toEqual(expect.any(Error));
 });
 
 test("create mural missing foreign key", async () => {
   expect.assertions(1);
-  const params = {
+  const params2 = {
     name: "testmural",
     artistId: "1",
     year: 1234,
@@ -71,20 +77,11 @@ test("create mural missing foreign key", async () => {
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
   };
-  await expect(Mural.create<Mural>(params)).rejects.toEqual(expect.any(Error));
+  await expect(Mural.create<Mural>(params2)).rejects.toEqual(expect.any(Error));
 });
 
 test("get mural", async () => {
   expect.assertions(3);
-  const params = {
-    name: "testmural",
-    boroughId: "1",
-    artistId: "1",
-    year: 1234,
-    city: "montreal",
-    address: "1234 street",
-    partners: ["partner 1", "partner 2"],
-  };
   await Mural.create<Mural>(params).catch((err: Error) =>
     fail("Creating mural failed.")
   );
@@ -97,15 +94,6 @@ test("get mural", async () => {
 test("ensure foreign key constraint", async () => {
   expect.assertions(1);
   //make sure it doesnt let us destroy a borough while a mural points to it
-  const params = {
-    name: "testmural",
-    boroughId: "1",
-    artistId: "1",
-    year: 1234,
-    city: "montreal",
-    address: "1234 street",
-    partners: ["partner 1", "partner 2"],
-  };
   await Mural.create<Mural>(params).catch((err: Error) =>
     fail("Creating mural failed.")
   );
@@ -122,15 +110,6 @@ test("ensure foreign key constraint", async () => {
 // A mural should not "know" its tours, instead, add murals to tours / collections using their functions
 test("test virtual sequelize functions for tour association", async () => {
   expect.assertions(4);
-  const params = {
-    name: "testmural",
-    boroughId: "1",
-    artistId: "1",
-    year: 1234,
-    city: "montreal",
-    address: "1234 street",
-    partners: ["partner 1", "partner 2"],
-  };
   const mural = await Mural.create<Mural>(params).catch((err: Error) =>
     fail("Creating mural failed.")
   );
@@ -151,7 +130,29 @@ test("test virtual sequelize functions for tour association", async () => {
   expect(tourCnt).toEqual(1);
 });
 
-//TODO can we think of more tests to make sure our database works as expected?
+test("test updating coordinates", async () => {
+  expect.assertions(4);
+  const mural = await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
+  expect(mural.id).toEqual(1);
+  expect(mural.coordinates.coordinates).toEqual([-87.123123, 41.232454]);
+  const update: UpdateOptions = {
+    where: { id: 1 },
+  };
+  const newcoord = {
+    coordinates: {
+      type: "Point",
+      coordinates: [-69.123123, 69.232454],
+    },
+  };
+  await Mural.update(newcoord, update);
+  const mural2 = await Mural.findByPk<Mural>(1).catch((err: Error) =>
+    fail("Finding mural failed.")
+  );
+  expect(mural2!.id).toEqual(1);
+  expect(mural2!.coordinates.coordinates).toEqual([-69.123123, 69.232454]);
+});
 
 afterAll(async () => {
   await database.close();
