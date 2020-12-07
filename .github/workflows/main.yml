@@ -18,6 +18,6 @@ jobs:
       with:
         # this formats all ts files everywhere, change it to just backend?
         dry: true
-        file_pattern: "backend/src/**/*.ts"
+        file_pattern: backend/src/**/*.ts
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
