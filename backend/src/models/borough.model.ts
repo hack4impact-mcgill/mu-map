@@ -20,7 +20,7 @@ Borough.init(
   },
   {
     tableName: "boroughs",
-    sequelize:   database,
+    sequelize: database,
   }
 );
 

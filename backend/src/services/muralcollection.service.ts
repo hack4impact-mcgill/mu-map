@@ -7,9 +7,9 @@ import { UpdateOptions } from "sequelize";
 
 export class MuralCollectionService {
   public async create(collecton: MuralCollectionInterface, murals: number[]) {
-    const createdCollection: MuralCollection = await MuralCollection.create<MuralCollection>(
-      collecton
-    );
+    const createdCollection: MuralCollection = await MuralCollection.create<
+      MuralCollection
+    >(collecton);
     murals.forEach(async (muralId) => {
       const mural = await Mural.findByPk<Mural>(muralId, {
         rejectOnEmpty: true,
@@ -20,10 +20,9 @@ export class MuralCollectionService {
   }
 
   public async show(collectionId: number) {
-    const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
-      collectionId,
-      { rejectOnEmpty: true }
-    );
+    const collection: MuralCollection = await MuralCollection.findByPk<
+      MuralCollection
+    >(collectionId, { rejectOnEmpty: true });
     return { success: true, collection: collection };
   }
 
