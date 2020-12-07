@@ -151,6 +151,27 @@ test("test virtual sequelize functions for tour association", async () => {
   expect(tourCnt).toEqual(1);
 });
 
+test("test creating mural with longitude and latitude", async () => {
+  expect.assertions(1);
+  const params = {
+    name: "testmural",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
+  };
+  const mural = await Mural.create<Mural>(params).catch((err: Error) =>
+    fail("Creating mural failed.")
+  );
+  expect(mural.id).toEqual(1);
+});
+
 //TODO can we think of more tests to make sure our database works as expected?
 
 afterAll(async () => {

@@ -20,6 +20,8 @@ export class Mural extends Model {
   public description!: string;
   public partners!: string[];
   public assistants!: string[];
+  public coordinates!: any;
+  public imgUrl!: string[];
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -79,6 +81,14 @@ Mural.init(
       type: DataTypes.INTEGER,
       references: { model: "boroughs", key: "id" },
     },
+    coordinates: {
+      type: DataTypes.GEOMETRY('POINT', 4326),
+      allowNull: true
+    },
+    imgUrl: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    }
   },
   {
     tableName: "murals",
@@ -98,4 +108,7 @@ export interface MuralInterface {
   description?: string;
   partners?: string[];
   assistants?: string[];
+  longitude?: number;
+  latitude?: number;
+  imgUrl?: string;
 }
