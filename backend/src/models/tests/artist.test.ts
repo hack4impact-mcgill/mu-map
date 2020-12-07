@@ -1,15 +1,16 @@
 import { Artist } from "../artist.model";
 import { database } from "../../config/database";
 
+const params = {
+  name: "testartist",
+};
+
 beforeEach(async () => {
   await Artist.sync({ force: true });
 });
 
 test("create artist", async () => {
   expect.assertions(1);
-  const params = {
-    name: "testartist",
-  };
   const artist = await Artist.create<Artist>(params).catch((err: Error) =>
     fail("Creating artist failed.")
   );
@@ -18,9 +19,6 @@ test("create artist", async () => {
 
 test("get artist", async () => {
   expect.assertions(3);
-  const params = {
-    name: "testartist",
-  };
   await Artist.create<Artist>(params).catch((err: Error) =>
     fail("Creating artist failed.")
   );
