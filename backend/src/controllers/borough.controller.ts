@@ -14,9 +14,8 @@ export class BoroughController {
       res.status(201).json(createdBorough);
     } catch (e) {
       if (e instanceof ValidationError) {
-        res.status(500).json({ error: "Invalid body parameters!"})
-      }
-      else {
+        res.status(500).json({ error: "Invalid body parameters!" });
+      } else {
         res.status(500).json(e);
       }
     }
