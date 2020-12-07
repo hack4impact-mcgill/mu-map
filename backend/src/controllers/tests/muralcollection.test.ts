@@ -1,5 +1,5 @@
 import { database } from "../../config/database";
-import { col, EmptyResultError } from "sequelize";
+import { EmptyResultError } from "sequelize";
 import { MuralCollectionController } from "../muralcollection.controller";
 
 jest.mock("../../services/muralcollection.service");
@@ -13,10 +13,17 @@ const mockResponse = () => {
 
 const mockPOSTRequest = (
   collectionName: String | undefined,
+  collectionDescription: String | undefined,
   collectionMurals: number[]
 ) => {
   return {
-    body: { collection: collectionName, murals: collectionMurals },
+    body: {
+      collection: {
+        name: collectionName,
+        description: collectionDescription,
+      },
+      murals: collectionMurals,
+    },
   } as any;
 };
 
@@ -35,14 +42,17 @@ const mockPUTRequest = (collectionId: Number, collectionName: String) => {
 
 test("valid POST request", async () => {
   expect.assertions(2);
-  const req = mockPOSTRequest("testCollection", [1, 2, 3]);
+  const req = mockPOSTRequest("testCollection", "des", [1, 2, 3]);
   const res = mockResponse();
 
   const collectionController: MuralCollectionController = new MuralCollectionController();
   collectionController.collectionService.create = jest.fn().mockResolvedValue({
     body: {
       id: 1,
-      name: "testCollection",
+      collection: {
+        name: "testCollectoin",
+        description: "des"
+      },
       murals: [1, 2, 3],
     },
     success: true,
@@ -56,7 +66,10 @@ test("valid POST request", async () => {
     expect.objectContaining({
       body: expect.objectContaining({
         id: 1,
-        name: "testCollection",
+        collection: {
+          name: "testCollectoin",
+          description: "des"
+        },
         murals: [1, 2, 3],
       }),
     })
@@ -65,7 +78,7 @@ test("valid POST request", async () => {
 
 test("invalid POST request", async () => {
   expect.assertions(1);
-  const req = mockPOSTRequest(undefined, [1, 2, 3]);
+  const req = mockPOSTRequest(undefined, "des", [1, 2, 3]);
   const res = mockResponse();
 
   const collectionController: MuralCollectionController = new MuralCollectionController();
