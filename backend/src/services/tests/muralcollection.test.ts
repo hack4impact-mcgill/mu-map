@@ -1,9 +1,54 @@
 import { database } from "../../config/database";
 import { MuralCollection } from "../../models/muralcollection.model";
 import { MuralCollectionService } from "../muralcollection.service";
+import {Mural} from '../../models/mural.model'
+import { Borough } from "../../models/borough.model";
+import { Artist } from "../../models/artist.model";
+
+
+beforeAll(async () => {
+  await Mural.belongsTo(Borough, {
+    foreignKey: { allowNull: false, name: "boroughId" },
+  });
+  await Mural.belongsTo(Artist, {
+    foreignKey: { allowNull: false, name: "artistId" },
+  });
+  await Mural.belongsToMany(MuralCollection, {
+    foreignKey: "muralId",
+    through: "murals_in_collection",
+    as: "collections",
+  });
+  await MuralCollection.belongsToMany(Mural, {
+    foreignKey: "collectionId",
+    through: "murals_in_collection",
+    as: "murals",
+  });
+});
 
 beforeEach(async () => {
+
   await MuralCollection.sync({ force: true });
+  const params = {
+    name: "testmural",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  await Mural.create<Mural>(params);
+
+  const params2 = {
+    name: "testmural2",
+    boroughId: "1",
+    artistId: "1",
+    year: 1234,
+    city: "montreal",
+    address: "1234 street",
+    partners: ["partner 1", "partner 2"],
+  };
+  await Mural.create<Mural>(params2);
 });
 
 test("create mural collection", async () => {
@@ -13,7 +58,7 @@ test("create mural collection", async () => {
     name: "testCollection",
     description: "des",
   };
-  const murals = [1, 2, 3];
+  const murals: number[] = [1, 2];
   const create = await collectionService.create(params, murals);
   expect(create.success).toEqual(true);
   expect(create.body.id).toEqual(1);
@@ -28,7 +73,7 @@ test("show valid mural collection", async () => {
     name: "testCollection",
     description: "des",
   };
-  const murals = [1, 2, 3];
+  const murals: number[] = [1, 2];
   const create = await collectionService.create(params, murals);
   if (!create.success) {
     fail("Creating mural collection failed.");
@@ -57,7 +102,7 @@ test("update mural collection", async () => {
     name: "testCollection",
     description: "des",
   };
-  const murals = [1, 2, 3];
+  const murals: number[] = [1, 2];
   const create = await collectionService.create(params, murals);
   if (!create.success) {
     fail("Creating mural collection failed.");
