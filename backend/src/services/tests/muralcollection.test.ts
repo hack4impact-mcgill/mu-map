@@ -34,6 +34,10 @@ beforeEach(async () => {
     city: "montreal",
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
   };
   await Mural.create<Mural>(params);
 
@@ -45,6 +49,10 @@ beforeEach(async () => {
     city: "montreal",
     address: "1234 street",
     partners: ["partner 1", "partner 2"],
+    coordinates: {
+      type: "Point",
+      coordinates: [-87.123123, 41.232454],
+    },
   };
   await Mural.create<Mural>(params2);
 });
