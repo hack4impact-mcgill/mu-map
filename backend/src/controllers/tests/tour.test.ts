@@ -103,7 +103,7 @@ test("tour not found GET request", async () => {
 
   expect(res.status).toHaveBeenCalledWith(404);
   expect(res.json).toHaveBeenCalledWith({
-    error: "Tour not found by id!",
+    error: "No tour found with this id",
   });
 });
 
