@@ -3,7 +3,16 @@ import { UpdateOptions } from "sequelize";
 
 export class MuralService {
   public async create(mural: MuralInterface) {
-    const createdMural: Mural = await Mural.create<Mural>(mural);
+    const coordinates = {
+      coordinates: {
+        type: "Point",
+        coordinates: [mural.longitude, mural.latitude],
+      },
+    };
+    const createdMural: Mural = await Mural.create<Mural>({
+      ...mural,
+      ...coordinates,
+    });
     return { success: true, body: createdMural };
   }
 
