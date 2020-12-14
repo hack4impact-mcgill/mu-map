@@ -6,6 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "start": "cross-env NODE_ENV=dev nodemon ./src/server.ts",
+    "start-migrate": "cross-env NODE_ENV=dev MIGRATE=true nodemon ./src/server.ts",
     "build": "tsc --project ./"
   },
   "author": "",

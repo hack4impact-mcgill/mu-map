@@ -108,7 +108,7 @@ export interface MuralInterface {
   description?: string;
   partners?: string[];
   assistants?: string[];
-  longitude?: number;
-  latitude?: number;
+  longitude: number;
+  latitude: number;
   imgUrl?: string;
 }
