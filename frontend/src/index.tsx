@@ -4,10 +4,42 @@ import './index.css';
 import App from './App/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
+import {
+  PRIMARY, SECONDARY, SUCCESS, WARNING, ERROR, CONTRAST
+} from 'constants/constants';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: PRIMARY,
+      contrastText: CONTRAST
+    },
+    secondary: {
+      main: SECONDARY,
+      contrastText: CONTRAST
+    },
+    success: {
+      main: SUCCESS,
+      contrastText: CONTRAST
+    },
+    warning: {
+      main: WARNING,
+      contrastText: CONTRAST
+    },
+    error: {
+      main: ERROR,
+      contrastText: CONTRAST
+    }
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
