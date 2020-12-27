@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { DEFAULT_LONGITUDE, DEFAULT_LATITUDE, DEFAULT_ZOOM } from 'constants/constants';
 import './Map.css';
@@ -6,51 +6,38 @@ import './Map.css';
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '';
 
 interface IMapProps {
-    mapContainer?: HTMLElement | string | null;
+    mapContainer: HTMLElement | string | null;
 }
 
-interface IMapState {
-    lng: number;
-    lat: number;
-    zoom: number;
-}
-class Map extends React.Component<IMapProps, IMapState> {
-    mapContainer: string | HTMLElement;
+function Map(props: IMapProps) {
+    const [lng, setLng] = useState(DEFAULT_LONGITUDE);
+    const [lat, setLat] = useState(DEFAULT_LATITUDE);
+    const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
-    constructor(props: IMapProps) {
-        super(props);
-        this.state = {
-            lng: DEFAULT_LONGITUDE,
-            lat: DEFAULT_LATITUDE,
-            zoom: DEFAULT_ZOOM
-        };
-        this.mapContainer = '';
-    }
+    let mapContainer: any = props.mapContainer;
 
-    componentDidMount() {
+    useEffect(() => {
+
         const map = new mapboxgl.Map({
-            container: this.mapContainer,
+            container: mapContainer,
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [this.state.lng, this.state.lat],
-            zoom: this.state.zoom
+            center: [lng, lat],
+            zoom: zoom
         });
 
         map.on('move', () => {
-            this.setState({
-                lng: map.getCenter().lng,
-                lat: map.getCenter().lat,
-                zoom: map.getZoom()
-            });
+            setLng(map.getCenter().lng);
+            setLat(map.getCenter().lat);
+            setZoom(map.getZoom());
         });
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    render() {
-        return (
-            <div>
-                <div ref={el => this.mapContainer = el ? el : ''} className="mapContainer" />
-            </div>
-        )
-    }
+    return (
+        <div>
+            <div ref={el => mapContainer = el} className="mapContainer" />
+        </div>
+    );
 }
 
 export default Map;
