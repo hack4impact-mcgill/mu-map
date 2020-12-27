@@ -35,7 +35,7 @@ function Map(props: IMapProps) {
 
     return (
         <div>
-            <div ref={el => mapContainer = el} className="mapContainer" >test</div>
+            <div ref={el => mapContainer = el} className="mapContainer" />
         </div>
     );
 }
