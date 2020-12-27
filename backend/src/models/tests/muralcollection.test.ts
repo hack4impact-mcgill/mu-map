@@ -4,25 +4,6 @@ import { Borough } from "../borough.model";
 import { Artist } from "../artist.model";
 import { MuralCollection } from "../muralcollection.model";
 
-beforeAll(async () => {
-  await Mural.belongsTo(Borough, {
-    foreignKey: { allowNull: false, name: "boroughId" },
-  });
-  await Mural.belongsTo(Artist, {
-    foreignKey: { allowNull: false, name: "artistId" },
-  });
-  await Mural.belongsToMany(MuralCollection, {
-    foreignKey: "muralId",
-    through: "murals_in_collection",
-    as: "collections",
-  });
-  await MuralCollection.belongsToMany(Mural, {
-    foreignKey: "collectionId",
-    through: "murals_in_collection",
-    as: "murals",
-  });
-});
-
 beforeEach(async () => {
   await database.sync({ force: true });
   //we can assume the following lines work, they are tested in another test suite
@@ -202,6 +183,3 @@ test("remove associated mural", async () => {
   expect(muralCnt).toEqual(0);
 });
 
-afterAll(async () => {
-  await database.close();
-});

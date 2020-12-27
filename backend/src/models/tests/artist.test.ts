@@ -30,6 +30,3 @@ test("get artist", async () => {
 
 //TODO can we think of more tests to make sure our database works as expected?
 
-afterAll(async () => {
-  await database.close();
-});

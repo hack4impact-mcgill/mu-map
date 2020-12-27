@@ -85,7 +85,3 @@ test("update invalid artist", async () => {
     .then(() => fail())
     .catch((err: Error) => expect(true).toEqual(true));
 });
-
-afterAll(async () => {
-  await database.close();
-});
