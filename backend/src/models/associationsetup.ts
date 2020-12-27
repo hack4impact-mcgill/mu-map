@@ -7,6 +7,7 @@ import { database } from "../config/database";
 
 export class AssociationSetup {
   public async sync() {
+    await database.query('CREATE EXTENSION IF NOT EXISTS postgis');
     Mural.belongsTo(Borough, {
       foreignKey: { allowNull: false, name: "boroughId" },
     });
