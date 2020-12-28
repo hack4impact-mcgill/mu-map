@@ -11,5 +11,6 @@ export const database = new Sequelize(
     dialectOptions: {
       ssl: { require: process.env.DB_SSL == "true", rejectUnauthorized: false },
     },
+    logging: process.env.SQL_LOGGING == "true"
   }
 );

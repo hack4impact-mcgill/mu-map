@@ -19,25 +19,6 @@ const params = {
   },
 };
 
-beforeAll(async () => {
-  await Mural.belongsTo(Borough, {
-    foreignKey: { allowNull: false, name: "boroughId" },
-  });
-  await Mural.belongsTo(Artist, {
-    foreignKey: { allowNull: false, name: "artistId" },
-  });
-  await Mural.belongsToMany(Tour, {
-    foreignKey: "muralId",
-    through: "murals_in_tour",
-    as: "tours",
-  });
-  await Tour.belongsToMany(Mural, {
-    foreignKey: "tourId",
-    through: "murals_in_tour",
-    as: "murals",
-  });
-});
-
 beforeEach(async () => {
   await database.sync({ force: true });
   //we can assume the following lines work, they are tested in another test suite
@@ -154,6 +135,3 @@ test("test updating coordinates", async () => {
   expect(mural2!.coordinates.coordinates).toEqual([-69.123123, 69.232454]);
 });
 
-afterAll(async () => {
-  await database.close();
-});

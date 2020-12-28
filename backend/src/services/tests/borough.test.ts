@@ -1,4 +1,3 @@
-import { database } from "../../config/database";
 import { Borough } from "../../models/borough.model";
 import { BoroughService } from "../borough.service";
 
@@ -80,8 +79,4 @@ test("update invalid borough", async () => {
     .update(1, params)
     .then(() => fail())
     .catch((err: Error) => expect(true).toEqual(true));
-});
-
-afterAll(async () => {
-  await database.close();
 });

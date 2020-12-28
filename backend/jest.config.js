@@ -8,4 +8,5 @@ module.exports = {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
   setupFiles: ["dotenv/config"],
+  setupFilesAfterEnv: ['<rootDir>/src/testsetup/setupTests.ts']
 };
