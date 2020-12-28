@@ -16,6 +16,14 @@ export class MuralService {
     return { success: true, body: createdMural };
   }
 
+  public async showAll(limit: number, offset: number) {
+    const murals = await Mural.findAndCountAll<Mural>({
+      limit: limit,
+      offset: offset
+    });
+    return { success: true, murals: murals };
+  }
+
   public async show(muralId: number) {
     const mural = await Mural.findByPk<Mural>(muralId, { rejectOnEmpty: true });
     return { success: true, mural: mural };
