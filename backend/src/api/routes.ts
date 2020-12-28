@@ -15,6 +15,7 @@ export class Routes {
   public routes(app: Application): void {
     app
       .route("/mural")
+      .get(this.muralController.showAll.bind(this.muralController))
       .post(this.muralController.create.bind(this.muralController));
 
     app

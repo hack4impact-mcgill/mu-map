@@ -16,6 +16,11 @@ export class MuralService {
     return { success: true, body: createdMural };
   }
 
+  public async showAll() {
+    const murals = await Mural.findAndCountAll<Mural>({ where: {} });
+    return { success: true, murals: murals };
+  }
+
   public async show(muralId: number) {
     const mural = await Mural.findByPk<Mural>(muralId, { rejectOnEmpty: true });
     return { success: true, mural: mural };

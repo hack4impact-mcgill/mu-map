@@ -3,7 +3,6 @@ import {
   DataTypes,
   BelongsToManyCountAssociationsMixin,
   BelongsToManyAddAssociationMixin,
-  BelongsToManyCreateAssociationMixin,
   BelongsToManyGetAssociationsMixin,
   BelongsToManyHasAssociationMixin,
 } from "sequelize";

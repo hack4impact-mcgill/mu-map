@@ -6,6 +6,16 @@ import { MuralService } from "../services/mural.service";
 export class MuralController {
   public muralService: MuralService = new MuralService();
 
+  // GET all /mural
+  public async showAll(req: Request, res: Response) {
+    try {
+      const murals = await this.muralService.showAll();
+      res.status(202).json(murals);
+    } catch (e) {
+      res.status(500).json({ error: "Something went wrong." });
+    }
+  }
+
   // POST /mural
   public async create(req: Request, res: Response) {
     const params: MuralInterface = req.body;
