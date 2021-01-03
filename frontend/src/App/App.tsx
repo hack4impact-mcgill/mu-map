@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
-      <PlusButton isVisible />
+      <PlusButton isVisible={true} />
     </div>
   );
 }

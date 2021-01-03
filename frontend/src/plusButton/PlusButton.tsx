@@ -4,12 +4,12 @@ import AddIcon from "@material-ui/icons/Add";
 import "./PlusButton.css";
 
 interface IPlusButtonProps {
-  isVisible: true; // Property doesn't take in App when I put boolean ?
+  isVisible: boolean;
 }
 
 function plusButtonClicked() {
   // TODO: Notify App
-  console.log("Button Clicked"); // This doesn't work ...
+  console.log("Button Clicked"); // Not sure if this works
 }
 
 function PlusButton(props: IPlusButtonProps) {
