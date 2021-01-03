@@ -29,10 +29,10 @@ function DropdownMenu () {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem ><TranslateIcon />  English (Anglais)</MenuItem>
-          <MenuItem >Turn Location Off</MenuItem>
-          <MenuItem >Visit MU site</MenuItem>
-          <MenuItem >Donate</MenuItem>
+          <MenuItem><TranslateIcon />  English (Anglais)</MenuItem>
+          <MenuItem>Turn Location Off</MenuItem>
+          <MenuItem>Visit MU site</MenuItem>
+          <MenuItem>Donate</MenuItem>
           <hr></hr>
           <MenuItem onClick={handleClose}>Cancel</MenuItem>
         </Menu>
