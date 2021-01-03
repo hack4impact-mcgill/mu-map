@@ -7,7 +7,7 @@ import DropdownMenu from '../DropdownMenu/DropdownMenu'
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   function handleSigninClick() {
-
+    setIsSignedIn(!isSignedIn)
   }
 
   return (
