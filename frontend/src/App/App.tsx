@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
 import Map from "../Map/Map";
-import SigninButton from "../SigninButton/SigninButton";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 
 function App() {
@@ -13,8 +12,7 @@ function App() {
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
-      <SigninButton isSignedIn={isSignedIn} onClick={handleSigninClick} />
-      <DropdownMenu />
+      <DropdownMenu isSignedIn={isSignedIn} signInClick={handleSigninClick}/>
     </div>
   );
 }
