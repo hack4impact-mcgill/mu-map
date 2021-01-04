@@ -24,7 +24,7 @@ function DropdownMenu() {
         color="primary"
         onClick={handleClick}
       >
-        Open Menu
+        More
       </Button>
       <Menu
         id="simple-menu"
