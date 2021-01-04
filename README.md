@@ -29,6 +29,7 @@ toolbox instead of docker desktop, type `docker-machine ip` into your command li
 ### Running
 - Make sure docker is running and the postgres container exists (which was created in the previous section).
 - Run `npm start`. You should see some output about the database tables being created. You are ready to work with the API.
+- Run `npm run start-migrate` to add some data to the database
 - Run `npm t` to run unit tests. Unit tests should pass.
 
 ## Frontend
