@@ -12,7 +12,7 @@ function SigninButton(props: ISigninButtonProps) {
     <div className="SigninButton">
       {props.isSignedIn ? (
         <Button variant="contained" onClick={props.onClick} color="secondary">
-          LOG OUT
+          SIGN OUT
         </Button>
       ) : (
         <Button variant="contained" onClick={props.onClick} color="primary">
