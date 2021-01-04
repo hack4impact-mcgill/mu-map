@@ -9,7 +9,7 @@ interface IPlusButtonProps {
 
 function plusButtonClicked() {
   // TODO: Notify App
-  console.log("Button Clicked"); // Not sure if this works
+  console.log("Button Clicked"); // tmp line to check if the call works
 }
 
 function PlusButton(props: IPlusButtonProps) {
