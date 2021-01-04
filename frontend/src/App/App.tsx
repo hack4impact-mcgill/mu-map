@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
-      <DropdownMenu isSignedIn={isSignedIn} signInClick={handleSigninClick}/>
+      <DropdownMenu isSignedIn={isSignedIn} signInClick={handleSigninClick} />
     </div>
   );
 }
