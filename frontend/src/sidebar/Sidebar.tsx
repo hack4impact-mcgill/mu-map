@@ -1,36 +1,51 @@
-import React from 'react';
-import Drawer from '@material-ui/core/Drawer'
-import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles';
-import './Sidebar.css'
+import React from "react";
+import Drawer from "@material-ui/core/Drawer";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
-    paper: {
-        backgroundColor: "#EEE3E3"
-    }
-})
+  drawer: {
+    backgroundColor: "#EEE3E3",
+  },
+  title: {
+    fontSize: "larger",
+    fontWeight: "bold",
+    paddingLeft: "30px",
+    paddingRight: "200px",
+    paddingTop: "40px",
+  },
+});
 
 interface ISidebarProps {
-    name: string;
+  name: string;
 }
 
 function Sidebar(props: ISidebarProps) {
+  const styles = useStyles();
+  const [open, setOpen] = React.useState<boolean>(false);
 
-    const styles = useStyles();
-    const [open, setOpen] = React.useState<boolean>(false)
-
-    return (
-        <div>
-            <Button variant="contained" color="primary" onClick={() => { setOpen(!open) }}>
-                Open sidebar
-            </Button>
-            <Drawer classes={{paper: styles.paper}} open={open} onClose={() => { setOpen(!open) }}>
-                <p className="title">
-                    {props.name}
-                </p>
-            </Drawer>
-        </div>
-    );
+  return (
+    <div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        Open sidebar
+      </Button>
+      <Drawer
+        classes={{ paper: styles.drawer }}
+        open={open}
+        onClose={() => {
+          setOpen(!open);
+        }}
+      >
+        <p className={styles.title}>{props.name}</p>
+      </Drawer>
+    </div>
+  );
 }
 
 export default Sidebar;
