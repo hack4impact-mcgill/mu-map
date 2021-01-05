@@ -4,20 +4,26 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import TranslateIcon from "@material-ui/icons/Translate";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme, createStyles, Theme } from "@material-ui/core/styles";
+
 
 interface IDropdownMenuProps {
   isSignedIn: boolean;
   signInClick: () => void;
 }
 
-const useStyles = makeStyles({
-  DropdownMenu: {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-  },
-});
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      DropdownMenu: {
+        position: "absolute",
+        marginRight: theme.spacing(1)
+      }
+        
+    })
+)
+
+
 
 function DropdownMenu(props: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -36,6 +42,7 @@ function DropdownMenu(props: IDropdownMenuProps) {
   };
 
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <div className={classes.DropdownMenu}>
