@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Map from "../Map/Map";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = React.useState<boolean>(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
