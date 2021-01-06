@@ -4,33 +4,27 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import TranslateIcon from "@material-ui/icons/Translate";
-import { makeStyles, useTheme, createStyles, Theme } from "@material-ui/core/styles";
-
+import {
+  makeStyles,
+  useTheme,
+  createStyles,
+  Theme,
+} from "@material-ui/core/styles";
 
 interface IDropdownMenuProps {
   isSignedIn: boolean;
   signInClick: () => void;
 }
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      DropdownMenu: {
-        position: "absolute",
-        top: theme.spacing(1),
-        right: theme.spacing(1)
-      },
-      signinText: {
-        color: theme.palette.primary.main,
-      },
-      signoutText: {
-        color: theme.palette.secondary.main,
-      }
-    })
-)
-
-
+  createStyles({
+    DropdownMenu: {
+      position: "absolute",
+      top: theme.spacing(1),
+      right: theme.spacing(1),
+    },
+  })
+);
 
 function DropdownMenu(props: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,10 +37,14 @@ function DropdownMenu(props: IDropdownMenuProps) {
     setAnchorEl(null);
   };
 
-  const theme = useTheme()
+  const theme = useTheme();
   const buttonText = {
-    signin:  <strong style={{color: theme.palette.primary.main}}>SIGN IN </strong> ,
-    signout: <strong style={{color: theme.palette.secondary.main}}>SIGN OUT </strong>
+    signin: (
+      <strong style={{ color: theme.palette.primary.main }}>SIGN IN </strong>
+    ),
+    signout: (
+      <strong style={{ color: theme.palette.secondary.main }}>SIGN OUT </strong>
+    ),
   };
 
   const classes = useStyles();
