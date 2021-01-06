@@ -13,13 +13,20 @@ interface IDropdownMenuProps {
 }
 
 
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       DropdownMenu: {
         position: "absolute",
-        marginRight: theme.spacing(1)
+        top: theme.spacing(1),
+        right: theme.spacing(1)
+      },
+      signinText: {
+        color: theme.palette.primary.main,
+      },
+      signoutText: {
+        color: theme.palette.secondary.main,
       }
-        
     })
 )
 
@@ -36,13 +43,13 @@ function DropdownMenu(props: IDropdownMenuProps) {
     setAnchorEl(null);
   };
 
+  const theme = useTheme()
   const buttonText = {
-    signin: <strong style={{ color: "#216ADB" }}>SIGN IN</strong>,
-    signout: <strong style={{ color: "#D22F2F" }}>SIGN OUT</strong>,
+    signin:  <strong style={{color: theme.palette.primary.main}}>SIGN IN </strong> ,
+    signout: <strong style={{color: theme.palette.secondary.main}}>SIGN OUT </strong>
   };
 
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <div className={classes.DropdownMenu}>
