@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 interface ISidebarProps {
   name: string;
   children?: React.ReactNode | null;
-  isVisible: boolean,
+  isVisible: boolean;
   closeSidebar: () => void;
 }
 
