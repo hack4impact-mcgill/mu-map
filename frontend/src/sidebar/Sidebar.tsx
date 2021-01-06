@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "larger",
       fontWeight: 500,
       paddingLeft: theme.spacing(3),
-      paddingRight: "200px",
+      paddingRight: theme.spacing(25),
     },
     closeIcon: {
       cursor: "pointer",
