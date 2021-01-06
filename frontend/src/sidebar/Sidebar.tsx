@@ -44,41 +44,29 @@ const useStyles = makeStyles({
 interface ISidebarProps {
   name: string;
   children?: React.ReactNode | null;
+  isVisible: boolean,
+  closeSidebar: () => void;
 }
 
 function Sidebar(props: ISidebarProps) {
   const styles = useStyles();
-  const [open, setOpen] = React.useState<boolean>(false);
   const [deleteButtonVisible, setDeleteButtonVisible] = React.useState<boolean>(
     false
   );
 
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          setOpen(!open);
-        }}
-      >
-        Open sidebar
-      </Button>
       <Drawer
         classes={{ paper: styles.drawer }}
-        open={open}
-        onClose={() => {
-          setOpen(!open);
-        }}
+        open={props.isVisible}
+        onClose={props.closeSidebar}
       >
         <div>
           <img
             src={closeButton}
             className={styles.closeImage}
             alt="closeButton"
-            onClick={() => {
-              setOpen(!open);
-            }}
+            onClick={props.closeSidebar}
           />
         </div>
         <p className={styles.title}>{props.name}</p>
