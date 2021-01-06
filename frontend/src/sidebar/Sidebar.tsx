@@ -1,7 +1,7 @@
 import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import closeButton from "./closeButton.png";
 
 const useStyles = makeStyles({
@@ -46,7 +46,6 @@ interface ISidebarProps {
 }
 
 function Sidebar(props: ISidebarProps) {
-  const theme = useTheme();
   const styles = useStyles();
   const [deleteButtonVisible] = React.useState<boolean>(false);
 

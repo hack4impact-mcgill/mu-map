@@ -7,13 +7,9 @@ import PlusButton from "../plusButton/PlusButton";
 function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState<boolean>(false);
 
-  const plusButtonClick = () => {
-    setSidebarOpen(true);
-  };
-
-  const closeSidebar = () => {
-    setSidebarOpen(false);
-  };
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
   
   return (
     <div className="App">
@@ -21,9 +17,9 @@ function App() {
       <Sidebar
         name="Example Sidebar"
         isVisible={sidebarOpen}
-        closeSidebar={closeSidebar}
+        closeSidebar={toggleSidebar}
       />
-      <PlusButton isVisible={true} handleClick={plusButtonClick} />
+      <PlusButton isVisible={true} handleClick={toggleSidebar} />
     </div>
   );
 }
