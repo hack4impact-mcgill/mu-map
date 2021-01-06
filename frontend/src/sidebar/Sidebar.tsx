@@ -65,15 +65,19 @@ function Sidebar(props: ISidebarProps) {
             onClick={props.closeSidebar}
           />
         </div>
+
         <p className={styles.title}>{props.name}</p>
         <div className={styles.flexContainer}>{props.children}</div>
+
         <div className={styles.bottomButtonContainer}>
           <Button color="primary" size="small" className={styles.bottomButton}>
             Cancel
           </Button>
+
           <Button color="primary" size="small">
             Save
           </Button>
+
           <Button
             className={deleteButtonVisible ? "" : styles.deleteButtonInvisible}
             size="small"
