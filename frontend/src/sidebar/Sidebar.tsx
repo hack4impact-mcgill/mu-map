@@ -1,7 +1,7 @@
 import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import closeButton from "./closeButton.png";
 
 const useStyles = makeStyles({
@@ -33,9 +33,6 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-evenly",
   },
-  deleteButtonVisible: {
-    color: "red",
-  },
   deleteButtonInvisible: {
     display: "none",
   },
@@ -49,10 +46,9 @@ interface ISidebarProps {
 }
 
 function Sidebar(props: ISidebarProps) {
+  const theme = useTheme();
   const styles = useStyles();
-  const [deleteButtonVisible, setDeleteButtonVisible] = React.useState<boolean>(
-    false
-  );
+  const [deleteButtonVisible] = React.useState<boolean>(false);
 
   return (
     <div>
@@ -79,12 +75,9 @@ function Sidebar(props: ISidebarProps) {
             Save
           </Button>
           <Button
-            className={
-              deleteButtonVisible
-                ? styles.deleteButtonVisible
-                : styles.deleteButtonInvisible
-            }
+            className={deleteButtonVisible ? "" : styles.deleteButtonInvisible}
             size="small"
+            color="secondary"
           >
             Delete
           </Button>

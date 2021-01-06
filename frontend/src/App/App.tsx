@@ -14,7 +14,7 @@ function App() {
   const closeSidebar = () => {
     setSidebarOpen(false);
   };
-
+  
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
