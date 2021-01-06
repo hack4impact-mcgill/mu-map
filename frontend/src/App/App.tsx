@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
-      <Sidebar name="test"/>
+      <Sidebar name="Example Sidebar" />
     </div>
   );
 }
