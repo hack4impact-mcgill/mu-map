@@ -8,14 +8,16 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState<boolean>(false);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-  
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const sidebarTitle = "Example Sidebar";
+
   return (
     <div className="App">
       <Map mapContainer={document.getElementById("root")} />
       <Sidebar
-        name="Example Sidebar"
+        name={sidebarTitle}
         isVisible={sidebarOpen}
         closeSidebar={toggleSidebar}
       />

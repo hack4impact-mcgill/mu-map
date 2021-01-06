@@ -1,42 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import closeButton from "./closeButton.png";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = makeStyles({
-  drawer: {
-    backgroundColor: "#E5E5E5",
-  },
-  title: {
-    fontSize: "larger",
-    fontWeight: 500,
-    paddingLeft: "26px",
-    paddingRight: "200px",
-  },
-  closeImage: {
-    cursor: "pointer",
-    float: "right",
-    marginTop: "19px",
-    width: "14px",
-    marginRight: "23px",
-  },
-  flexContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  bottomButton: {
-    fontWeight: 500,
-  },
-  bottomButtonContainer: {
-    display: "flex",
-    justifyContent: "space-evenly",
-  },
-  deleteButtonInvisible: {
-    display: "none",
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawer: {
+      paper: "primary",
+    },
+    title: {
+      fontSize: "larger",
+      fontWeight: 500,
+      paddingLeft: theme.spacing(3),
+      paddingRight: "200px",
+    },
+    closeIcon: {
+      cursor: "pointer",
+      float: "right",
+      marginTop: theme.spacing(2),
+      marginRight: theme.spacing(3),
+    },
+    flexContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    bottomButton: {
+      fontWeight: 500,
+    },
+    bottomButtonContainer: {
+      display: "flex",
+      justifyContent: "space-evenly",
+    },
+    deleteButtonInvisible: {
+      display: "none",
+    },
+  })
+);
 
 interface ISidebarProps {
   name: string;
@@ -47,21 +48,19 @@ interface ISidebarProps {
 
 function Sidebar(props: ISidebarProps) {
   const styles = useStyles();
-  const [deleteButtonVisible] = React.useState<boolean>(false);
+  const [deleteButtonVisible] = useState<boolean>(false);
 
   return (
     <div>
       <Drawer
-        classes={{ paper: styles.drawer }}
+        className={styles.drawer}
         open={props.isVisible}
         onClose={props.closeSidebar}
       >
         <div>
-          <img
-            src={closeButton}
-            className={styles.closeImage}
-            alt="closeButton"
+          <CloseIcon
             onClick={props.closeSidebar}
+            className={styles.closeIcon}
           />
         </div>
 
