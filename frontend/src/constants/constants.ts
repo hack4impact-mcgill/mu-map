@@ -7,3 +7,7 @@ export const SUCCESS = "#3BF5C1";
 export const WARNING = "#FEEB23";
 export const ERROR = "#FC303E";
 export const CONTRAST = "#FFF"
+export const MTL_MIN_LONGITUDE = -73.85123
+export const MTL_MIN_LATITUDE = 45.370932
+export const MTL_MAX_LONGITUDE = -73.33952
+export const MTL_MAX_LATITUDE =  45.752154
