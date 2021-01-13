@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
   MAPBOX_GEOCODING_API,
@@ -82,6 +82,7 @@ export default function AddressSearchBar() {
         loading={loading}
         id="address-search-bar"
         options={options}
+        filterOptions={(options) => options}
         onOpen={() => {
           setOpen(true);
         }}
@@ -97,12 +98,12 @@ export default function AddressSearchBar() {
             InputProps={{
               ...params.InputProps,
               endAdornment: (
-                <React.Fragment>
+                <Fragment>
                   {loading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                   {params.InputProps.endAdornment}
-                </React.Fragment>
+                </Fragment>
               ),
             }}
           />
