@@ -11,3 +11,4 @@ export const MTL_MIN_LONGITUDE = -73.85123
 export const MTL_MIN_LATITUDE = 45.370932
 export const MTL_MAX_LONGITUDE = -73.33952
 export const MTL_MAX_LATITUDE =  45.752154
+export const MAPBOX_GEOCODING_API = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
