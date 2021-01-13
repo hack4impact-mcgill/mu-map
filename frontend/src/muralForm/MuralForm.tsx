@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import AddressSearch from "../AddressSearch/addressSearch"
+import AddressSearch from "../AddressSearch/addressSearch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     element: {
       margin: theme.spacing(1),
-      width: "195px"
+      width: "195px",
     },
   })
 );
