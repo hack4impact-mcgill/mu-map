@@ -4,7 +4,7 @@ import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
-import MuralForm from "../MuralForm/MuralForm"
+import MuralForm from "../muralForm/MuralForm";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
