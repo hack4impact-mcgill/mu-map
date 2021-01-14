@@ -5,11 +5,7 @@ import "./PlusButton.css";
 
 interface IPlusButtonProps {
   isVisible: boolean;
-}
-
-function plusButtonClicked() {
-  // TODO: Notify App
-  console.log("Button Clicked"); // tmp line to check if the call works
+  handleClick: () => void;
 }
 
 function PlusButton(props: IPlusButtonProps) {
@@ -20,7 +16,7 @@ function PlusButton(props: IPlusButtonProps) {
           size="medium"
           color="primary"
           aria-label="add"
-          onClick={plusButtonClicked}
+          onClick={props.handleClick}
         >
           <AddIcon />
         </Fab>
