@@ -27,7 +27,7 @@ export default function SearchBar() {
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/mural').then((response) => { setMurals(response.data.murals.rows) });
+    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.murals.rows) }).catch(err => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -39,7 +39,6 @@ export default function SearchBar() {
     <form className={classes.root} >
       <Autocomplete
         freeSolo
-        id="free-solo-2-demo"
         disableClearable
         options={result.map((mural: any) => mural.name)}
         renderInput={(params) => (

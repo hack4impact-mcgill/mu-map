@@ -7,7 +7,7 @@ import Search from "../Search/Search"
 function App() {
   return (
     <div className="App">
-      <Search></Search>
+      <Search />
       <Map mapContainer={document.getElementById("root")} />
       <PlusButton isVisible={true} />
     </div>
