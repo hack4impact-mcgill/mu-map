@@ -4,6 +4,7 @@ import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
+import MuralForm from "../muralForm/MuralForm";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -13,7 +14,7 @@ function App() {
   function handleSigninClick() {
     setIsSignedIn(!isSignedIn);
   }
-  
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -28,7 +29,9 @@ function App() {
         name={sidebarTitle}
         isVisible={sidebarOpen}
         closeSidebar={toggleSidebar}
-      />
+      >
+        <MuralForm />
+      </Sidebar>
       <PlusButton isVisible={true} handleClick={toggleSidebar} />
     </div>
   );
