@@ -16,6 +16,8 @@ class App {
     this.associationSetup.sync();
   }
   private config(): void {
+    const cors = require('cors')
+    this.app.use(cors())
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
