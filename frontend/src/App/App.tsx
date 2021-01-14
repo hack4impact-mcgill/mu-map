@@ -4,6 +4,7 @@ import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
+import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <div className="App">
+      <Search />
       <Map mapContainer={document.getElementById("root")} />
       <DropdownMenu isSignedIn={isSignedIn} signInClick={handleSigninClick} />
       <Sidebar
