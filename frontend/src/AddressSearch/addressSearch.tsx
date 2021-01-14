@@ -93,7 +93,7 @@ export default function AddressSearchBar() {
           <TextField
             {...params}
             id="autocomplete-text-f"
-            label="Search..."
+            label="Address Search..."
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
             InputProps={{
               ...params.InputProps,
