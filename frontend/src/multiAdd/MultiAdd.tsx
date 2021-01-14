@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Input from "@material-ui/core/Input";
 import MultiAddItem from "./MultiAddItem";
-
+import FilledInput from "@material-ui/core/FilledInput";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flexContainer: {
@@ -54,7 +53,7 @@ function MultiAdd(props: IMultiAddProps) {
 
   return (
     <div className={styles.flexContainer}>
-      <Input
+      <FilledInput
         placeholder={props.placeholder}
         onChange={(e) => setCurrentInput(e.target.value)}
         value={currentInput}

@@ -94,6 +94,8 @@ export default function AddressSearchBar() {
             {...params}
             id="autocomplete-text-f"
             label="Address Search..."
+            variant="filled"
+            size="small"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
             InputProps={{
               ...params.InputProps,

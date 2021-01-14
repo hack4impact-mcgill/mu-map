@@ -37,7 +37,14 @@ function MuralForm(props: IMuralFormProps) {
   return (
     <form noValidate autoComplete="off">
       <div className={styles.flexContainer}>
-        <TextField className={styles.element} required id="name" label="Name" />
+        <TextField
+          className={styles.element}
+          required
+          id="name"
+          label="Name"
+          variant="filled"
+          size="small"
+        />
         <TextField
           className={styles.element}
           required
@@ -45,6 +52,8 @@ function MuralForm(props: IMuralFormProps) {
           label="Year"
           type="number"
           defaultValue={currYear}
+          variant="filled"
+          size="small"
         />
         <AddressSearch />
         <TextField
@@ -53,6 +62,8 @@ function MuralForm(props: IMuralFormProps) {
           id="artist"
           label="Artist"
           placeholder="Unknown Artist"
+          variant="filled"
+          size="small"
         />
         <TextField
           className={styles.element}
@@ -61,6 +72,8 @@ function MuralForm(props: IMuralFormProps) {
           id="description"
           label="Description"
           placeholder="No Description"
+          variant="filled"
+          size="small"
         />
         <MultiAdd
           title={"Assistants"}

@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemContainer: {
-      margin: theme.spacing(0),
+      marginTop: theme.spacing(2),
       display: "flex",
       alignItems: "center",
       height: theme.spacing(4),
@@ -28,7 +29,13 @@ function MultiAddItem(props: IMultiAddItemProps) {
 
   return (
     <div className={styles.itemContainer}>
-      <p>{props.name}</p>
+      <TextField
+        defaultValue={props.name}
+        size="small"
+        InputProps={{
+          readOnly: true,
+        }}
+      />
       <DeleteIcon
         className={styles.deleteIcon}
         onClick={() => props.onDelete(props.name)}
