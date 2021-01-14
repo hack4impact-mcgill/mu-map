@@ -36,7 +36,6 @@ function Map(props: IMapProps) {
     });
 
     props.murals.forEach((mural: any) => {
-      console.log(mural.coordinates.coordinates[0]);
       new mapboxgl.Marker()
         .setLngLat([
           mural.coordinates.coordinates[0],
