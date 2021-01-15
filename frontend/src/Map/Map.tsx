@@ -14,16 +14,15 @@ interface IMapProps {
   murals: any;
 }
 
-function Map(props: IMapProps) {
+function Map({mapContainer, murals}: IMapProps) {
   const [lng, setLng] = useState(DEFAULT_LONGITUDE);
   const [lat, setLat] = useState(DEFAULT_LATITUDE);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
-  let mapContainer: any = props.mapContainer;
 
   useEffect(() => {
     const map = new mapboxgl.Map({
-      container: mapContainer,
+      container: (mapContainer as any),
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
       zoom: zoom,
@@ -35,7 +34,7 @@ function Map(props: IMapProps) {
       setZoom(map.getZoom());
     });
 
-    props.murals.forEach((mural: any) => {
+    murals.forEach((mural: any) => {
       new mapboxgl.Marker()
         .setLngLat([
           mural.coordinates.coordinates[0],
@@ -44,7 +43,7 @@ function Map(props: IMapProps) {
         .addTo(map);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.murals]);
+  }, [murals]);
 
   return (
     <div>
