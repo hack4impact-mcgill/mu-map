@@ -22,4 +22,12 @@ export class BoroughService {
     await Borough.update(params, update);
     return { success: true };
   }
+
+  public async showAll(limit: number, offset: number) {
+    const boroughs = await Borough.findAndCountAll<Borough>({
+      limit: limit,
+      offset: offset,
+    });
+    return { success: true, boroughs: boroughs };
+  }
 }

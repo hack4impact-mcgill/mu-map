@@ -25,6 +25,7 @@ export class Routes {
 
     app
       .route("/borough")
+      .get(this.boroughController.showAll.bind(this.boroughController))
       .post(this.boroughController.create.bind(this.boroughController));
 
     app
@@ -34,6 +35,7 @@ export class Routes {
 
     app
       .route("/artist")
+      .get(this.artistController.showAll.bind(this.artistController))
       .post(this.artistController.create.bind(this.artistController));
 
     app
@@ -43,6 +45,7 @@ export class Routes {
 
     app
       .route("/tour")
+      .get(this.tourController.showAll.bind(this.tourController))
       .post(this.tourController.create.bind(this.tourController));
 
     app
@@ -52,6 +55,7 @@ export class Routes {
 
     app
       .route("/collection")
+      .get(this.collectionController.showAll.bind(this.collectionController))
       .post(this.collectionController.create.bind(this.collectionController));
 
     app

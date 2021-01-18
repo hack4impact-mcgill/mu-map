@@ -48,4 +48,16 @@ export class ArtistController {
       }
     }
   }
+
+  //GET /artist to get all artists
+  public async showAll(req: Request, res: Response) {
+    const limit = Number(req.query.limit ?? 40);
+    const offset = Number(req.query.page ?? 0) * limit;
+    try {
+      const artists = await this.artistService.showAll(limit, offset);
+      res.status(202).json(artists);
+    } catch (e) {
+      res.status(500).json({ error: "Something went wrong." });
+    }
+  }
 }

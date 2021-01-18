@@ -22,4 +22,12 @@ export class ArtistService {
     await Artist.update(params, update);
     return { success: true };
   }
+
+  public async showAll(limit: number, offset: number) {
+    const artists = await Artist.findAndCountAll<Artist>({
+      limit: limit,
+      offset: offset,
+    });
+    return { success: true, artists: artists };
+  }
 }

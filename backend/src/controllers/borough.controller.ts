@@ -52,4 +52,16 @@ export class BoroughController {
       }
     }
   }
+
+  //GET /borough to get ALL boroughs
+  public async showAll(req: Request, res: Response) {
+    const limit = Number(req.query.limit ?? 40);
+    const offset = Number(req.query.page ?? 0) * limit;
+    try {
+      const boroughs = await this.boroughService.showAll(limit, offset);
+      res.status(202).json(boroughs);
+    } catch (e) {
+      res.status(500).json({ error: "Something went wrong." });
+    }
+  }
 }

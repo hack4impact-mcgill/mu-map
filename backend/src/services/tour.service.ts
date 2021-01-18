@@ -15,7 +15,7 @@ export class TourService {
   }
   public async show(tourId: number) {
     const tour = await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    const murals = await tour.getMurals()
+    const murals = await tour.getMurals();
     return { success: true, tour: tour, murals: murals };
   }
 
@@ -34,5 +34,13 @@ export class TourService {
       where: { id: tourId },
     });
     return { success: true };
+  }
+
+  public async showAll(limit: number, offset: number) {
+    const tours = await Tour.findAndCountAll<Tour>({
+      limit: limit,
+      offset: offset,
+    });
+    return { success: true, tours: tours };
   }
 }
