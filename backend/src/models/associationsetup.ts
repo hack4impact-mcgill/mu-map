@@ -4,7 +4,6 @@ import { Tour } from "./tour.model";
 import { Mural } from "./mural.model";
 import { MuralCollection } from "./muralcollection.model";
 import { database } from "../config/database";
-import { create } from "domain";
 
 export class AssociationSetup {
   public async sync() {
