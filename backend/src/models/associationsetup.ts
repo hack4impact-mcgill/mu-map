@@ -79,7 +79,7 @@ export class AssociationSetup {
       partners: ["partner 1"],
       coordinates: {
         type: "Point",
-        coordinates: [-55.123123, 18.222224],
+        coordinates: [-73.5772, 45.5048],
       },
     };
     await Mural.create<Mural>(muralParams2);
@@ -89,6 +89,7 @@ export class AssociationSetup {
     });
     await createdTour.addMural(1);
     await createdTour.addMural(2);
+    console.log("Finished creating data");
   }
 
   public close() {

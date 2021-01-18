@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
+import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
 
 function App() {
@@ -11,19 +12,33 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
-  function handleSigninClick() {
+  const [murals, setMurals] = useState<any>([]);
+
+  const handleSigninClick = () => {
     setIsSignedIn(!isSignedIn);
-  }
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const getMural = async () => {
+    const response = await fetch("http://localhost:3000/mural");
+    const data = await response.json();
+
+    setMurals(data.murals.rows);
+  };
+
+  useEffect(() => {
+    getMural();
+  }, []);
+
   const sidebarTitle = "Example Sidebar";
 
   return (
     <div className="App">
-      <Map mapContainer={document.getElementById("root")} />
+      <Search />
+      <Map murals={murals} mapContainer={document.getElementById("root")} />
       <DropdownMenu isSignedIn={isSignedIn} signInClick={handleSigninClick} />
       <Sidebar
         name={sidebarTitle}
