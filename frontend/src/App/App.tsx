@@ -33,7 +33,7 @@ function App() {
     getMural();
   }, []);
 
-  const sidebarTitle = "Example Sidebar";
+  const sidebarTitle = "Create Mural";
 
   return (
     <div className="App">
