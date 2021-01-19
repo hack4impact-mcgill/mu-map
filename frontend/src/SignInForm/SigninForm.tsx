@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "70%",
       margin: theme.spacing(2),
     },
+    signInText: {
+      width: "100%",
+    },
     flexContainer: {
       display: "flex",
       flexDirection: "column",
@@ -54,7 +57,9 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
 
   return (
     <>
-      <span onClick={handleOpen}>{children}</span>
+      <span onClick={handleOpen} className={classes.signInText}>
+        {children}
+      </span>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           <p className={classes.title}> Welcome</p>
