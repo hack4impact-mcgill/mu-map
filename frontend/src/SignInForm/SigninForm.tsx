@@ -56,7 +56,7 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
   };
 
   return (
-    <>
+    <div>
       <span onClick={handleOpen} className={classes.signInText}>
         {children}
       </span>
@@ -102,7 +102,7 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 }
 
