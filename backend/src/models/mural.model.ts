@@ -20,7 +20,8 @@ export class Mural extends Model {
   public partners!: string[];
   public assistants!: string[];
   public coordinates!: any;
-  public imgUrl!: string[];
+  public imgURLs!: string[];
+  public socialMediaURLs!: string[];
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -84,8 +85,12 @@ Mural.init(
       type: DataTypes.GEOMETRY("POINT", 4326),
       allowNull: false,
     },
-    imgUrl: {
-      type: DataTypes.TEXT,
+    imgURLs: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true,
+    },
+    socialMediaURLs: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
       allowNull: true,
     },
   },
@@ -109,5 +114,6 @@ export interface MuralInterface {
   assistants?: string[];
   longitude: number;
   latitude: number;
-  imgUrl?: string;
+  imgURLs?: string[];
+  socialMediaURLs?: string[];
 }
