@@ -3,6 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
+import ArtistSearchBar from "../ArtistSearch/ArtistSearch";
+import BoroughSearchBar from "../BoroughSearch/BoroughSearch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,31 +24,35 @@ interface IMuralFormProps {}
 
 function MuralForm(props: IMuralFormProps) {
   const styles = useStyles();
-  const currYear = new Date().getFullYear();
+  const [name, setName] = useState<string>("");
+  const [year, setYear] = useState<number>(new Date().getFullYear());
   const [assistants, setAssistants] = useState<string[]>([]);
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
+  const [artist, setArtist] = useState<number | null>(null);
+  const [borough, setBorough] = useState<number | null>(null);
+  const [addressCoords, setAddressCoords] = useState<number[]>([]);
+  const [description, setDescription] = useState<string>("");
   //todo: delete these logs once we actually use the state
-  console.log(assistants)
-  console.log(socialMedia)
-
-  function updateAssistants(newAssistants: string[]) {
-    setAssistants(newAssistants);
-  }
-
-  function updateSocialMedia(newSocialMedia: string[]) {
-    setSocialMedia(newSocialMedia);
-  }
+  console.log("name", name);
+  console.log("assistants", assistants);
+  console.log("socialmedia", socialMedia);
+  console.log("artist", artist);
+  console.log("borough", borough);
+  console.log("address", addressCoords);
+  console.log("description", description);
+  console.log("year", year);
 
   return (
     <form noValidate autoComplete="off">
       <div className={styles.flexContainer}>
         <TextField
           className={styles.element}
-          required
+          required={true}
           id="name"
           label="Name"
           variant="filled"
           size="small"
+          onChange={(e: any) => setName(e.target.value)}
         />
         <TextField
           className={styles.element}
@@ -54,19 +60,19 @@ function MuralForm(props: IMuralFormProps) {
           id="year"
           label="Year"
           type="number"
-          defaultValue={currYear}
+          defaultValue={year}
           variant="filled"
           size="small"
+          onChange={(e: any) => setYear(e.target.value)}
         />
-        <AddressSearch />
-        <TextField
-          className={styles.element}
-          required
-          id="artist"
-          label="Artist"
-          placeholder="Unknown Artist"
-          variant="filled"
-          size="small"
+        <ArtistSearchBar
+          callback={(artistId: number | null) => setArtist(artistId)}
+        />
+        <AddressSearch
+          callback={(coords: number[]) => setAddressCoords(coords)}
+        />
+        <BoroughSearchBar
+          callback={(boroughId: number | null) => setBorough(boroughId)}
         />
         <TextField
           className={styles.element}
@@ -77,16 +83,19 @@ function MuralForm(props: IMuralFormProps) {
           placeholder="No Description"
           variant="filled"
           size="small"
+          onChange={(e: any) => setDescription(e.target.value)}
         />
         <MultiAdd
           title={"Assistants"}
           placeholder={"Add Assistants..."}
-          callback={updateAssistants}
+          callback={(newAssistants: string[]) => setAssistants(newAssistants)}
         />
         <MultiAdd
           title={"Social Media"}
           placeholder={"Add Social Media..."}
-          callback={updateSocialMedia}
+          callback={(newSocialMedia: string[]) =>
+            setSocialMedia(newSocialMedia)
+          }
         />
       </div>
     </form>
