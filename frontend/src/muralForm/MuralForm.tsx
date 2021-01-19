@@ -25,6 +25,9 @@ function MuralForm(props: IMuralFormProps) {
   const currYear = new Date().getFullYear();
   const [assistants, setAssistants] = useState<string[]>([]);
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
+  //todo: delete these logs once we actually use the state
+  console.log(assistants)
+  console.log(socialMedia)
 
   function updateAssistants(newAssistants: string[]) {
     setAssistants(newAssistants);
