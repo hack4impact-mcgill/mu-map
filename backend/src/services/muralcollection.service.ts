@@ -37,4 +37,12 @@ export class MuralCollectionService {
     await MuralCollection.update(params, update);
     return { success: true };
   }
+
+  public async showAll(limit: number, offset: number) {
+    const collections = await MuralCollection.findAndCountAll<MuralCollection>({
+      limit: limit,
+      offset: offset,
+    });
+    return { success: true, collections: collections };
+  }
 }

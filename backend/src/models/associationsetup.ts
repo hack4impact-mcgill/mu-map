@@ -7,7 +7,7 @@ import { database } from "../config/database";
 
 export class AssociationSetup {
   public async sync() {
-    await database.query('CREATE EXTENSION IF NOT EXISTS postgis');
+    await database.query("CREATE EXTENSION IF NOT EXISTS postgis");
     Mural.belongsTo(Borough, {
       foreignKey: { allowNull: false, name: "boroughId" },
     });
@@ -89,6 +89,11 @@ export class AssociationSetup {
     });
     await createdTour.addMural(1);
     await createdTour.addMural(2);
+    const createdCollection = await MuralCollection.create<MuralCollection>({
+      name: "basic collection",
+      description: "cool murals",
+    });
+    await createdCollection.addMural(1);
     console.log("Finished creating data");
   }
 

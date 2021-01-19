@@ -68,4 +68,16 @@ export class TourController {
       }
     }
   }
+
+  //GET /tour to get all tours
+  public async showAll(req: Request, res: Response) {
+    const limit = Number(req.query.limit ?? 40);
+    const offset = Number(req.query.page ?? 0) * limit;
+    try {
+      const tours = await this.tourService.showAll(limit, offset);
+      res.status(202).json(tours);
+    } catch (e) {
+      res.status(500).json({ error: "Something went wrong." });
+    }
+  }
 }
