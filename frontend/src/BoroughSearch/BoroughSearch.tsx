@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState, useEffect } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { GET_ALL_BOROUGH_API } from "../constants/constants"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,7 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/borough")
+      .get(GET_ALL_BOROUGH_API)
       .then((response) => {
         if (response.data) setboroughs(response.data.boroughs.rows);
       })

@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState, useEffect } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { GET_ALL_ARTISTS_API } from "../constants/constants"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/artist")
+      .get(GET_ALL_ARTISTS_API)
       .then((response) => {
         if (response.data) setArtists(response.data.artists.rows);
       })
