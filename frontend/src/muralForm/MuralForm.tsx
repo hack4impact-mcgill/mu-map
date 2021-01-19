@@ -5,6 +5,9 @@ import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
 import ArtistSearchBar from "../ArtistSearch/ArtistSearch";
 import BoroughSearchBar from "../BoroughSearch/BoroughSearch";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { CREATE_MURAL_API } from "../constants/constants";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,6 +19,13 @@ const useStyles = makeStyles((theme: Theme) =>
     element: {
       margin: theme.spacing(1),
       width: "195px",
+    },
+    bottomButton: {
+      fontWeight: 500,
+    },
+    bottomButtonContainer: {
+      display: "flex",
+      justifyContent: "space-between",
     },
   })
 );
@@ -32,15 +42,61 @@ function MuralForm(props: IMuralFormProps) {
   const [borough, setBorough] = useState<number | null>(null);
   const [addressCoords, setAddressCoords] = useState<number[]>([]);
   const [description, setDescription] = useState<string>("");
-  //todo: delete these logs once we actually use the state
-  console.log("name", name);
-  console.log("assistants", assistants);
-  console.log("socialmedia", socialMedia);
-  console.log("artist", artist);
-  console.log("borough", borough);
-  console.log("address", addressCoords);
-  console.log("description", description);
-  console.log("year", year);
+  const [neighbourhood, setNeighbourhood] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  function submitForm() {
+    if (name === "") {
+      alert("Please enter a name.");
+      return;
+    }
+    if (artist == null) {
+      alert("Please select a valid artist.");
+      return;
+    }
+    if (borough == null) {
+      alert("Please select a valid borough.");
+      return;
+    }
+    if (addressCoords.length !== 2 || address === "" || neighbourhood === "") {
+      alert("Please check validity of address.");
+      return;
+    }
+    axios
+      .post(CREATE_MURAL_API, {
+        name: name,
+        boroughId: borough,
+        artistId: artist,
+        year: year,
+        city: "Montreal",
+        longitude: addressCoords[0],
+        latitude: addressCoords[1],
+        partners: assistants,
+        description: description,
+        socialMedia: socialMedia,
+        address: address,
+        neighbourhood: neighbourhood,
+      })
+      .then(
+        (response) => {
+          //TODO notify success and clear form.
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  function handleAddressUpdate(
+    coords: number[],
+    address: string,
+    neighbourhood: string
+  ) {
+    setAddressCoords(coords);
+    setAddress(address);
+    setNeighbourhood(neighbourhood);
+  }
 
   return (
     <form noValidate autoComplete="off">
@@ -68,9 +124,7 @@ function MuralForm(props: IMuralFormProps) {
         <ArtistSearchBar
           callback={(artistId: number | null) => setArtist(artistId)}
         />
-        <AddressSearch
-          callback={(coords: number[]) => setAddressCoords(coords)}
-        />
+        <AddressSearch callback={handleAddressUpdate} />
         <BoroughSearchBar
           callback={(boroughId: number | null) => setBorough(boroughId)}
         />
@@ -97,6 +151,14 @@ function MuralForm(props: IMuralFormProps) {
             setSocialMedia(newSocialMedia)
           }
         />
+        <div className={styles.bottomButtonContainer}>
+          <Button color="primary" size="small" className={styles.bottomButton}>
+            Cancel
+          </Button>
+          <Button color="primary" size="small" onClick={submitForm}>
+            Save
+          </Button>
+        </div>
       </div>
     </form>
   );

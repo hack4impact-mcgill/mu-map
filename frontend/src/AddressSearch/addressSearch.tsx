@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IAddressSearchBarProps {
-  callback: (coords: number[]) => void;
+  callback: (coords: number[], address: string, neighbourhood: string) => void;
 }
 
 export default function AddressSearchBar(props: IAddressSearchBarProps) {
@@ -84,8 +84,12 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
     const filtered: any = response.filter((option: any) => {
       return option.place_name === selection;
     });
-    if (filtered.length === 0) props.callback([]);
-    props.callback(filtered[0].center);
+    if (filtered.length === 0) props.callback([], "", "");
+    props.callback(
+      filtered[0].center,
+      filtered[0].place_name,
+      filtered[0].context[0].text
+    );
   }
 
   return (

@@ -15,3 +15,4 @@ export const MAPBOX_GEOCODING_API =
   "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 export const GET_ALL_ARTISTS_API = "http://localhost:3000/artist";
 export const GET_ALL_BOROUGH_API = "http://localhost:3000/borough";
+export const CREATE_MURAL_API = "http://localhost:3000/mural";
