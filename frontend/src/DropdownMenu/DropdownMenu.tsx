@@ -4,7 +4,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import TranslateIcon from "@material-ui/icons/Translate";
-import SigninForm from "../SignInForm/SigninForm" 
+import SigninForm from "../SignInForm/SigninForm";
 import {
   makeStyles,
   useTheme,
@@ -27,9 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function DropdownMenu({isSignedIn, signInClick}: IDropdownMenuProps) {
+function DropdownMenu({ isSignedIn, signInClick }: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,7 +44,6 @@ function DropdownMenu({isSignedIn, signInClick}: IDropdownMenuProps) {
       <SigninForm signInClick={signInClick}>
         <strong style={{ color: theme.palette.primary.main }}>SIGN IN </strong>
       </SigninForm>
-      
     ),
     signout: (
       <strong style={{ color: theme.palette.secondary.main }}>SIGN OUT </strong>
@@ -78,7 +76,13 @@ function DropdownMenu({isSignedIn, signInClick}: IDropdownMenuProps) {
         <MenuItem component="a" href="https://mumtl.org/" target="_blank">
           Visit MU site
         </MenuItem>
-        <MenuItem>Donate</MenuItem>
+        <MenuItem
+          component="a"
+          href="https://www.canadahelps.org/en/charities/mu/"
+          target="_blank"
+        >
+          Donate
+        </MenuItem>
         <MenuItem onClick={handleClose}>
           {isSignedIn ? buttonText.signout : buttonText.signin}
         </MenuItem>
