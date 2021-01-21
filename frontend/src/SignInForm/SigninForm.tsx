@@ -13,7 +13,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 
 interface ISigninFormProps {
-  signInClick: () => void;
+  signInClick: (credentials: { email: string, password: string }) => void;
   children: JSX.Element;
 }
 
@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme: Theme) =>
 function SigninForm({ signInClick, children }: ISigninFormProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -54,6 +57,10 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleSubmit = () => {
+    signInClick({ email, password })
+  }
 
   return (
     <div>
@@ -72,6 +79,7 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
               label="Email"
               variant="outlined"
               className={classes.textField}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               id="password"
@@ -79,6 +87,7 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               variant="outlined"
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -97,7 +106,11 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={signInClick} color="primary">
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            color="primary"
+          >
             Sign in
           </Button>
         </DialogActions>

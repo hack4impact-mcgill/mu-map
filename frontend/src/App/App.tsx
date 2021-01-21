@@ -6,16 +6,22 @@ import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
 import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
+import "firebase/auth"
+import firebaseAuth from "../firebase"
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-
   const [murals, setMurals] = useState<any>([]);
 
-  const handleSigninClick = () => {
-    setIsSignedIn(!isSignedIn);
+  const handleSigninClick = (creds: any) => {
+    firebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
+      .then((userCredential: any) => {
+        let user = userCredential.user;
+        console.log(user)
+        setIsSignedIn(true)
+      })
+      .catch((error: any) => console.log(error.message));
   };
 
   const toggleSidebar = () => {

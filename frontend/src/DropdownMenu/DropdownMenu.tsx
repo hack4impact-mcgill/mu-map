@@ -14,7 +14,7 @@ import {
 
 interface IDropdownMenuProps {
   isSignedIn: boolean;
-  signInClick: () => void;
+  signInClick: (credentials: Object) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,10 +38,14 @@ function DropdownMenu({ isSignedIn, signInClick }: IDropdownMenuProps) {
     setAnchorEl(null);
   };
 
+  const handleSignIn = (credentials: Object) => {
+    signInClick(credentials)
+  }
+
   const theme = useTheme();
   const buttonText = {
     signin: (
-      <SigninForm signInClick={signInClick}>
+      <SigninForm signInClick={handleSignIn}>
         <strong style={{ color: theme.palette.primary.main }}>SIGN IN </strong>
       </SigninForm>
     ),
