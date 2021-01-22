@@ -28,7 +28,9 @@ function App() {
       .catch((error: any) => console.log(error.message));
   };
 
-  const openSignin = () => setSigningIn(!signingIn)
+  const openSignin = () => setSigningIn(true)
+
+  const handleCancelSignin = () => setSigningIn(false)
 
   const handleSignout = async () => {
     await firebaseAuth.signOut()
@@ -48,13 +50,19 @@ function App() {
 
   useEffect(() => {
     getMural();
+    firebaseAuth.onAuthStateChanged((user: any) => {
+      setIsSignedIn(!!user)
+    });
   }, []);
 
   const sidebarTitle = "Example Sidebar";
 
   return (
     <div className="App">
-      <SigninForm signInClick={handleSignin} signingIn={signingIn} />
+      <SigninForm
+        signInClick={handleSignin}
+        cancelClick={handleCancelSignin}
+        open={signingIn} />
       <Search />
       <Map murals={murals} mapContainer={document.getElementById("root")} />
       <DropdownMenu

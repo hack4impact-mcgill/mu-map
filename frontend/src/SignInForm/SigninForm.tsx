@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -14,7 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 
 interface ISigninFormProps {
   signInClick: (credentials: { email: string, password: string }) => void;
-  signingIn: boolean;
+  cancelClick: () => void;
+  open: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,8 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SigninForm({ signInClick, signingIn }: ISigninFormProps) {
-  const [open, setOpen] = useState<boolean>(signingIn);
+function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
@@ -47,7 +47,7 @@ function SigninForm({ signInClick, signingIn }: ISigninFormProps) {
   const classes = useStyles();
 
   const handleClose = () => {
-    setOpen(false);
+    cancelClick();
   };
 
   const handleClickShowPassword = () => {
@@ -57,8 +57,6 @@ function SigninForm({ signInClick, signingIn }: ISigninFormProps) {
   const handleSubmit = () => {
     signInClick({ email, password })
   }
-
-  useEffect(() => { setOpen(signingIn) }, [signingIn])
 
   return (
     <div>
@@ -72,6 +70,7 @@ function SigninForm({ signInClick, signingIn }: ISigninFormProps) {
             <TextField
               autoFocus
               label="Email"
+              type="email"
               variant="outlined"
               className={classes.textField}
               onChange={(e) => setEmail(e.target.value)}
