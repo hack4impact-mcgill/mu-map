@@ -3,6 +3,11 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
+import ArtistSearchBar from "../ArtistSearch/ArtistSearch";
+import BoroughSearchBar from "../BoroughSearch/BoroughSearch";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { CREATE_MURAL_API } from "../constants/constants";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +20,13 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       width: "195px",
     },
+    bottomButton: {
+      fontWeight: 500,
+    },
+    bottomButtonContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
   })
 );
 
@@ -22,19 +34,68 @@ interface IMuralFormProps {}
 
 function MuralForm(props: IMuralFormProps) {
   const styles = useStyles();
-  const currYear = new Date().getFullYear();
+  const [name, setName] = useState<string>("");
+  const [year, setYear] = useState<number>(new Date().getFullYear());
   const [assistants, setAssistants] = useState<string[]>([]);
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
-  //todo: delete these logs once we actually use the state
-  console.log(assistants)
-  console.log(socialMedia)
+  const [artist, setArtist] = useState<number | null>(null);
+  const [borough, setBorough] = useState<number | null>(null);
+  const [addressCoords, setAddressCoords] = useState<number[]>([]);
+  const [description, setDescription] = useState<string>("");
+  const [neighbourhood, setNeighbourhood] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
-  function updateAssistants(newAssistants: string[]) {
-    setAssistants(newAssistants);
+  function submitForm() {
+    if (name === "") {
+      alert("Please enter a name.");
+      return;
+    }
+    if (artist == null) {
+      alert("Please select a valid artist.");
+      return;
+    }
+    if (borough == null) {
+      alert("Please select a valid borough.");
+      return;
+    }
+    if (addressCoords.length !== 2 || address === "" || neighbourhood === "") {
+      alert("Please check validity of address.");
+      return;
+    }
+    axios
+      .post(CREATE_MURAL_API, {
+        name: name,
+        boroughId: borough,
+        artistId: artist,
+        year: year,
+        city: "Montreal",
+        longitude: addressCoords[0],
+        latitude: addressCoords[1],
+        partners: assistants,
+        description: description,
+        socialMedia: socialMedia,
+        address: address,
+        neighbourhood: neighbourhood,
+      })
+      .then(
+        (response) => {
+          //TODO notify success and clear form.
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
-  function updateSocialMedia(newSocialMedia: string[]) {
-    setSocialMedia(newSocialMedia);
+  function handleAddressUpdate(
+    coords: number[],
+    address: string,
+    neighbourhood: string
+  ) {
+    setAddressCoords(coords);
+    setAddress(address);
+    setNeighbourhood(neighbourhood);
   }
 
   return (
@@ -42,11 +103,12 @@ function MuralForm(props: IMuralFormProps) {
       <div className={styles.flexContainer}>
         <TextField
           className={styles.element}
-          required
+          required={true}
           id="name"
           label="Name"
           variant="filled"
           size="small"
+          onChange={(e: any) => setName(e.target.value)}
         />
         <TextField
           className={styles.element}
@@ -54,19 +116,17 @@ function MuralForm(props: IMuralFormProps) {
           id="year"
           label="Year"
           type="number"
-          defaultValue={currYear}
+          defaultValue={year}
           variant="filled"
           size="small"
+          onChange={(e: any) => setYear(e.target.value)}
         />
-        <AddressSearch />
-        <TextField
-          className={styles.element}
-          required
-          id="artist"
-          label="Artist"
-          placeholder="Unknown Artist"
-          variant="filled"
-          size="small"
+        <ArtistSearchBar
+          callback={(artistId: number | null) => setArtist(artistId)}
+        />
+        <AddressSearch callback={handleAddressUpdate} />
+        <BoroughSearchBar
+          callback={(boroughId: number | null) => setBorough(boroughId)}
         />
         <TextField
           className={styles.element}
@@ -77,17 +137,28 @@ function MuralForm(props: IMuralFormProps) {
           placeholder="No Description"
           variant="filled"
           size="small"
+          onChange={(e: any) => setDescription(e.target.value)}
         />
         <MultiAdd
           title={"Assistants"}
           placeholder={"Add Assistants..."}
-          callback={updateAssistants}
+          callback={(newAssistants: string[]) => setAssistants(newAssistants)}
         />
         <MultiAdd
           title={"Social Media"}
           placeholder={"Add Social Media..."}
-          callback={updateSocialMedia}
+          callback={(newSocialMedia: string[]) =>
+            setSocialMedia(newSocialMedia)
+          }
         />
+        <div className={styles.bottomButtonContainer}>
+          <Button color="primary" size="small" className={styles.bottomButton}>
+            Cancel
+          </Button>
+          <Button color="primary" size="small" onClick={submitForm}>
+            Save
+          </Button>
+        </div>
       </div>
     </form>
   );

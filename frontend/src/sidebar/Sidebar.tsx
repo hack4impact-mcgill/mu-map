@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -26,16 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "center",
     },
-    bottomButton: {
-      fontWeight: 500,
-    },
-    bottomButtonContainer: {
-      display: "flex",
-      justifyContent: "space-evenly",
-    },
-    deleteButtonInvisible: {
-      display: "none",
-    },
   })
 );
 
@@ -48,7 +37,6 @@ interface ISidebarProps {
 
 function Sidebar(props: ISidebarProps) {
   const styles = useStyles();
-  const [deleteButtonVisible] = useState<boolean>(false);
 
   return (
     <div>
@@ -63,27 +51,8 @@ function Sidebar(props: ISidebarProps) {
             className={styles.closeIcon}
           />
         </div>
-
         <p className={styles.title}>{props.name}</p>
         <div className={styles.flexContainer}>{props.children}</div>
-
-        <div className={styles.bottomButtonContainer}>
-          <Button color="primary" size="small" className={styles.bottomButton}>
-            Cancel
-          </Button>
-
-          <Button color="primary" size="small">
-            Save
-          </Button>
-
-          <Button
-            className={deleteButtonVisible ? "" : styles.deleteButtonInvisible}
-            size="small"
-            color="secondary"
-          >
-            Delete
-          </Button>
-        </div>
       </Drawer>
     </div>
   );

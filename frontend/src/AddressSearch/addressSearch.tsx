@@ -25,11 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddressSearchBar() {
+interface IAddressSearchBarProps {
+  callback: (coords: number[], address: string, neighbourhood: string) => void;
+}
+
+export default function AddressSearchBar(props: IAddressSearchBarProps) {
   const styles = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
   const [options, setOptions] = useState([]);
+  const [response, setResponse] = useState([]);
   const loading = open && options.length === 0;
 
   useEffect(() => {
@@ -55,6 +60,7 @@ export default function AddressSearchBar() {
       })
       .then((response) => {
         if (active) {
+          setResponse(response.data.features);
           setOptions(
             response.data.features.map((feature: any) => feature.place_name)
           );
@@ -74,10 +80,23 @@ export default function AddressSearchBar() {
     }
   }, [open]);
 
+  function updateCoordinates(selection: string) {
+    const filtered: any = response.filter((option: any) => {
+      return option.place_name === selection;
+    });
+    if (filtered.length === 0) props.callback([], "", "");
+    props.callback(
+      filtered[0].center,
+      filtered[0].place_name,
+      filtered[0].context[0].text
+    );
+  }
+
   return (
     <div className={styles.root}>
       <Autocomplete
         freeSolo={false}
+        disableClearable
         open={open}
         loading={loading}
         id="address-search-bar"
@@ -89,6 +108,9 @@ export default function AddressSearchBar() {
         onClose={() => {
           setOpen(false);
         }}
+        onChange={(event: any, selection: string) =>
+          updateCoordinates(selection)
+        }
         renderInput={(params) => (
           <TextField
             {...params}
