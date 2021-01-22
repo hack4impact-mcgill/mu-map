@@ -7,7 +7,6 @@ import TranslateIcon from "@material-ui/icons/Translate";
 import {
   makeStyles,
   useTheme,
-  createStyles,
   Theme,
 } from "@material-ui/core/styles";
 
@@ -17,14 +16,13 @@ interface IDropdownMenuProps {
   signoutClick: () => void;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    DropdownMenu: {
-      position: "absolute",
-      top: theme.spacing(1),
-      right: theme.spacing(1),
-    },
-  })
+const useStyles = makeStyles((theme: Theme) => ({
+  DropdownMenu: {
+    position: "absolute",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+  },
+})
 );
 
 function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuProps) {
