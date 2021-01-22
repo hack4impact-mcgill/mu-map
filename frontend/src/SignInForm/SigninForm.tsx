@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -14,7 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 interface ISigninFormProps {
   signInClick: (credentials: { email: string, password: string }) => void;
-  children: JSX.Element;
+  signingIn: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,17 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SigninForm({ signInClick, children }: ISigninFormProps) {
-  const [open, setOpen] = useState<boolean>(false);
+function SigninForm({ signInClick, signingIn }: ISigninFormProps) {
+  const [open, setOpen] = useState<boolean>(signingIn);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
   const classes = useStyles();
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -62,17 +58,16 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
     signInClick({ email, password })
   }
 
+  useEffect(() => { setOpen(signingIn) }, [signingIn])
+
   return (
     <div>
-      <span onClick={handleOpen} className={classes.signInText}>
-        {children}
-      </span>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
-          <p className={classes.title}> Welcome</p>
+          <p className={classes.title}>Welcome</p>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>MUMTL's map editor</DialogContentText>
+          <DialogContentText>MU MTL's Map Editor</DialogContentText>
           <div className={classes.flexContainer}>
             <TextField
               autoFocus
