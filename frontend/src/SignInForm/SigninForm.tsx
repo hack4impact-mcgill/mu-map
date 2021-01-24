@@ -13,8 +13,9 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 
 interface ISigninFormProps {
-  signInClick: () => void;
-  children: JSX.Element;
+  signInClick: (credentials: { email: string, password: string }) => void;
+  cancelClick: () => void;
+  open: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,40 +39,41 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SigninForm({ signInClick, children }: ISigninFormProps) {
-  const [open, setOpen] = useState<boolean>(false);
+function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+
   const classes = useStyles();
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    cancelClick();
   };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleSubmit = () => {
+    signInClick({ email, password })
+  }
+
   return (
     <div>
-      <span onClick={handleOpen} className={classes.signInText}>
-        {children}
-      </span>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
-          <p className={classes.title}> Welcome</p>
+          <p className={classes.title}>Welcome</p>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>MUMTL's map editor</DialogContentText>
+          <DialogContentText>MU MTL's Map Editor</DialogContentText>
           <div className={classes.flexContainer}>
             <TextField
               autoFocus
               label="Email"
+              type="email"
               variant="outlined"
               className={classes.textField}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               id="password"
@@ -79,6 +81,7 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               variant="outlined"
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -97,7 +100,11 @@ function SigninForm({ signInClick, children }: ISigninFormProps) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={signInClick} color="primary">
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            color="primary"
+          >
             Sign in
           </Button>
         </DialogActions>

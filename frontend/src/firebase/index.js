@@ -1,0 +1,16 @@
+import firebase from "firebase/app"
+import "firebase/auth"
+
+const config = {
+    apiKey: "AIzaSyBLFwchilVz7sSTFIyGiVhPz5LrDgvGMNA",
+    authDomain: "mu-auth.firebaseapp.com",
+    projectId: "mu-auth",
+    appId: "mu-auth",
+};
+
+firebase.initializeApp(config)
+
+const FirebaseAuth = firebase.auth()
+FirebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+
+export default FirebaseAuth

@@ -4,30 +4,28 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import TranslateIcon from "@material-ui/icons/Translate";
-import SigninForm from "../SignInForm/SigninForm";
 import {
   makeStyles,
   useTheme,
-  createStyles,
   Theme,
 } from "@material-ui/core/styles";
 
 interface IDropdownMenuProps {
   isSignedIn: boolean;
-  signInClick: () => void;
+  signinClick: () => void;
+  signoutClick: () => void;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    DropdownMenu: {
-      position: "absolute",
-      top: theme.spacing(1),
-      right: theme.spacing(1),
-    },
-  })
+const useStyles = makeStyles((theme: Theme) => ({
+  DropdownMenu: {
+    position: "absolute",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+  },
+})
 );
 
-function DropdownMenu({ isSignedIn, signInClick }: IDropdownMenuProps) {
+function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,15 +36,23 @@ function DropdownMenu({ isSignedIn, signInClick }: IDropdownMenuProps) {
     setAnchorEl(null);
   };
 
+  const handleSignin = () => {
+    signinClick()
+    handleClose()
+  }
+
+  const handleSignout = () => {
+    signoutClick()
+    handleClose()
+  }
+
   const theme = useTheme();
   const buttonText = {
     signin: (
-      <SigninForm signInClick={signInClick}>
-        <strong style={{ color: theme.palette.primary.main }}>SIGN IN </strong>
-      </SigninForm>
+      <strong style={{ color: theme.palette.primary.main }}>Sign in</strong>
     ),
     signout: (
-      <strong style={{ color: theme.palette.secondary.main }}>SIGN OUT </strong>
+      <strong style={{ color: theme.palette.secondary.main }}>Sign out</strong>
     ),
   };
 
@@ -83,7 +89,7 @@ function DropdownMenu({ isSignedIn, signInClick }: IDropdownMenuProps) {
         >
           Donate
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={isSignedIn ? handleSignout : handleSignin}>
           {isSignedIn ? buttonText.signout : buttonText.signin}
         </MenuItem>
         <hr></hr>
