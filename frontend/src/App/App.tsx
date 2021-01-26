@@ -7,37 +7,52 @@ import PlusButton from "../plusButton/PlusButton";
 import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
 import SigninForm from "../SignInForm/SigninForm";
-import Context from "../context"
-import "firebase/auth"
-import FirebaseAuth from "../firebase"
+import Context from "../context";
+import "firebase/auth";
+import FirebaseAuth from "../firebase";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [signingIn, setSigningIn] = useState<boolean>(false)
-  const [user, setUser] = useState<any>({})
+  const [signingIn, setSigningIn] = useState<boolean>(false);
+  const [user, setUser] = useState<any>({});
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [murals, setMurals] = useState<any>([]);
+  const [signInError, setSignInError] = useState<string>('');
 
   const handleSignin = (creds: any) => {
+    setSignInError("")
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
-      .catch((error: any) => console.log(error.message));
-  }
+      .then(() => {
+        handleCancelSignin()
+        setSignInError('')
+      })
+      .catch((error: any) => {
+        console.log(error.message);
+        if (error.code === "auth/network-request-failed") {
+          setSignInError("Network error.")
+        } else if (error.code === 'auth/wrong-password') {
+          setSignInError("Incorrect password.")
+        } else if (error.code === "auth/user-not-found") {
+          setSignInError("No user record corresponding to this email.")
+        }
+      });
+  };
 
   const handleSignout = async () => {
-    await FirebaseAuth.signOut()
-  }
+    await FirebaseAuth.signOut();
+  };
 
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
-      setUser(user)
-      setIsSignedIn(!!user)
-      setSigningIn(false)
+      setUser(user);
+      setIsSignedIn(!!user);
+      setSigningIn(false);
     });
-  }, [])
+  }, []);
 
-  const openSignin = () => setSigningIn(true)
+  const openSignin = () => setSigningIn(true);
 
-  const handleCancelSignin = () => setSigningIn(false)
+  const handleCancelSignin = () => setSigningIn(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -62,7 +77,9 @@ function App() {
         <SigninForm
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
-          open={signingIn} />
+          open={signingIn}
+          error={signInError}
+        />
         <Search />
         <Map murals={murals} mapContainer={document.getElementById("root")} />
         <DropdownMenu

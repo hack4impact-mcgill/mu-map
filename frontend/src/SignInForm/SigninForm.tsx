@@ -11,11 +11,13 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import Alert from "@material-ui/lab/Alert";
 
 interface ISigninFormProps {
   signInClick: (credentials: { email: string; password: string }) => void;
   cancelClick: () => void;
   open: boolean;
+  error: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,7 +41,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
+function SigninForm({
+  signInClick,
+  cancelClick,
+  open,
+  error,
+}: ISigninFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -126,8 +133,14 @@ function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
                 ),
               }}
               className={classes.textField}
+              helperText={
+                passwordIsValid || password.length === 0
+                  ? ""
+                  : "Invalid password length"
+              }
             />
           </div>
+          {error.length === 0 ? null : <Alert severity="error">{error}</Alert>}
         </DialogContent>
 
         <DialogActions>
