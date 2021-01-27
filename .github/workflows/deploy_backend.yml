@@ -14,7 +14,31 @@ jobs:
       uses: actions/setup-node@v2
         with:
           node-version: '12'
-    - run: npm run-script build
+      run: cd backend
+      run: npm install
+      run: npm run-script build
+
+    - name: Generate javascript artifact
+      run: mkdir -p build
+      run: rm build/build.zip
+      run: zip build/build.zip -r build package.json package-lock.json
 
     - name: Generate deployment package
-      run: 
+      run: zip -r deployment.zip .
+
+    - name: Generate build number
+      uses: einaregilsson/build-number@v3 
+      with:
+        token: ${{secrets.github_token}} 
+      run: echo "Build number is $BUILD_NUMBER"
+
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v14
+      with: 
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: mu-map
+        environment_name: mu-map-backend
+        version_label: $BUILD_NUMBER
+        region: us-east-1
+        deployment_package: deployment.zip
