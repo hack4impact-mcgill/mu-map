@@ -9,11 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - uses: actions/checkout@v2 
     - name: Checkout source code
-      uses: actions/checkout@v2
       uses: actions/setup-node@v2
       with:
         node-version: '12'
+
+    - name: Install and build
       run: cd backend
       run: npm install
       run: npm run-script build
@@ -27,6 +29,8 @@ jobs:
       uses: einaregilsson/build-number@v3 
       with:
         token: ${{secrets.github_token}} 
+    
+    - name: Print build number
       run: echo "Build number is $BUILD_NUMBER"
 
     - name: Deploy to EB
