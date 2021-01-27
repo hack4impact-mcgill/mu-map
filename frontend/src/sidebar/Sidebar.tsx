@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
       paper: "primary",
+      width: "30%",
     },
     title: {
       fontSize: "larger",
