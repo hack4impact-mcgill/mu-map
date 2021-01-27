@@ -21,10 +21,7 @@ jobs:
     - name: Generate javascript artifact
       run: mkdir -p build
       run: rm build/build.zip
-      run: zip build/build.zip -r build package.json package-lock.json
-
-    - name: Generate deployment package
-      run: zip -r deployment.zip .
+      run: zip build/build.zip -r build package.json package-lock.json Procfile
 
     - name: Generate build number
       uses: einaregilsson/build-number@v3 
@@ -41,4 +38,4 @@ jobs:
         environment_name: mu-map-backend
         version_label: $BUILD_NUMBER
         region: us-east-1
-        deployment_package: deployment.zip
+        deployment_package: build/build.zip
