@@ -30,7 +30,7 @@ function App() {
 
   const handleSearch = (results: any) => {
     setSearchResult(results);
-  } 
+  }
 
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
@@ -68,26 +68,26 @@ function App() {
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
           open={signingIn} />
-        <Search searchCallBack={handleSearch}/>
+        <Search searchCallBack={handleSearch} />
         <Map murals={murals} mapContainer={document.getElementById("root")} />
         <DropdownMenu
           isSignedIn={isSignedIn}
           signinClick={openSignin}
           signoutClick={handleSignout}
         />
-        <Sidebar 
+        <Sidebar
           name={sidebarTitle}
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
-          
+
         >
-          { !searchResult.length ? (
+          {!searchResult.length ? (
             <MuralForm />
           ) : (
-            <SearchCard searchCards={searchResult}/>
-          )
+              <SearchCard searchCards={searchResult} />
+            )
           }
-          
+
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
