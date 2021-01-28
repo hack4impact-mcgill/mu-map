@@ -1,0 +1,46 @@
+name: Deploy Backend
+on: 
+  push:
+    branches:
+    - main
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2 
+    - name: Checkout source code
+      uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+
+    - name: Install and build
+      run: |
+        cd backend
+        npm install
+        npm run-script build
+
+    - name: Generate javascript artifact
+      run: |
+        mkdir -p build
+        zip build/build.zip -r build package.json package-lock.json Procfile
+
+    - name: Generate build number
+      uses: einaregilsson/build-number@v3 
+      with:
+        token: ${{secrets.github_token}} 
+    
+    - name: Print build number
+      run: echo "Build number is $BUILD_NUMBER"
+
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v14
+      with: 
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: mu-map
+        environment_name: mu-map-backend
+        version_label: $BUILD_NUMBER
+        region: us-east-1
+        deployment_package: build/build.zip
