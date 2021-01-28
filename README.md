@@ -29,7 +29,7 @@ A Progressive Web App for Montrealers and visitors to explore murals.
 Toolbox instead of Docker Desktop, type `docker-machine ip` into your command line, and paste the output into your DB_HOST **.env** variable.
 - You can remove the old database image and container to free up space on your machine.
 
-### Running
+### Running 
 - Make sure docker is running and the Postgres container exists (which was created in the previous section).
 - Run `npm start`. You should see some output about the database tables being created. You are ready to work with the API.
 - Run `npm t` to run unit tests. Unit tests should pass.
