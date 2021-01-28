@@ -10,6 +10,7 @@ import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
+import SearchCard from "../SideBarSearch/searchCard";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -17,6 +18,7 @@ function App() {
   const [user, setUser] = useState<any>({});
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [murals, setMurals] = useState<any>([]);
+  const [searchResult, setSearchResult] = useState<any>([]);
   const [signInError, setSignInError] = useState<string>('');
 
   const handleSignin = (creds: any) => {
@@ -41,6 +43,10 @@ function App() {
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
   };
+
+  const handleSearch = (results: any) => {
+    setSearchResult(results);
+  }
 
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
@@ -77,10 +83,9 @@ function App() {
         <SigninForm
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
-          open={signingIn}
           error={signInError}
-        />
-        <Search />
+          open={signingIn} />
+        <Search searchCallBack={handleSearch} />
         <Map murals={murals} mapContainer={document.getElementById("root")} />
         <DropdownMenu
           isSignedIn={isSignedIn}
@@ -92,7 +97,11 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          <MuralForm />
+          {
+            !searchResult.length ?
+              (<MuralForm />) :
+              (<SearchCard searchCards={searchResult} />)
+          }
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
