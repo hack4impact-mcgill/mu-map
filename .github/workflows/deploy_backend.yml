@@ -44,4 +44,4 @@ jobs:
         environment_name: mu-map-backend
         version_label: "$BUILD_NUMBER"
         region: us-east-1
-        deployment_package: build/build.zip
+        deployment_package: backend/build/build.zip
