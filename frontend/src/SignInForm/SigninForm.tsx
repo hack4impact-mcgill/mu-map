@@ -11,11 +11,13 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import Alert from "@material-ui/lab/Alert";
 
 interface ISigninFormProps {
-  signInClick: (credentials: { email: string, password: string }) => void;
+  signInClick: (credentials: { email: string; password: string }) => void;
   cancelClick: () => void;
   open: boolean;
+  error: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,12 +41,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
+function SigninForm({
+  signInClick,
+  cancelClick,
+  open,
+  error,
+}: ISigninFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailIsValid, setEmailIsValid] = useState<boolean>(false);
+  const [passwordIsValid, setPasswordIsValid] = useState<boolean>(false);
 
   const classes = useStyles();
+  const emailPattern = new RegExp(
+    /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+  );
 
   const handleClose = () => {
     cancelClick();
@@ -55,8 +67,30 @@ function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
   };
 
   const handleSubmit = () => {
-    signInClick({ email, password })
-  }
+    signInClick({ email, password });
+  };
+
+  const handleEmailChange = (newEmail: string) => {
+    const testPassed = emailPattern.test(newEmail);
+    if (!testPassed && emailIsValid) {
+      setEmailIsValid(false);
+    }
+    if (testPassed && !emailIsValid) {
+      setEmailIsValid(true);
+    }
+    setEmail(newEmail);
+  };
+
+  const handlePasswordChange = (newPassword: string) => {
+    const newPasswordLength = newPassword.length;
+    if (newPasswordLength < 8 && passwordIsValid) {
+      setPasswordIsValid(false);
+    }
+    if (newPasswordLength >= 8 && !passwordIsValid) {
+      setPasswordIsValid(true);
+    }
+    setPassword(newPassword);
+  };
 
   return (
     <div>
@@ -69,19 +103,26 @@ function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
           <div className={classes.flexContainer}>
             <TextField
               autoFocus
+              error={emailIsValid || email.length === 0 ? false : true}
               label="Email"
               type="email"
               variant="outlined"
               className={classes.textField}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => handleEmailChange(e.target.value)}
+              helperText={
+                emailIsValid || email.length === 0
+                  ? ""
+                  : "Invalid email address"
+              }
             />
             <TextField
+              error={passwordIsValid || password.length === 0 ? false : true}
               id="password"
               label="Password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               variant="outlined"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handlePasswordChange(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -92,8 +133,14 @@ function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
                 ),
               }}
               className={classes.textField}
+              helperText={
+                passwordIsValid || password.length === 0
+                  ? ""
+                  : "Invalid password length"
+              }
             />
           </div>
+          {error.length === 0 ? null : <Alert severity="error">{error}</Alert>}
         </DialogContent>
 
         <DialogActions>
@@ -104,6 +151,7 @@ function SigninForm({ signInClick, cancelClick, open }: ISigninFormProps) {
             variant="contained"
             onClick={handleSubmit}
             color="primary"
+            disabled={passwordIsValid && emailIsValid ? false : true}
           >
             Sign in
           </Button>
