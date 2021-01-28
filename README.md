@@ -4,20 +4,20 @@ _For MU MTL's 15th anniversary_ 🎉
 A Progressive Web App for Montrealers and visitors to explore murals.
 
 ### Developers
-- @zhenglinxiao
-- @Tony9984
+- [Lin Xiao Zheng](https://github.com/zhenglinxiao)
+- [Tony Ou](https://github.com/Tony9984)
 - Gabriel Paquette
-- @JDziewonski98
-- @SiboYang
-- @yi-fang-yuan
-- @BlancheFrancheterre
+- [Jacek Dziewonski](https://github.com/JDziewonski98)
+- [Sibo Yang](https://github.com/SiboYang)
+- [Yi Fang Yuan](https://github.com/yi-fang-yuan)
+- [Blanche Francheterre](https://github.com/BlancheFrancheterre)
 
 ### UI/UX Designers
 - Sophearah Suy-Puth
 - Pauline Swen
 
 ### Project Manager
-- @tedspare
+- [Ted Spare](https://github.com/tedspare)
 
 ## Backend
 ### Setup
