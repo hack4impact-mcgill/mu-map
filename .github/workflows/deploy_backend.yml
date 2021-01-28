@@ -23,6 +23,7 @@ jobs:
 
     - name: Generate javascript artifact
       run: |
+        cd backend
         mkdir -p build
         zip build/build.zip -r build package.json package-lock.json Procfile
 
@@ -41,6 +42,6 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: mu-map
         environment_name: mu-map-backend
-        version_label: $BUILD_NUMBER
+        version_label: "$BUILD_NUMBER"
         region: us-east-1
         deployment_package: build/build.zip
