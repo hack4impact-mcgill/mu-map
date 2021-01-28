@@ -24,7 +24,6 @@ jobs:
     - name: Generate javascript artifact
       run: |
         mkdir -p build
-        rm build/build.zip
         zip build/build.zip -r build package.json package-lock.json Procfile
 
     - name: Generate build number
