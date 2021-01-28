@@ -1,19 +1,19 @@
 # MU MTL Open-air Museum Map
-_For MU MTL's 15th anniversary_ 🎉
+_For [MU MTL](https://mumtl.org/)'s 15th anniversary_ 🎉
 
 A Progressive Web App for Montrealers and visitors to explore murals.
 
 ### Developers
 - [Lin Xiao Zheng](https://github.com/zhenglinxiao)
 - [Tony Ou](https://github.com/Tony9984)
-- Gabriel Paquette
+- [Gabriel Paquette](https://github.com/Gabriel-Paquette)
 - [Jacek Dziewonski](https://github.com/JDziewonski98)
 - [Sibo Yang](https://github.com/SiboYang)
 - [Yi Fang Yuan](https://github.com/yi-fang-yuan)
 - [Blanche Francheterre](https://github.com/BlancheFrancheterre)
 
 ### UI/UX Designers
-- Sophearah Suy-Puth
+- [Sophearah Suy-Puth](https://github.com/sophearahsp)
 - Pauline Swen
 
 ### Project Manager
@@ -38,6 +38,6 @@ Toolbox instead of Docker Desktop, type `docker-machine ip` into your command li
 
 - `cd` into **frontend**
 - Add a file called **.env** with the appropriate keys from Slack. See **.sample-env** for reference.
-- `yarn install` to install dependencies from npm (yarn is the same as npm but newer)
+- `yarn install` to install dependencies from npm ([yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) is the same as npm but newer)
 - `yarn start` and open the browser to **localhost:3000** or go to **192.168.2.20:3000** on your phone on wifi! :rocket:
-- In Google Chrome or Firefox, open Developer Tools by `right click` > `inspect` or cmd/ctrl+shift+c
+- To debug, open Developer Tools in Chrome or Firefox via right click > inspect or `cmd`/`ctrl`+`shift`+`c`.
