@@ -6,6 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
 import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
+import CollectionForm from "../CollectionForm/CollectionForm";
 import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
@@ -65,7 +66,7 @@ function App() {
   };
 
   const getMural = async () => {
-    const response = await fetch("http://localhost:3000/mural");
+    const response = await fetch("http://mumapbackend.us-east-1.elasticbeanstalk.com/mural");
     const data = await response.json();
 
     setMurals(data.murals.rows);
@@ -99,7 +100,8 @@ function App() {
         >
           {
             !searchResult.length ?
-              (<MuralForm />) :
+              // (<MuralForm />) :
+              (<CollectionForm />) :
               (<SearchCard searchCards={searchResult} />)
           }
         </Sidebar>
