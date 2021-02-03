@@ -28,6 +28,15 @@ function Map({mapContainer, murals}: IMapProps) {
       zoom: zoom,
     });
 
+    map.addControl(
+        new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true
+        })
+    );
+
     map.on("move", () => {
       setLng(map.getCenter().lng);
       setLat(map.getCenter().lat);
