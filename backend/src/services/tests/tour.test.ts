@@ -11,7 +11,7 @@ test("create tour", async () => {
   const tourService: TourService = new TourService();
   const params = {
     name: "testtour",
-    description: "testtour"
+    description: "testtour",
   };
   const create = await tourService.create(params, []);
   expect(create.success).toEqual(true);
@@ -20,11 +20,11 @@ test("create tour", async () => {
 });
 
 test("show valid tour", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const tourService: TourService = new TourService();
   const params = {
     name: "testtour",
-    description: "testtour"
+    description: "testtour",
   };
   const create = await tourService.create(params, []);
   if (!create.success) {
@@ -33,9 +33,8 @@ test("show valid tour", async () => {
   const tour = create.body!;
 
   const show = await tourService.show(tour.id);
-  expect(show.success).toEqual(true);
-  expect(show.tour!.id).toEqual(tour.id);
-  expect(show.tour!.name).toEqual(tour.name);
+  expect(show.id).toEqual(tour.id);
+  expect(show.name).toEqual(tour.name);
 });
 
 test("show invalid tour", async () => {

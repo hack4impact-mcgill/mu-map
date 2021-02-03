@@ -29,7 +29,9 @@ export class MuralCollectionController {
   public async show(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
     try {
-      const collection = await this.collectionService.show(collectionId);
+      const collection: MuralCollection = await this.collectionService.show(
+        collectionId
+      );
       res.status(202).json(collection);
     } catch (e) {
       if (e instanceof EmptyResultError) {

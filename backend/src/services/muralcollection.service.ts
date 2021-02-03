@@ -20,12 +20,12 @@ export class MuralCollectionService {
     return { success: true, body: createdCollection };
   }
 
-  public async show(collectionId: number) {
+  public async show(collectionId: number): Promise<MuralCollection> {
     const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
       collectionId,
       { rejectOnEmpty: true }
     );
-    return { success: true, collection: collection };
+    return collection;
   }
 
   public async update(collectionId: number, params: MuralCollectionInterface) {

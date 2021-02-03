@@ -14,10 +14,23 @@ export class TourService {
     });
     return { success: true, body: createdTour };
   }
-  public async show(tourId: number) {
-    const tour = await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    const murals = await tour.getMurals();
-    return { success: true, tour: tour, murals: murals };
+
+  public async show(tourId: number): Promise<Tour> {
+    const tour = await Tour.findByPk<Tour>(tourId, {
+      rejectOnEmpty: true,
+      include: [
+        {
+          model: Mural,
+          as: "murals",
+          attributes: ["id"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+      attributes: { exclude: ["updatedAt", "createdAt"] },
+    });
+    return tour;
   }
 
   public async update(tourId: number, params: TourInterface) {
