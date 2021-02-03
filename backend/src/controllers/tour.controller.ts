@@ -71,8 +71,8 @@ export class TourController {
 
   /**
    * GET /tour to get all tours
-   * @param req
-   * @param res
+   * @param req HTTP request
+   * @param res HTTP response
    */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);

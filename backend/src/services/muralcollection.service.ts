@@ -4,6 +4,7 @@ import {
 } from "../models/muralcollection.model";
 import { Mural } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
+import { RED } from "../config/constants";
 
 export class MuralCollectionService {
   public async create(collecton: MuralCollectionInterface, murals: number[]) {
@@ -38,11 +39,32 @@ export class MuralCollectionService {
     return { success: true };
   }
 
+  /**
+   * Finds and returns all collections within specified page number and size
+   * @param limit page size
+   * @param offset the page number
+   */
   public async showAll(limit: number, offset: number) {
-    const collections = await MuralCollection.findAndCountAll<MuralCollection>({
-      limit: limit,
-      offset: offset,
-    });
-    return { success: true, collections: collections };
+    try {
+      const collections = await MuralCollection.findAll<MuralCollection>({
+        limit: limit,
+        offset: offset,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return { success: true, collections: collections };
+    } catch (e) {
+      console.log(RED, e.message);
+      throw e;
+    }
   }
 }

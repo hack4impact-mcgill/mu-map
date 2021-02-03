@@ -54,7 +54,11 @@ export class MuralCollectionController {
     }
   }
 
-  //GET /collection to get ALL collections
+  /**
+   * /GET /collection to get ALL collections
+   * @param req HTTP request
+   * @param res HTTP repsonse
+   */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
