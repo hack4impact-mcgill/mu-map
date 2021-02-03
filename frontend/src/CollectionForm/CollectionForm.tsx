@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
             alignItems: "start",
             width: "40vw",
+            maxWidth: "500px",
             padding: theme.spacing(3)
         },
         field: {
@@ -29,13 +30,16 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: "180%",
         },
         bottomButton: {
-            fontWeight: 500,
+            margin: theme.spacing(0, 0, 0, 3)
         },
         bottomButtonContainer: {
             display: "flex",
-            bottom: 0,
-            justifyContent: "space-between",
-            padding: theme.spacing(3)
+            justifyContent: "flex-end",
+            padding: theme.spacing(3),
+            width: "40vw",
+            maxWidth: "500px",
+            position: "fixed",
+            bottom: 0
         },
     })
 );
@@ -92,11 +96,11 @@ function CollectionForm() {
 
     return (
         <div>
-            <div className={styles.flexContainer}>
-                <form
-                    noValidate
-                    autoComplete="off"
-                    onSubmit={(e: SyntheticEvent) => { e.preventDefault(); handleSave() }}>
+            <form
+                noValidate
+                autoComplete="off"
+                onSubmit={(e: SyntheticEvent) => { e.preventDefault(); handleSave() }}>
+                <div className={styles.flexContainer}>
                     <InputBase
                         className={`${styles.title} ${styles.field}`}
                         defaultValue="Name the collection"
@@ -147,8 +151,8 @@ function CollectionForm() {
                             )}
                         />
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div className={styles.bottomButtonContainer}>
                 <Button
                     color="secondary"
@@ -164,6 +168,7 @@ function CollectionForm() {
                     size="small"
                     variant="contained"
                     disableElevation
+                    className={styles.bottomButton}
                     onClick={handleSave}>
                     Save
                 </Button>
