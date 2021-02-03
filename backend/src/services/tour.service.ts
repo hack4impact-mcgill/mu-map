@@ -42,7 +42,7 @@ export class TourService {
    * @param limit page size
    * @param offset the page number
    */
-  public async showAll(limit: number, offset: number) {
+  public async showAll(limit: number, offset: number): Promise<Tour[]> {
     try {
       const tours: Tour[] = await Tour.findAll<Tour>({
         limit: limit,
@@ -59,7 +59,7 @@ export class TourService {
         ],
         attributes: { exclude: ["updatedAt", "createdAt"] },
       });
-      return { success: true, tours: tours };
+      return tours;
     } catch (e) {
       console.error(RED, e.message);
       throw e;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
-
-import { TourInterface } from "../models/tour.model";
+import { TourInterface, Tour } from "../models/tour.model";
 import { TourService } from "../services/tour.service";
 
 // Request by id
@@ -78,8 +77,8 @@ export class TourController {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
-      const tours = await this.tourService.showAll(limit, offset);
-      res.status(202).json(tours);
+      const tours: Tour[] = await this.tourService.showAll(limit, offset);
+      res.status(202).json({ tours: tours });
     } catch (e) {
       res.status(500).json({ error: "Something went wrong." });
     }

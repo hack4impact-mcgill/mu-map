@@ -7,9 +7,9 @@ import { UpdateOptions } from "sequelize";
 import { RED } from "../config/constants";
 
 export class MuralCollectionService {
-  public async create(collecton: MuralCollectionInterface, murals: number[]) {
+  public async create(collection: MuralCollectionInterface, murals: number[]) {
     const createdCollection: MuralCollection = await MuralCollection.create<MuralCollection>(
-      collecton
+      collection
     );
     murals.forEach(async (muralId) => {
       const mural = await Mural.findByPk<Mural>(muralId, {
@@ -44,7 +44,10 @@ export class MuralCollectionService {
    * @param limit page size
    * @param offset the page number
    */
-  public async showAll(limit: number, offset: number) {
+  public async showAll(
+    limit: number,
+    offset: number
+  ): Promise<MuralCollection[]> {
     try {
       const collections = await MuralCollection.findAll<MuralCollection>({
         limit: limit,
@@ -61,7 +64,7 @@ export class MuralCollectionService {
         ],
         attributes: { exclude: ["updatedAt", "createdAt"] },
       });
-      return { success: true, collections: collections };
+      return collections;
     } catch (e) {
       console.log(RED, e.message);
       throw e;

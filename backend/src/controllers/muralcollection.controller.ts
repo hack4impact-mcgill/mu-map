@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
-import { MuralCollectionInterface } from "../models/muralcollection.model";
+import {
+  MuralCollection,
+  MuralCollectionInterface,
+} from "../models/muralcollection.model";
 import { MuralCollectionService } from "../services/muralcollection.service";
 
 export class MuralCollectionController {
@@ -63,8 +66,11 @@ export class MuralCollectionController {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
-      const collections = await this.collectionService.showAll(limit, offset);
-      res.status(202).json(collections);
+      const collections: MuralCollection[] = await this.collectionService.showAll(
+        limit,
+        offset
+      );
+      res.status(202).json({ collections: collections });
     } catch (e) {
       res.status(500).json({ error: "Something went wrong." });
     }
