@@ -11,6 +11,7 @@ import axios from "axios";
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import EditIcon from '@material-ui/icons/Edit';
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import ActionButtons from "../ActionButtons/ActionButtons";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,18 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             fontSize: "180%",
-        },
-        bottomButton: {
-            margin: theme.spacing(0, 0, 0, 3)
-        },
-        bottomButtonContainer: {
-            display: "flex",
-            justifyContent: "flex-end",
-            padding: theme.spacing(3),
-            width: "40vw",
-            maxWidth: "500px",
-            position: "fixed",
-            bottom: 0
         },
     })
 );
@@ -153,26 +142,7 @@ function CollectionForm() {
                     </div>
                 </div>
             </form>
-            <div className={styles.bottomButtonContainer}>
-                <Button
-                    color="secondary"
-                    size="small"
-                    variant="outlined"
-                    className={styles.bottomButton}
-                    onClick={handleCancel}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    color="primary"
-                    size="small"
-                    variant="contained"
-                    disableElevation
-                    className={styles.bottomButton}
-                    onClick={handleSave}>
-                    Save
-                </Button>
-            </div>
+            <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
         </div>
     )
 }
