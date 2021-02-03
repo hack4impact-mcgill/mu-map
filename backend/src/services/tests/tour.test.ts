@@ -1,4 +1,3 @@
-import { database } from "../../config/database";
 import { Tour } from "../../models/tour.model";
 import { TourService } from "../tour.service";
 
