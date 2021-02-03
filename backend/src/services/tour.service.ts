@@ -1,6 +1,7 @@
 import { Tour, TourInterface } from "../models/tour.model";
 import { Mural } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
+import { RED } from "../config/constants";
 
 export class TourService {
   public async create(tour: TourInterface, murals: number[]) {
@@ -36,11 +37,32 @@ export class TourService {
     return { success: true };
   }
 
+  /**
+   * Finds and returns all tours within specified page number and size
+   * @param limit page size
+   * @param offset the page number
+   */
   public async showAll(limit: number, offset: number) {
-    const tours = await Tour.findAndCountAll<Tour>({
-      limit: limit,
-      offset: offset,
-    });
-    return { success: true, tours: tours };
+    try {
+      const tours: Tour[] = await Tour.findAll<Tour>({
+        limit: limit,
+        offset: offset,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return { success: true, tours: tours };
+    } catch (e) {
+      console.error(RED, e.message);
+      throw e;
+    }
   }
 }

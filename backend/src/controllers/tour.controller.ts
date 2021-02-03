@@ -69,7 +69,11 @@ export class TourController {
     }
   }
 
-  //GET /tour to get all tours
+  /**
+   * GET /tour to get all tours
+   * @param req
+   * @param res
+   */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
