@@ -30,7 +30,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
     axios
       .get(GET_ALL_ARTISTS_API)
       .then((response) => {
-        if (response.data) setArtists(response.data.artists.rows);
+        if (response.data) setArtists(response.data.rows);
       })
       .catch((err) => console.log(err));
   }, []);
