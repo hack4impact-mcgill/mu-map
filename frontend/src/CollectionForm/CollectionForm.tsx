@@ -3,6 +3,7 @@ import {
   InputAdornment,
   InputBase,
   makeStyles,
+  Snackbar,
   TextField,
   Theme
 } from "@material-ui/core";
@@ -12,6 +13,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import SearchCard from "SideBarSearch/searchCard";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +49,8 @@ function CollectionForm() {
   const [editingTitle, setEditingTitle] = useState<boolean>(false);
   const [hoveringTitle, setHoveringTitle] = useState<boolean>(false);
 
+  const [popup, setPopup] = useState<boolean>(false);
+
   const styles = useStyles();
 
   const handleAddMural = (addedMural: any) => {
@@ -58,6 +62,8 @@ function CollectionForm() {
   };
 
   const handleSave = () => {
+    if (!title.length || !description.length) return;
+
     // TODO: remember to replace this with localhost before merging
     axios.post('http://mumapbackend.us-east-1.elasticbeanstalk.com/collection', {
       collection: {
@@ -66,7 +72,10 @@ function CollectionForm() {
       },
       murals: muralsInCollection.map((mural: any) => mural.id)
     })
-      .then((response: any) => { console.log("Collection added!") })
+      .then(() => {
+        setPopup(true);
+        setTimeout(() => setPopup(false), 5000);
+      })
       .catch((err: any) => console.log(err));
   };
 
@@ -151,6 +160,11 @@ function CollectionForm() {
       </form>
       <SearchCard searchCards={muralsInCollection} />
       <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
+      <Snackbar open={popup} autoHideDuration={6000}>
+        <Alert severity="success">
+          Collection published successfully!
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
