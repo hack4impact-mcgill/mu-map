@@ -21,7 +21,7 @@ export class TourController {
   }
 
   /**
-   * /GET (get a tour by id)
+   * GET /tour/:id to get a tour
    * @param req HTTP request
    * @param res HTTP response
    */
