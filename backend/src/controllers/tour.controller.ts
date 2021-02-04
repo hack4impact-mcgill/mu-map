@@ -24,13 +24,13 @@ export class TourController {
   public async show(req: Request, res: Response) {
     const tourId: number = Number(req.params.id);
     try {
-      const tour = await this.tourService.show(tourId);
+      const tour: Tour = await this.tourService.show(tourId);
       res.status(202).json(tour);
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "No tour found with this id" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json("Something went wrong.");
       }
     }
   }
