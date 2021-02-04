@@ -66,7 +66,7 @@ function App() {
   };
 
   const getMural = async () => {
-    const response = await fetch("http://mumapbackend.us-east-1.elasticbeanstalk.com/mural");
+    const response = await fetch("http://localhost:3000/mural");
     const data = await response.json();
 
     setMurals(data.murals.rows);

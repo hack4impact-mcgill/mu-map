@@ -41,11 +41,11 @@ function CollectionForm() {
   const [muralResults, setMuralResults] = useState<any>([]);
   const [muralQuery, setMuralQuery] = useState<string>("");
 
-  const [description, setDescription] = useState([]);
+  const [description, setDescription] = useState<string>("");
   const [editingDesc, setEditingDesc] = useState<boolean>(false);
   const [hoveringDesc, setHoveringDesc] = useState<boolean>(false);
 
-  const [title, setTitle] = useState([]);
+  const [title, setTitle] = useState<string>("");
   const [editingTitle, setEditingTitle] = useState<boolean>(false);
   const [hoveringTitle, setHoveringTitle] = useState<boolean>(false);
 
@@ -137,7 +137,7 @@ function CollectionForm() {
           />
           <div className={styles.field}>
             <Autocomplete
-              freeSolo
+              freeSolo={false}
               options={muralResults.map((mural: any) => mural)}
               getOptionLabel={(mural: any) => mural.name}
               onChange={(e: any, value: any) => handleAddMural(value)}
