@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
-
-import { TourInterface } from "../models/tour.model";
+import { TourInterface, Tour } from "../models/tour.model";
 import { TourService } from "../services/tour.service";
 
 // Request by id
@@ -21,17 +20,21 @@ export class TourController {
     }
   }
 
-  //GET (get a tour by id)
+  /**
+   * GET /tour/:id to get a tour
+   * @param req HTTP request
+   * @param res HTTP response
+   */
   public async show(req: Request, res: Response) {
     const tourId: number = Number(req.params.id);
     try {
-      const tour = await this.tourService.show(tourId);
+      const tour: Tour = await this.tourService.show(tourId);
       res.status(202).json(tour);
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "No tour found with this id" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json("Something went wrong.");
       }
     }
   }
@@ -69,13 +72,17 @@ export class TourController {
     }
   }
 
-  //GET /tour to get all tours
+  /**
+   * GET /tour to get all tours
+   * @param req HTTP request
+   * @param res HTTP response
+   */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
-      const tours = await this.tourService.showAll(limit, offset);
-      res.status(202).json(tours);
+      const tours: Tour[] = await this.tourService.showAll(limit, offset);
+      res.status(202).json({ tours: tours });
     } catch (e) {
       res.status(500).json({ error: "Something went wrong." });
     }

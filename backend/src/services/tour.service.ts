@@ -1,6 +1,7 @@
 import { Tour, TourInterface } from "../models/tour.model";
 import { Mural } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
+import { RED } from "../config/constants";
 
 export class TourService {
   public async create(tour: TourInterface, murals: number[]) {
@@ -13,10 +14,32 @@ export class TourService {
     });
     return { success: true, body: createdTour };
   }
-  public async show(tourId: number) {
-    const tour = await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    const murals = await tour.getMurals();
-    return { success: true, tour: tour, murals: murals };
+
+  /**
+   * Displays a single tour by id
+   * @param tourId the id of the tour to display
+   */
+  public async show(tourId: number): Promise<Tour> {
+    try {
+      const tour = await Tour.findByPk<Tour>(tourId, {
+        rejectOnEmpty: true,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return tour;
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   public async update(tourId: number, params: TourInterface) {
@@ -36,11 +59,32 @@ export class TourService {
     return { success: true };
   }
 
-  public async showAll(limit: number, offset: number) {
-    const tours = await Tour.findAndCountAll<Tour>({
-      limit: limit,
-      offset: offset,
-    });
-    return { success: true, tours: tours };
+  /**
+   * Finds and returns all tours within specified page number and size
+   * @param limit page size
+   * @param offset the page number
+   */
+  public async showAll(limit: number, offset: number): Promise<Tour[]> {
+    try {
+      const tours: Tour[] = await Tour.findAll<Tour>({
+        limit: limit,
+        offset: offset,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return tours;
+    } catch (e) {
+      console.error(RED, e.message);
+      throw e;
+    }
   }
 }

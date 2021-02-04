@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
-import { MuralCollectionInterface } from "../models/muralcollection.model";
+import {
+  MuralCollection,
+  MuralCollectionInterface,
+} from "../models/muralcollection.model";
 import { MuralCollectionService } from "../services/muralcollection.service";
 
 export class MuralCollectionController {
@@ -22,11 +25,17 @@ export class MuralCollectionController {
     }
   }
 
-  // GET /collection/:id   (get a collection by id)
+  /**
+   * / GET /collection/:id   (get a collection by id)
+   * @param req HTTP request
+   * @param res HTTP response
+   */
   public async show(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
     try {
-      const collection = await this.collectionService.show(collectionId);
+      const collection: MuralCollection = await this.collectionService.show(
+        collectionId
+      );
       res.status(202).json(collection);
     } catch (e) {
       if (e instanceof EmptyResultError) {
@@ -54,13 +63,20 @@ export class MuralCollectionController {
     }
   }
 
-  //GET /collection to get ALL collections
+  /**
+   * /GET /collection to get ALL collections
+   * @param req HTTP request
+   * @param res HTTP repsonse
+   */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
-      const collections = await this.collectionService.showAll(limit, offset);
-      res.status(202).json(collections);
+      const collections: MuralCollection[] = await this.collectionService.showAll(
+        limit,
+        offset
+      );
+      res.status(202).json({ collections: collections });
     } catch (e) {
       res.status(500).json({ error: "Something went wrong." });
     }

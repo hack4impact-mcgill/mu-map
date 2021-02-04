@@ -1,4 +1,3 @@
-import { database } from "../../config/database";
 import { MuralCollection } from "../../models/muralcollection.model";
 import { MuralCollectionService } from "../muralcollection.service";
 import { Mural } from "../../models/mural.model";
@@ -54,7 +53,7 @@ test("create mural collection", async () => {
 });
 
 test("show valid mural collection", async () => {
-  expect.assertions(4);
+  expect.assertions(3);
   const collectionService: MuralCollectionService = new MuralCollectionService();
 
   const murals: number[] = [1, 2];
@@ -64,10 +63,9 @@ test("show valid mural collection", async () => {
   }
 
   const show = await collectionService.show(create.body.id);
-  expect(show.success).toEqual(true);
-  expect(show.collection.id).toEqual(create.body.id);
-  expect(show.collection.name).toEqual(create.body.name);
-  expect(show.collection.description).toEqual(create.body.description);
+  expect(show.id).toEqual(create.body.id);
+  expect(show.name).toEqual(create.body.name);
+  expect(show.description).toEqual(create.body.description);
 });
 
 test("show invalid collection", async () => {
@@ -103,10 +101,9 @@ test("update mural collection", async () => {
       fail("Could not find the mural collection by ID");
     });
 
-  const updateCollection = show.collection;
-  expect(updateCollection.id).toEqual(collection.id);
-  expect(updateCollection.name).toEqual("testCollection2");
-  expect(updateCollection.description).toEqual("cri");
+  expect(show.id).toEqual(collection.id);
+  expect(show.name).toEqual("testCollection2");
+  expect(show.description).toEqual("cri");
 });
 
 test("update invalid mural collection", async () => {
@@ -118,4 +115,3 @@ test("update invalid mural collection", async () => {
     .then(() => fail())
     .catch((err: Error) => expect(true).toEqual(true));
 });
-

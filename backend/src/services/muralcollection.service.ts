@@ -4,11 +4,12 @@ import {
 } from "../models/muralcollection.model";
 import { Mural } from "../models/mural.model";
 import { UpdateOptions } from "sequelize";
+import { RED } from "../config/constants";
 
 export class MuralCollectionService {
-  public async create(collecton: MuralCollectionInterface, murals: number[]) {
+  public async create(collection: MuralCollectionInterface, murals: number[]) {
     const createdCollection: MuralCollection = await MuralCollection.create<MuralCollection>(
-      collecton
+      collection
     );
     murals.forEach(async (muralId) => {
       const mural = await Mural.findByPk<Mural>(muralId, {
@@ -19,12 +20,21 @@ export class MuralCollectionService {
     return { success: true, body: createdCollection };
   }
 
-  public async show(collectionId: number) {
-    const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
-      collectionId,
-      { rejectOnEmpty: true }
-    );
-    return { success: true, collection: collection };
+  /**
+   * Displays a single collection by id
+   * @param collectionId id of the collection to display
+   */
+  public async show(collectionId: number): Promise<MuralCollection> {
+    try {
+      const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
+        collectionId,
+        { rejectOnEmpty: true }
+      );
+      return collection;
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   public async update(collectionId: number, params: MuralCollectionInterface) {
@@ -38,11 +48,35 @@ export class MuralCollectionService {
     return { success: true };
   }
 
-  public async showAll(limit: number, offset: number) {
-    const collections = await MuralCollection.findAndCountAll<MuralCollection>({
-      limit: limit,
-      offset: offset,
-    });
-    return { success: true, collections: collections };
+  /**
+   * Finds and returns all collections within specified page number and size
+   * @param limit page size
+   * @param offset the page number
+   */
+  public async showAll(
+    limit: number,
+    offset: number
+  ): Promise<MuralCollection[]> {
+    try {
+      const collections = await MuralCollection.findAll<MuralCollection>({
+        limit: limit,
+        offset: offset,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return collections;
+    } catch (e) {
+      console.log(RED, e);
+      throw e;
+    }
   }
 }
