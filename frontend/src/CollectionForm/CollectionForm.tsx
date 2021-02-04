@@ -64,8 +64,7 @@ function CollectionForm() {
   const handleSave = () => {
     if (!title.length || !description.length) return;
 
-    // TODO: remember to replace this with localhost before merging
-    axios.post('http://mumapbackend.us-east-1.elasticbeanstalk.com/collection', {
+    axios.post('http://localhost:3000/collection', {
       collection: {
         name: title,
         description: description
@@ -84,8 +83,7 @@ function CollectionForm() {
   };
 
   useEffect(() => {
-    // TODO: remember to replace this with localhost before merging
-    axios.get('http://mumapbackend.us-east-1.elasticbeanstalk.com/mural')
+    axios.get('http://localhost:3000/mural')
       .then((response) => {
         if (response.data) setMurals(response.data.murals.rows)
       })
