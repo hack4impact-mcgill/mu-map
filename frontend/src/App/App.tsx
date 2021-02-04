@@ -100,10 +100,10 @@ function App() {
         >
           {
             !searchResult.length ?
-              // (<MuralForm />) :
               (<CollectionForm />) :
               (<SearchCard searchCards={searchResult} />)
           }
+          {false && (<MuralForm />)}
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
