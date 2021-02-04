@@ -25,11 +25,16 @@ export class MuralCollectionService {
    * @param collectionId id of the collection to display
    */
   public async show(collectionId: number): Promise<MuralCollection> {
-    const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
-      collectionId,
-      { rejectOnEmpty: true }
-    );
-    return collection;
+    try {
+      const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
+        collectionId,
+        { rejectOnEmpty: true }
+      );
+      return collection;
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   public async update(collectionId: number, params: MuralCollectionInterface) {
@@ -70,7 +75,7 @@ export class MuralCollectionService {
       });
       return collections;
     } catch (e) {
-      console.log(RED, e.message);
+      console.log(RED, e);
       throw e;
     }
   }

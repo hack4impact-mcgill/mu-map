@@ -20,21 +20,26 @@ export class TourService {
    * @param tourId the id of the tour to display
    */
   public async show(tourId: number): Promise<Tour> {
-    const tour = await Tour.findByPk<Tour>(tourId, {
-      rejectOnEmpty: true,
-      include: [
-        {
-          model: Mural,
-          as: "murals",
-          attributes: ["id"],
-          through: {
-            attributes: [],
+    try {
+      const tour = await Tour.findByPk<Tour>(tourId, {
+        rejectOnEmpty: true,
+        include: [
+          {
+            model: Mural,
+            as: "murals",
+            attributes: ["id"],
+            through: {
+              attributes: [],
+            },
           },
-        },
-      ],
-      attributes: { exclude: ["updatedAt", "createdAt"] },
-    });
-    return tour;
+        ],
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      });
+      return tour;
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   public async update(tourId: number, params: TourInterface) {
