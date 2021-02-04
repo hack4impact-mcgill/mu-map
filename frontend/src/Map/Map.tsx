@@ -14,7 +14,7 @@ interface IMapProps {
   murals: any;
 }
 
-function Map({mapContainer, murals}: IMapProps) {
+function Map({ mapContainer, murals }: IMapProps) {
   const [lng, setLng] = useState(DEFAULT_LONGITUDE);
   const [lat, setLat] = useState(DEFAULT_LATITUDE);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
@@ -26,7 +26,20 @@ function Map({mapContainer, murals}: IMapProps) {
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
       zoom: zoom,
+      attributionControl: false
     });
+
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      }),
+      'bottom-right'
+    );
+
+    map.addControl(new mapboxgl.AttributionControl(), 'top-left');
 
     map.on("move", () => {
       setLng(map.getCenter().lng);

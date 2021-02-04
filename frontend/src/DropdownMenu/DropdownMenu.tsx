@@ -78,7 +78,6 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuPr
         <MenuItem>
           <TranslateIcon /> English (Anglais)
         </MenuItem>
-        <MenuItem>Turn Location Off</MenuItem>
         <MenuItem component="a" href="https://mumtl.org/" target="_blank">
           Visit MU site
         </MenuItem>
