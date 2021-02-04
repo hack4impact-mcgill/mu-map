@@ -20,7 +20,11 @@ export class TourController {
     }
   }
 
-  //GET (get a tour by id)
+  /**
+   * /GET (get a tour by id)
+   * @param req HTTP request
+   * @param res HTTP response
+   */
   public async show(req: Request, res: Response) {
     const tourId: number = Number(req.params.id);
     try {

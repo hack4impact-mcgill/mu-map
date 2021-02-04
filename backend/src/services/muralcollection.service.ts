@@ -20,6 +20,10 @@ export class MuralCollectionService {
     return { success: true, body: createdCollection };
   }
 
+  /**
+   * Displays a single collection by id
+   * @param collectionId id of the collection to display
+   */
   public async show(collectionId: number): Promise<MuralCollection> {
     const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
       collectionId,

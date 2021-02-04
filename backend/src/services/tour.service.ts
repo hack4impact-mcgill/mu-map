@@ -15,6 +15,10 @@ export class TourService {
     return { success: true, body: createdTour };
   }
 
+  /**
+   * Displays a single tour by id
+   * @param tourId the id of the tour to display
+   */
   public async show(tourId: number): Promise<Tour> {
     const tour = await Tour.findByPk<Tour>(tourId, {
       rejectOnEmpty: true,

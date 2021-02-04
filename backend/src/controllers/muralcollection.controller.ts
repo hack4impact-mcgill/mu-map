@@ -25,7 +25,11 @@ export class MuralCollectionController {
     }
   }
 
-  // GET /collection/:id   (get a collection by id)
+  /**
+   * / GET /collection/:id   (get a collection by id)
+   * @param req HTTP request
+   * @param res HTTP response
+   */
   public async show(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
     try {
