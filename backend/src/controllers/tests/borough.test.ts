@@ -95,7 +95,7 @@ test("valid GET request", async () => {
 
   await boroughController.show(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith(
     expect.objectContaining({
       borough: expect.objectContaining({
@@ -151,7 +151,7 @@ test("valid PUT request", async () => {
 
   await boroughController.update(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith({
     data: "successfully updated",
   });
