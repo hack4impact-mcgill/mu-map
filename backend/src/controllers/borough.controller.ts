@@ -1,43 +1,54 @@
 import { Request, Response } from "express";
-import { BoroughInterface } from "../models/borough.model";
+import { Borough, BoroughInterface } from "../models/borough.model";
 import { EmptyResultError, ValidationError } from "sequelize";
 import { BoroughService } from "../services/borough.service";
 
 export class BoroughController {
   public boroughService: BoroughService = new BoroughService();
 
-  // POST /borough
+  /**
+   * POST /borough
+   * @param req HTTP request containing ArtistInterface attributes
+   * @param res HTTP response containing borough data
+   */
   public async create(req: Request, res: Response) {
     const params: BoroughInterface = req.body;
     try {
-      const createdBorough = await this.boroughService.create(params);
+      const createdBorough: Borough = await this.boroughService.create(params);
       res.status(201).json(createdBorough);
     } catch (e) {
       if (e instanceof ValidationError) {
-        res.status(500).json({ error: "Invalid body parameters!" });
+        res.status(400).json({ error: "Invalid body parameters!" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json({ error: "Something went wrong." });
       }
     }
   }
 
-  // GET /borough/:id   returns borough by id
+  /**
+   * GET /borough/:id   returns borough by id
+   * @param req HTTP request
+   * @param res HTTP response containing borough data
+   */
   public async show(req: Request, res: Response) {
     const boroughId: number = Number(req.params.id);
-
     try {
-      const borough = await this.boroughService.show(boroughId);
+      const borough: Borough = await this.boroughService.show(boroughId);
       res.status(202).json(borough);
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Borough not found by id!" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json({ error: "Something went wrong" });
       }
     }
   }
 
-  // PUT /borough/:id   update properties of a borough by id
+  /**
+   * PUT /borough/:id update properties of a borough by id
+   * @param req HTTP request containing BoroughInterface attributes to update
+   * @param res HTTP response
+   */
   public async update(req: Request, res: Response) {
     const boroughId: number = Number(req.params.id);
     const params: BoroughInterface = req.body;
@@ -47,13 +58,19 @@ export class BoroughController {
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Borough not found by id!" });
+      } else if (e instanceof ValidationError) {
+        res.status(400).json({ error: "Invalid body parameters!" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json({ error: "Something went wrong." });
       }
     }
   }
 
-  //GET /borough to get ALL boroughs
+  /**
+   * /GET /borough to get ALL boroughs (paginated)
+   * @param req HTTP request with optional limit and offset query params
+   * @param res HTTP response
+   */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 40);
     const offset = Number(req.query.page ?? 0) * limit;

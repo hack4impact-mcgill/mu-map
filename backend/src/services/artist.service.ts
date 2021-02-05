@@ -4,7 +4,7 @@ import { RED } from "../config/constants";
 
 export class ArtistService {
   /**
-   * Creates a new artist
+   * Creates a new artist in db
    * @param artist ArtistInterface describing newly created artist
    */
   public async create(artist: ArtistInterface): Promise<Artist> {

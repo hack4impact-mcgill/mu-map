@@ -16,6 +16,7 @@ class App {
     this.routePrv.routes(this.app);
     this.associationSetup.sync();
   }
+
   private config(): void {
     this.app.use(cors());
     this.app.use(bodyParser.json());
