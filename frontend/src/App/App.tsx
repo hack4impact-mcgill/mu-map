@@ -6,6 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
 import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
+import CollectionForm from "../CollectionForm/CollectionForm";
 import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
@@ -99,9 +100,10 @@ function App() {
         >
           {
             !searchResult.length ?
-              (<MuralForm />) :
+              (<CollectionForm />) :
               (<SearchCard searchCards={searchResult} />)
           }
+          {false && (<MuralForm />)}
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
