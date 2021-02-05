@@ -34,7 +34,7 @@ export class BoroughController {
     const boroughId: number = Number(req.params.id);
     try {
       const borough: Borough = await this.boroughService.show(boroughId);
-      res.status(202).json(borough);
+      res.status(200).json(borough);
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Borough not found by id!" });
@@ -54,7 +54,7 @@ export class BoroughController {
     const params: BoroughInterface = req.body;
     try {
       await this.boroughService.update(boroughId, params);
-      res.status(202).json({ data: "successfully updated" });
+      res.status(200).json({ data: "successfully updated" });
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "Borough not found by id!" });
@@ -76,7 +76,7 @@ export class BoroughController {
     const offset = Number(req.query.page ?? 0) * limit;
     try {
       const boroughs = await this.boroughService.showAll(limit, offset);
-      res.status(202).json(boroughs);
+      res.status(200).json(boroughs);
     } catch (e) {
       res.status(500).json({ error: "Something went wrong." });
     }
