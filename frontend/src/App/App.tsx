@@ -20,23 +20,23 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [murals, setMurals] = useState<any>([]);
   const [searchResult, setSearchResult] = useState<any>([]);
-  const [signInError, setSignInError] = useState<string>('');
+  const [signInError, setSignInError] = useState<string>("");
 
   const handleSignin = (creds: any) => {
-    setSignInError("")
+    setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
       .then(() => {
-        handleCancelSignin()
-        setSignInError('')
+        handleCancelSignin();
+        setSignInError("");
       })
       .catch((error: any) => {
         console.log(error.message);
         if (error.code === "auth/network-request-failed") {
-          setSignInError("Network error.")
-        } else if (error.code === 'auth/wrong-password') {
-          setSignInError("Incorrect password.")
+          setSignInError("Network error.");
+        } else if (error.code === "auth/wrong-password") {
+          setSignInError("Incorrect password.");
         } else if (error.code === "auth/user-not-found") {
-          setSignInError("No user record corresponding to this email.")
+          setSignInError("No user record corresponding to this email.");
         }
       });
   };
@@ -47,7 +47,7 @@ function App() {
 
   const handleSearch = (results: any) => {
     setSearchResult(results);
-  }
+  };
 
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
@@ -76,7 +76,7 @@ function App() {
     getMural();
   }, []);
 
-  const sidebarTitle = "Create Mural";
+  const sidebarTitle = "";
 
   return (
     <div className="App">
@@ -85,7 +85,8 @@ function App() {
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
           error={signInError}
-          open={signingIn} />
+          open={signingIn}
+        />
         <Search searchCallBack={handleSearch} />
         <Map murals={murals} mapContainer={document.getElementById("root")} />
         <DropdownMenu
@@ -98,12 +99,12 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {
-            !searchResult.length ?
-              (<CollectionForm />) :
-              (<SearchCard searchCards={searchResult} />)
-          }
-          {false && (<MuralForm />)}
+          {!searchResult.length ? (
+            <CollectionForm />
+          ) : (
+            <SearchCard searchCards={searchResult} />
+          )}
+          {false && <MuralForm />}
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>

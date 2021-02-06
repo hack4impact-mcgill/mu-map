@@ -4,12 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState, useEffect } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { GET_ALL_BOROUGH_API } from "../constants/constants"
+import { GET_ALL_BOROUGH_API } from "../constants/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(1),
-    width: "195px",
+    margin: theme.spacing(0, 0, 4, 0),
+    width: "100%",
     zIndex: 1,
     position: "relative",
     display: "inline-block",
@@ -64,8 +64,8 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
           <TextField
             {...params}
             id="search-borough"
-            label="Search borough..."
-            variant="filled"
+            label="Search Borough..."
+            inputProps={{ "aria-label": "naked" }}
             size="small"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
           />

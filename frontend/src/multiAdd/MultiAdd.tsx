@@ -4,14 +4,15 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MultiAddItem from "./MultiAddItem";
 import FilledInput from "@material-ui/core/FilledInput";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flexContainer: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      width: "195px",
-      margin: theme.spacing(1),
+      alignItems: "left",
+      width: "100%",
+      margin: theme.spacing(0, 0, 4, 0),
     },
     addIcon: {
       cursor: "pointer",
