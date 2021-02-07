@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "MU Map",
+  "name": "MU MTL Open-air Museum App",
+  "description": "MU Map turns Montreal into an open-air museum of murals. 🎉 Find street art, follow tours, and learn about the city from an easy-to-use app.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -12,17 +13,17 @@
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "maskable"
+      "purpose": "maskable any"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "maskable"
+      "purpose": "maskable any"
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
+  "display": "fullscreen",
+  "theme_color": "#6546F4",
   "background_color": "#ffffff"
 }
