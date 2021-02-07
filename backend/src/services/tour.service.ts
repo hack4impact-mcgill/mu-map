@@ -4,15 +4,34 @@ import { UpdateOptions } from "sequelize";
 import { RED } from "../config/constants";
 
 export class TourService {
+  /**
+   * Create a new tour interface and optionally connect it with murals
+   * @param tour TourInterface describing the attributes of the new tour
+   * @param murals list of mural IDs to connect with the tour
+   */
   public async create(tour: TourInterface, murals: number[]) {
-    const createdTour = await Tour.create<Tour>(tour);
-    murals.forEach(async (muralId) => {
-      const mural = await Mural.findByPk<Mural>(muralId, {
-        rejectOnEmpty: true,
+    try {
+      const createdTour = await Tour.create<Tour>(tour);
+      let muralsNotFound: number[] = [];
+      murals.forEach(async (muralId) => {
+        try {
+          const mural: Mural = await Mural.findByPk<Mural>(muralId, {
+            rejectOnEmpty: true,
+          });
+          createdTour.addMural(mural);
+        } catch (e) {
+          muralsNotFound.push(muralId);
+          console.warn(
+            RED,
+            "Mural ID not found, could not be added to tour: " + muralId
+          );
+        }
       });
-      createdTour.addMural(mural);
-    });
-    return { success: true, body: createdTour };
+      return { muralsNotFound: muralsNotFound, tour: createdTour };
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   /**
@@ -42,21 +61,40 @@ export class TourService {
     }
   }
 
-  public async update(tourId: number, params: TourInterface) {
-    const update: UpdateOptions = {
-      where: { id: tourId },
-    };
-    await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    await Tour.update(params, update);
-    return { success: true };
+  /**
+   * Updates attributes of a tour by id
+   * @param tourId id of the tour
+   * @param params TourInterface describing attrtibutes to be updated
+   */
+  public async update(tourId: number, params: TourInterface): Promise<void> {
+    try {
+      const update: UpdateOptions = {
+        where: { id: tourId },
+      };
+      await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
+      await Tour.update(params, update);
+      return;
+    } catch (e) {
+      console.error(RED, e.message);
+      throw e;
+    }
   }
 
-  public async delete(tourId: number, params: TourInterface) {
-    await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
-    await Tour.destroy({
-      where: { id: tourId },
-    });
-    return { success: true };
+  /**
+   * deletes a tour by id
+   * @param tourId tour's id
+   */
+  public async delete(tourId: number): Promise<void> {
+    try {
+      await Tour.findByPk<Tour>(tourId, { rejectOnEmpty: true });
+      await Tour.destroy({
+        where: { id: tourId },
+      });
+      return;
+    } catch (e) {
+      console.error(RED, e.message);
+      throw e;
+    }
   }
 
   /**
