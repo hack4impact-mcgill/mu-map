@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "30%",
     },
     title: {
-      fontSize: "larger",
+      fontSize: "180%",
       fontWeight: 500,
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(25),

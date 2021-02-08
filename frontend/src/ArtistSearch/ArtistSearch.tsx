@@ -8,8 +8,8 @@ import { GET_ALL_ARTISTS_API } from "../constants/constants"
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(1),
-    width: "195px",
+    margin: theme.spacing(0, 0, 3, 0),
+    width: "100%",
     zIndex: 1,
     position: "relative",
     display: "inline-block",
@@ -64,9 +64,10 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
           <TextField
             {...params}
             id="search-artist"
-            label="Search Artist..."
-            variant="filled"
+            label="Artist"
+            variant="outlined"
             size="small"
+            placeholder="Who made it?"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
           />
         )}

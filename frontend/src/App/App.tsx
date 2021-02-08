@@ -12,6 +12,7 @@ import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
 import SearchCard from "../SideBarSearch/searchCard";
+import { CREATE_MURAL_API } from "constants/constants";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -20,23 +21,24 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [murals, setMurals] = useState<any>([]);
   const [searchResult, setSearchResult] = useState<any>([]);
-  const [signInError, setSignInError] = useState<string>('');
+  const [signInError, setSignInError] = useState<string>("");
+  const [activeForm, setActiveForm] = useState<string>("mural");
 
   const handleSignin = (creds: any) => {
-    setSignInError("")
+    setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
       .then(() => {
-        handleCancelSignin()
-        setSignInError('')
+        handleCancelSignin();
+        setSignInError("");
       })
       .catch((error: any) => {
         console.log(error.message);
         if (error.code === "auth/network-request-failed") {
-          setSignInError("Network error.")
-        } else if (error.code === 'auth/wrong-password') {
-          setSignInError("Incorrect password.")
+          setSignInError("Network error.");
+        } else if (error.code === "auth/wrong-password") {
+          setSignInError("Incorrect password.");
         } else if (error.code === "auth/user-not-found") {
-          setSignInError("No user record corresponding to this email.")
+          setSignInError("No user record corresponding to this email.");
         }
       });
   };
@@ -47,7 +49,7 @@ function App() {
 
   const handleSearch = (results: any) => {
     setSearchResult(results);
-  }
+  };
 
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
@@ -61,12 +63,13 @@ function App() {
 
   const handleCancelSignin = () => setSigningIn(false);
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (formName: string = "") => {
     setSidebarOpen(!sidebarOpen);
+    formName && setActiveForm(formName);
   };
 
   const getMural = async () => {
-    const response = await fetch("http://localhost:3000/mural");
+    const response = await fetch(CREATE_MURAL_API);
     const data = await response.json();
 
     setMurals(data.rows);
@@ -76,7 +79,7 @@ function App() {
     getMural();
   }, []);
 
-  const sidebarTitle = "Create Mural";
+  const sidebarTitle = "";
 
   return (
     <div className="App">
@@ -85,7 +88,8 @@ function App() {
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
           error={signInError}
-          open={signingIn} />
+          open={signingIn}
+        />
         <Search searchCallBack={handleSearch} />
         <Map murals={murals} mapContainer={document.getElementById("root")} />
         <DropdownMenu
@@ -98,12 +102,13 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {
-            !searchResult.length ?
-              (<CollectionForm />) :
-              (<SearchCard searchCards={searchResult} />)
-          }
-          {false && (<MuralForm />)}
+          {searchResult.length ? (
+            <SearchCard searchCards={searchResult} />
+          ) : activeForm === "Mural" ? (
+            <MuralForm />
+          ) : activeForm === "Collection" ? (
+            <CollectionForm />
+          ) : null}
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
