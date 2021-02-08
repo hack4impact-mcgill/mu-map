@@ -114,6 +114,7 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
             {...params}
             id="autocomplete-text-f"
             label="Address"
+            size="small"
             placeholder="Type at least two characters"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
             InputProps={{
