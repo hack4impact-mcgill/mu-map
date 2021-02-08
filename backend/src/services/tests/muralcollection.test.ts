@@ -41,12 +41,13 @@ beforeEach(async () => {
 });
 
 test("create mural collection", async () => {
-  expect.assertions(4);
+  expect.assertions(3);
   const collectionService: MuralCollectionService = new MuralCollectionService();
 
   const murals: number[] = [1, 2];
-  const create = await collectionService.create(params, murals);
-  expect(create.success).toEqual(true);
+  const create = await collectionService
+    .create(params, murals)
+    .catch((err: Error) => fail());
   expect(create.body.id).toEqual(1);
   expect(create.body.name).toEqual("testCollection");
   expect(create.body.description).toEqual("des");
@@ -57,12 +58,13 @@ test("show valid mural collection", async () => {
   const collectionService: MuralCollectionService = new MuralCollectionService();
 
   const murals: number[] = [1, 2];
-  const create = await collectionService.create(params, murals);
-  if (!create.success) {
-    fail("Creating mural collection failed.");
-  }
+  const create = await collectionService
+    .create(params, murals)
+    .catch((err: Error) => fail());
 
-  const show = await collectionService.show(create.body.id);
+  const show = await collectionService
+    .show(create.body.id)
+    .catch((err: Error) => fail());
   expect(show.id).toEqual(create.body.id);
   expect(show.name).toEqual(create.body.name);
   expect(show.description).toEqual(create.body.description);
@@ -78,22 +80,22 @@ test("show invalid collection", async () => {
 });
 
 test("update mural collection", async () => {
-  expect.assertions(4);
+  expect.assertions(3);
   const collectionService: MuralCollectionService = new MuralCollectionService();
 
   const murals: number[] = [1, 2];
-  const create = await collectionService.create(params, murals);
-  if (!create.success) {
-    fail("Creating mural collection failed.");
-  }
+  const create = await collectionService
+    .create(params, murals)
+    .catch((err: Error) => fail());
   const collection = create.body;
 
   const updateParams = {
     name: "testCollection2",
     description: "cri",
   };
-  const update = await collectionService.update(collection.id, updateParams);
-  expect(update.success).toEqual(true);
+  await collectionService
+    .update(collection.id, updateParams)
+    .catch((err: Error) => fail());
 
   const show = await collectionService
     .show(collection.id)

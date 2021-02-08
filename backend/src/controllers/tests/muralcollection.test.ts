@@ -51,7 +51,7 @@ test("valid POST request", async () => {
       id: 1,
       collection: {
         name: "testCollectoin",
-        description: "des"
+        description: "des",
       },
       murals: [1, 2, 3],
     },
@@ -68,7 +68,7 @@ test("valid POST request", async () => {
         id: 1,
         collection: {
           name: "testCollectoin",
-          description: "des"
+          description: "des",
         },
         murals: [1, 2, 3],
       }),
@@ -109,7 +109,7 @@ test("valid GET request", async () => {
 
   await collectionController.show(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith(
     expect.objectContaining({
       collection: expect.objectContaining({
@@ -151,9 +151,9 @@ test("valid PUT request", async () => {
 
   await collectionController.update(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith({
-    data: "successfully updated",
+    data: "Successfully updated",
   });
 });
 

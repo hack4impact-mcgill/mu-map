@@ -8,7 +8,10 @@ export class BoroughController {
 
   /**
    * POST /borough
-   * @param req HTTP request containing ArtistInterface attributes
+   * @param req HTTP request containing BoroughInterface attributes:
+   *  {
+   *    name: string;
+   *  }
    * @param res HTTP response containing borough data
    */
   public async create(req: Request, res: Response) {
@@ -46,7 +49,10 @@ export class BoroughController {
 
   /**
    * PUT /borough/:id update properties of a borough by id
-   * @param req HTTP request containing BoroughInterface attributes to update
+   * @param req HTTP request containing BoroughInterface attributes to update:
+   *  {
+   *    name: string;
+   *  }
    * @param res HTTP response
    */
   public async update(req: Request, res: Response) {

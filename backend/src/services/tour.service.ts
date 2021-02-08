@@ -5,7 +5,7 @@ import { RED } from "../config/constants";
 
 export class TourService {
   /**
-   * Create a new tour interface and optionally connect it with murals
+   * Create a new tour and optionally connect it with murals
    * @param tour TourInterface describing the attributes of the new tour
    * @param murals list of mural IDs to connect with the tour
    */
