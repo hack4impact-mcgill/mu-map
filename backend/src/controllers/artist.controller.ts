@@ -8,7 +8,10 @@ export class ArtistController {
 
   /**
    * POST /artist
-   * @param req HTTP request containing ArtistInterface attributes
+   * @param req HTTP request containing ArtistInterface attributes:
+   *  {
+   *    name: string;
+   *  }
    * @param res HTTP response containing artist data
    */
   public async create(req: Request, res: Response) {
@@ -46,7 +49,10 @@ export class ArtistController {
 
   /**
    * PUT /artist/:id   update properties of a artist by id
-   * @param req HTTP request containing ArtistInterface attributes to update
+   * @param req HTTP request containing ArtistInterface attributes to update:
+   *  {
+   *    name: string;
+   *  }
    * @param res HTTP response
    */
   public async update(req: Request, res: Response) {

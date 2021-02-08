@@ -9,11 +9,16 @@ import { MuralCollectionService } from "../services/muralcollection.service";
 export class MuralCollectionController {
   public collectionService: MuralCollectionService = new MuralCollectionService();
 
-  // POST /collection
   /**
    * POST /collection
    * @param req HTTP request containing a "collection" parameter that has a
-   * MuralCollectionInterface describing the collection, and a list of mural IDs
+   * MuralCollectionInterface describing the collection, and a list of mural IDs:
+   * { murals: number[],
+   *   collection: {
+   *    name: string,
+   *    description: string,
+   *    }
+   * }
    * @param res Http response
    */
   public async create(req: Request, res: Response) {
@@ -54,7 +59,11 @@ export class MuralCollectionController {
   /**
    * PUT /collection/:id to update a collection
    * @param req HTTP request containing MuralCollectionInterface attributes
-   * describing updated fields
+   * describing updated fields:
+   * {
+   *  name: string,
+   *  description: string,
+   * }
    * @param res HTTP response
    */
   public async update(req: Request, res: Response) {
