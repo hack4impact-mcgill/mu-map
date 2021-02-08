@@ -65,6 +65,7 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
             {...params}
             id="search-borough"
             label="Borough"
+            variant="outlined"
             size="small"
             placeholder="Choose a borough"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}

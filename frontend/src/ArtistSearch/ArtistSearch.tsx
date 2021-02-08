@@ -65,6 +65,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
             {...params}
             id="search-artist"
             label="Artist"
+            variant="outlined"
             size="small"
             placeholder="Who made it?"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}

@@ -106,7 +106,7 @@ function CollectionForm() {
         <div className={styles.flexContainer}>
           <InputBase
             className={`${styles.title} ${styles.field}`}
-            defaultValue="Name the collection"
+            placeholder="Name the collection"
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ 'aria-label': 'New collection title' }}
             onClick={() => setEditingTitle(true)}
