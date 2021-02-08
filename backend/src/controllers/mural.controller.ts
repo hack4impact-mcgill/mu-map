@@ -11,7 +11,7 @@ export class MuralController {
    * @param req HTTP request optionally containing page count and size in querystring:
    * limit: number (default 40)
    * page: number (default 0)
-   * @param res
+   * @param res HTTP response containing one page worth of mural data
    */
   public async showAll(req: Request, res: Response) {
     try {
@@ -43,7 +43,7 @@ export class MuralController {
       imgURLs?: string[];
       socialMediaURLs?: string[];
     }
-   * @param res HTTP response
+   * @param res HTTP response containing data of the created mural
    */
   public async create(req: Request, res: Response) {
     const params: MuralInterface = req.body;
@@ -63,7 +63,7 @@ export class MuralController {
   /**
    * GET /mural/:id to return a mural by id
    * @param req HTTP request
-   * @param res HTTP response
+   * @param res HTTP response containing a single mural's data
    */
   public async show(req: Request, res: Response) {
     const muralId: number = Number(req.params.id);
@@ -98,7 +98,7 @@ export class MuralController {
       imgURLs?: string[];
       socialMediaURLs?: string[];
     }
-   * @param res HTTP response
+   * @param res HTTP response containing a confirmation message (or error)
    */
   public async update(req: Request, res: Response) {
     const muralId: number = Number(req.params.id);

@@ -19,7 +19,7 @@ export class MuralCollectionController {
    *    description: string,
    *    }
    * }
-   * @param res Http response
+   * @param res Http response containing data of created collection
    */
   public async create(req: Request, res: Response) {
     const collection: MuralCollectionInterface = req.body.collection;
@@ -38,7 +38,8 @@ export class MuralCollectionController {
   /**
    * / GET /collection/:id   (get a collection by id)
    * @param req HTTP request
-   * @param res HTTP response
+   * @param res HTTP response containing a single collection's data
+   *  (with associated mural IDs)
    */
   public async show(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
@@ -64,7 +65,7 @@ export class MuralCollectionController {
    *  name: string,
    *  description: string,
    * }
-   * @param res HTTP response
+   * @param res HTTP response containing a confirmation message (or error)
    */
   public async update(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
@@ -87,7 +88,7 @@ export class MuralCollectionController {
    * @param req HTTP request
    * limit: number (default 120)
    * page: number (default 0)
-   * @param res HTTP repsonse
+   * @param res HTTP repsonse containing one page worth of collections
    */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 120);

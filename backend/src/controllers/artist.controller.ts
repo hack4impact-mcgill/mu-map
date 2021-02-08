@@ -53,7 +53,7 @@ export class ArtistController {
    *  {
    *    name: string;
    *  }
-   * @param res HTTP response
+   * @param res HTTP response containing a confirmation message (or error message)
    */
   public async update(req: Request, res: Response) {
     const artistId: number = Number(req.params.id);
@@ -77,7 +77,7 @@ export class ArtistController {
    * @param req HTTP request with optional limit and offset query params:
    * limit: number (default 120)
    * page: number (default 0)
-   * @param res HTTP response
+   * @param res HTTP response containing one page worth of artists
    */
   public async showAll(req: Request, res: Response) {
     const limit = Number(req.query.limit ?? 120);
