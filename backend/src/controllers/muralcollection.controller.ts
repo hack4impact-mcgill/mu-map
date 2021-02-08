@@ -10,10 +10,15 @@ export class MuralCollectionController {
   public collectionService: MuralCollectionService = new MuralCollectionService();
 
   // POST /collection
+  /**
+   * POST /collection
+   * @param req HTTP request containing a "collection" parameter that has a
+   * MuralCollectionInterface describing the collection, and a list of mural IDs
+   * @param res Http response
+   */
   public async create(req: Request, res: Response) {
     const collection: MuralCollectionInterface = req.body.collection;
     const murals: number[] = req.body.murals;
-
     try {
       const createdCollection = await this.collectionService.create(
         collection,
@@ -21,7 +26,7 @@ export class MuralCollectionController {
       );
       res.status(201).json(createdCollection);
     } catch (e) {
-      res.status(500).json(e);
+      res.status(500).json({ error: "Something went wrong." });
     }
   }
 
@@ -36,7 +41,7 @@ export class MuralCollectionController {
       const collection: MuralCollection = await this.collectionService.show(
         collectionId
       );
-      res.status(202).json(collection);
+      res.status(200).json(collection);
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "No collection found with this id" });
@@ -46,19 +51,24 @@ export class MuralCollectionController {
     }
   }
 
-  //PUT /collection/:id (update a collection by id)
+  /**
+   * PUT /collection/:id to update a collection
+   * @param req HTTP request containing MuralCollectionInterface attributes
+   * describing updated fields
+   * @param res HTTP response
+   */
   public async update(req: Request, res: Response) {
     const collectionId: number = Number(req.params.id);
     const params: MuralCollectionInterface = req.body;
 
     try {
       await this.collectionService.update(collectionId, params);
-      res.status(202).json({ data: "successfully updated" });
+      res.status(200).json({ data: "Successfully updated" });
     } catch (e) {
       if (e instanceof EmptyResultError) {
         res.status(404).json({ error: "No collection found with this id" });
       } else {
-        res.status(500).json(e);
+        res.status(500).json({ error: "Something went wrong." });
       }
     }
   }

@@ -42,7 +42,12 @@ export class TourController {
     }
   }
 
-  // PUT update a mural with a given id
+  /**
+   * PUT /tour update a tour with a given id
+   * @param req HTTP request containing a tourId and a tourInterface
+   *  describing the new tour to create
+   * @param res HTTP response
+   */
   public async update(req: Request, res: Response) {
     const tourId: number = Number(req.params.id);
     const params: TourInterface = req.body;

@@ -7,17 +7,36 @@ import { UpdateOptions } from "sequelize";
 import { RED } from "../config/constants";
 
 export class MuralCollectionService {
+  /**
+   * Create a new collection and optionally connect it with murals
+   * @param collection MuralCollectionInterface describing the attributes of the new collection
+   * @param murals list of mural IDs to associate with the new collection
+   */
   public async create(collection: MuralCollectionInterface, murals: number[]) {
-    const createdCollection: MuralCollection = await MuralCollection.create<MuralCollection>(
-      collection
-    );
-    murals.forEach(async (muralId) => {
-      const mural = await Mural.findByPk<Mural>(muralId, {
-        rejectOnEmpty: true,
+    try {
+      const createdCollection: MuralCollection = await MuralCollection.create<MuralCollection>(
+        collection
+      );
+      let muralsNotFound: number[] = [];
+      murals.forEach(async (muralId) => {
+        try {
+          const mural = await Mural.findByPk<Mural>(muralId, {
+            rejectOnEmpty: true,
+          });
+          createdCollection.addMural(mural);
+        } catch (e) {
+          muralsNotFound.push(muralId);
+          console.warn(
+            RED,
+            "Mural ID not found, could not be added to tour: " + muralId
+          );
+        }
       });
-      createdCollection.addMural(mural);
-    });
-    return { success: true, body: createdCollection };
+      return { muralsNotFound: muralsNotFound, body: createdCollection };
+    } catch (e) {
+      console.error(RED, e);
+      throw e;
+    }
   }
 
   /**
@@ -28,7 +47,20 @@ export class MuralCollectionService {
     try {
       const collection: MuralCollection = await MuralCollection.findByPk<MuralCollection>(
         collectionId,
-        { rejectOnEmpty: true }
+        {
+          rejectOnEmpty: true,
+          include: [
+            {
+              model: Mural,
+              as: "murals",
+              attributes: ["id"],
+              through: {
+                attributes: [],
+              },
+            },
+          ],
+          attributes: { exclude: ["updatedAt", "createdAt"] },
+        }
       );
       return collection;
     } catch (e) {
@@ -37,15 +69,26 @@ export class MuralCollectionService {
     }
   }
 
+  /**
+   * Updates attributes of a collection by id
+   * @param collectionId id of the collection
+   * @param params MuralCollectionInterface describing the
+   *  attributes to be updated
+   */
   public async update(collectionId: number, params: MuralCollectionInterface) {
-    const update: UpdateOptions = {
-      where: { id: collectionId },
-    };
-    await MuralCollection.findByPk<MuralCollection>(collectionId, {
-      rejectOnEmpty: true,
-    });
-    await MuralCollection.update(params, update);
-    return { success: true };
+    try {
+      const update: UpdateOptions = {
+        where: { id: collectionId },
+      };
+      await MuralCollection.findByPk<MuralCollection>(collectionId, {
+        rejectOnEmpty: true,
+      });
+      await MuralCollection.update(params, update);
+      return;
+    } catch (e) {
+      console.error(RED, e.message);
+      throw e;
+    }
   }
 
   /**
