@@ -50,8 +50,8 @@ function SigninForm({
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [emailIsValid, setEmailIsValid] = useState<boolean>(false);
-  const [passwordIsValid, setPasswordIsValid] = useState<boolean>(false);
+  const [emailIsValid, setEmailIsValid] = useState<boolean>(true);
+  const [passwordIsValid, setPasswordIsValid] = useState<boolean>(true);
 
   const classes = useStyles();
   const emailPattern = new RegExp(
@@ -103,26 +103,24 @@ function SigninForm({
           <div className={classes.flexContainer}>
             <TextField
               autoFocus
-              error={emailIsValid || email.length === 0 ? false : true}
+              error={emailIsValid ? false : true}
               label="Email"
               type="email"
               variant="outlined"
               className={classes.textField}
-              onChange={(e) => handleEmailChange(e.target.value)}
-              helperText={
-                emailIsValid || email.length === 0
-                  ? ""
-                  : "Invalid email address"
-              }
+              onBlur={(e) => handleEmailChange(e.target.value)}
+              onFocus={() => setEmailIsValid(true)}
+              helperText={emailIsValid ? "" : "Invalid email address"}
             />
             <TextField
-              error={passwordIsValid || password.length === 0 ? false : true}
+              error={passwordIsValid ? false : true}
               id="password"
               label="Password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               variant="outlined"
-              onChange={(e) => handlePasswordChange(e.target.value)}
+              onBlur={(e) => handlePasswordChange(e.target.value)}
+              onFocus={() => setPasswordIsValid(true)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -133,11 +131,7 @@ function SigninForm({
                 ),
               }}
               className={classes.textField}
-              helperText={
-                passwordIsValid || password.length === 0
-                  ? ""
-                  : "Invalid password length"
-              }
+              helperText={passwordIsValid ? "" : "Invalid password length"}
             />
           </div>
           {error.length === 0 ? null : <Alert severity="error">{error}</Alert>}
@@ -151,7 +145,9 @@ function SigninForm({
             variant="contained"
             onClick={handleSubmit}
             color="primary"
-            disabled={passwordIsValid && emailIsValid ? false : true}
+            disabled={
+              !(passwordIsValid && emailIsValid && email.length && password.length)
+            }
           >
             Sign in
           </Button>
