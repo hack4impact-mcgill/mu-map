@@ -85,7 +85,7 @@ function CollectionForm() {
   useEffect(() => {
     axios.get('http://localhost:3000/mural')
       .then((response) => {
-        if (response.data) setMurals(response.data.murals.rows)
+        if (response.data) setMurals(response.data.rows)
       })
       .catch(err => console.log(err));
   }, []);
