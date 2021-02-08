@@ -53,7 +53,7 @@ export class BoroughController {
    *  {
    *    name: string;
    *  }
-   * @param res HTTP response
+   * @param res HTTP response containing a confirmation message (or error)
    */
   public async update(req: Request, res: Response) {
     const boroughId: number = Number(req.params.id);
@@ -74,11 +74,13 @@ export class BoroughController {
 
   /**
    * /GET /borough to get ALL boroughs (paginated)
-   * @param req HTTP request with optional limit and offset query params
-   * @param res HTTP response
+   * @param req HTTP request with optional limit and offset query params:
+   * limit: number (default 120)
+   * page: number (default 0)
+   * @param res HTTP response containing one page worth of boroughs
    */
   public async showAll(req: Request, res: Response) {
-    const limit = Number(req.query.limit ?? 40);
+    const limit = Number(req.query.limit ?? 120);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
       const boroughs = await this.boroughService.showAll(limit, offset);

@@ -35,7 +35,7 @@ export class BoroughService {
 
   /**
    * update an existing borough by id
-   * @param boroughId brough id
+   * @param boroughId borough id
    * @param params BoroughInterface describing fields to be updated
    */
   public async update(

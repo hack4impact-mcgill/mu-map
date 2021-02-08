@@ -69,7 +69,7 @@ function App() {
     const response = await fetch("http://localhost:3000/mural");
     const data = await response.json();
 
-    setMurals(data.murals.rows);
+    setMurals(data.rows);
   };
 
   useEffect(() => {

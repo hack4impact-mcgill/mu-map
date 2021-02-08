@@ -30,7 +30,7 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
     axios
       .get(GET_ALL_BOROUGH_API)
       .then((response) => {
-        if (response.data) setboroughs(response.data.boroughs.rows);
+        if (response.data) setboroughs(response.data.rows);
       })
       .catch((err) => console.log(err));
   }, []);

@@ -31,7 +31,7 @@ export default function SearchBar({ searchCallBack}: ISearchBarProps) {
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.murals.rows) }).catch(err => console.log(err));
+    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.rows) }).catch(err => console.log(err));
   }, []);
 
   useEffect(() => {
