@@ -168,7 +168,7 @@ function MuralForm(props: IMuralFormProps) {
           />
           <Typography variant="body1" display="block" color="textSecondary">
             Year
-        </Typography>
+          </Typography>
           <InputBase
             required
             id="year"

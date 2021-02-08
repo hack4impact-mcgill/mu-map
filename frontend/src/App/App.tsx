@@ -12,6 +12,7 @@ import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
 import SearchCard from "../SideBarSearch/searchCard";
+import { CREATE_MURAL_API } from "constants/constants";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -21,6 +22,7 @@ function App() {
   const [murals, setMurals] = useState<any>([]);
   const [searchResult, setSearchResult] = useState<any>([]);
   const [signInError, setSignInError] = useState<string>("");
+  const [activeForm, setActiveForm] = useState<string>("mural");
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -61,12 +63,13 @@ function App() {
 
   const handleCancelSignin = () => setSigningIn(false);
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (formName: string = "") => {
     setSidebarOpen(!sidebarOpen);
+    formName && setActiveForm(formName);
   };
 
   const getMural = async () => {
-    const response = await fetch("http://localhost:3000/mural");
+    const response = await fetch(CREATE_MURAL_API);
     const data = await response.json();
 
     setMurals(data.murals.rows);
@@ -99,12 +102,13 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {!searchResult.length ? (
-            <MuralForm />
-          ) : (
+          {searchResult.length ? (
             <SearchCard searchCards={searchResult} />
-          )}
-          {false && <CollectionForm />}
+          ) : activeForm === "Mural" ? (
+            <MuralForm />
+          ) : activeForm === "Collection" ? (
+            <CollectionForm />
+          ) : null}
         </Sidebar>
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
