@@ -96,10 +96,12 @@ export class TourController {
   /**
    * GET /tour to get all tours
    * @param req HTTP request
+   * limit: number (default 120)
+   * page: number (default 0)
    * @param res HTTP response containing all tours
    */
   public async showAll(req: Request, res: Response) {
-    const limit = Number(req.query.limit ?? 40);
+    const limit = Number(req.query.limit ?? 120);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
       const tours: Tour[] = await this.tourService.showAll(limit, offset);

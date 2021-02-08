@@ -85,10 +85,12 @@ export class MuralCollectionController {
   /**
    * /GET /collection to get ALL collections
    * @param req HTTP request
+   * limit: number (default 120)
+   * page: number (default 0)
    * @param res HTTP repsonse
    */
   public async showAll(req: Request, res: Response) {
-    const limit = Number(req.query.limit ?? 40);
+    const limit = Number(req.query.limit ?? 120);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
       const collections: MuralCollection[] = await this.collectionService.showAll(

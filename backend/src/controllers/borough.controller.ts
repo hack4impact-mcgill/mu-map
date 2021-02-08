@@ -74,11 +74,13 @@ export class BoroughController {
 
   /**
    * /GET /borough to get ALL boroughs (paginated)
-   * @param req HTTP request with optional limit and offset query params
+   * @param req HTTP request with optional limit and offset query params:
+   * limit: number (default 120)
+   * page: number (default 0)
    * @param res HTTP response
    */
   public async showAll(req: Request, res: Response) {
-    const limit = Number(req.query.limit ?? 40);
+    const limit = Number(req.query.limit ?? 120);
     const offset = Number(req.query.page ?? 0) * limit;
     try {
       const boroughs = await this.boroughService.showAll(limit, offset);
