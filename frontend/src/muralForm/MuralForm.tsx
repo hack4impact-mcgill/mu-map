@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, InputBase, InputAdornment } from "@material-ui/core";
+import { InputBase, InputAdornment, Typography } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     element: {
       width: "100%",
-      margin: theme.spacing(0, 0, 4, 0),
+      margin: theme.spacing(0, 0, 2, 0),
     },
     bottomButton: {
       fontWeight: 500,
@@ -38,24 +38,32 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface IMuralFormProps {}
+interface IMuralFormProps { }
 
 function MuralForm(props: IMuralFormProps) {
+
   const styles = useStyles();
+
   const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [year, setYear] = useState<number>(new Date().getFullYear());
+
+  const [address, setAddress] = useState<string>("");
+  const [addressCoords, setAddressCoords] = useState<number[]>([]);
+  const [borough, setBorough] = useState<number | null>(null);
+  const [neighbourhood, setNeighbourhood] = useState<string>("");
+
   const [assistants, setAssistants] = useState<string[]>([]);
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
   const [partners, setPartners] = useState<string[]>([]);
   const [artist, setArtist] = useState<number | null>(null);
-  const [borough, setBorough] = useState<number | null>(null);
-  const [addressCoords, setAddressCoords] = useState<number[]>([]);
-  const [description, setDescription] = useState<string>("");
-  const [neighbourhood, setNeighbourhood] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+
 
   const [editingName, setEditingName] = useState<boolean>(false);
   const [hoveringName, setHoveringName] = useState<boolean>(false);
+
+  const [editingDesc, setEditingDesc] = useState<boolean>(false);
+  const [hoveringDesc, setHoveringDesc] = useState<boolean>(false);
 
   function submitForm() {
     if (name === "") {
@@ -132,8 +140,30 @@ function MuralForm(props: IMuralFormProps) {
             )
           }
         />
-        <InputBase // TODO add year prompt in front
+        <InputBase
           className={styles.element}
+          multiline
+          rows={4}
+          id="description"
+          placeholder="Add a description"
+          inputProps={{ "aria-label": "naked" }}
+          onChange={(e: any) => setDescription(e.target.value)}
+          onClick={() => setEditingDesc(true)}
+          onBlur={() => setEditingDesc(false)}
+          onMouseEnter={() => setHoveringDesc(true)}
+          onMouseLeave={() => setHoveringDesc(false)}
+          endAdornment={
+            !editingDesc && (
+              <InputAdornment position="start">
+                <EditIcon color={hoveringDesc ? "primary" : "action"} />
+              </InputAdornment>
+            )
+          }
+        />
+        <Typography variant="body1" display="block" color="textSecondary">
+          Year
+        </Typography>
+        <InputBase
           required
           id="year"
           type="number"
@@ -141,35 +171,26 @@ function MuralForm(props: IMuralFormProps) {
           inputProps={{ "aria-label": "naked" }}
           onChange={(e: any) => setYear(e.target.value)}
         />
-        <ArtistSearchBar
-          callback={(artistId: number | null) => setArtist(artistId)}
-        />
         <AddressSearch callback={handleAddressUpdate} />
         <BoroughSearchBar
           callback={(boroughId: number | null) => setBorough(boroughId)}
         />
-        <InputBase
-          className={styles.element}
-          multiline
-          rows={4}
-          id="description"
-          placeholder="Add Description"
-          inputProps={{ "aria-label": "naked" }}
-          onChange={(e: any) => setDescription(e.target.value)}
+        <ArtistSearchBar
+          callback={(artistId: number | null) => setArtist(artistId)}
         />
         <MultiAdd // TODO not sure how to make these borderless
           title={"Assistants"}
-          placeholder={"Add Assistants..."}
+          placeholder={"Add assistants..."}
           callback={(newAssistants: string[]) => setAssistants(newAssistants)}
         />
         <MultiAdd
           title={"Partners"}
-          placeholder={"Add Partners..."}
+          placeholder={"Add partners..."}
           callback={(newPartners: string[]) => setPartners(newPartners)}
         />
         <MultiAdd
           title={"Social Media"}
-          placeholder={"Add Social Media..."}
+          placeholder={"Add social media..."}
           callback={(newSocialMedia: string[]) =>
             setSocialMedia(newSocialMedia)
           }

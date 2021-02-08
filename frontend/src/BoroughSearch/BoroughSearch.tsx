@@ -8,7 +8,7 @@ import { GET_ALL_BOROUGH_API } from "../constants/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(0, 0, 4, 0),
+    margin: theme.spacing(0, 0, 3, 0),
     width: "100%",
     zIndex: 1,
     position: "relative",
@@ -64,9 +64,8 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
           <TextField
             {...params}
             id="search-borough"
-            label="Search Borough..."
-            inputProps={{ "aria-label": "naked" }}
-            size="small"
+            label="Borough"
+            placeholder="Choose a borough"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
           />
         )}

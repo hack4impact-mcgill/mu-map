@@ -15,7 +15,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(0, 0, 4, 0),
+    margin: theme.spacing(1, 0, 3, 0),
     width: "100%",
     zIndex: 1,
     position: "relative",
@@ -113,9 +113,8 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
           <TextField
             {...params}
             id="autocomplete-text-f"
-            label="Search Address..."
-            inputProps={{ "aria-label": "naked" }}
-            size="small"
+            label="Address"
+            placeholder="Type at least two characters"
             onChange={(e) => setQuery(e.target.value.toLowerCase())}
             InputProps={{
               ...params.InputProps,
