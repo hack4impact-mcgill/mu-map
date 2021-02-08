@@ -44,9 +44,9 @@ test("valid POST request", async () => {
       body: expect.objectContaining({
         id: 1,
         name: "testtour",
-      })
+      }),
     })
-  )
+  );
 });
 
 test("invalid POST request", async () => {
@@ -79,7 +79,7 @@ test("valid GET request", async () => {
 
   await tourController.show(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith(
     expect.objectContaining({
       tour: expect.objectContaining({
