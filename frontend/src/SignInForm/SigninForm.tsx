@@ -146,9 +146,7 @@ function SigninForm({
             onClick={handleSubmit}
             color="primary"
             disabled={
-              passwordIsValid && emailIsValid && email.length && password.length
-                ? false
-                : true
+              !(passwordIsValid && emailIsValid && email.length && password.length)
             }
           >
             Sign in
