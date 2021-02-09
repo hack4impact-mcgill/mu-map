@@ -5,3 +5,14 @@
     left: 0;
     bottom: 0;
     }
+
+.mapboxgl-popup {
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.mapboxgl-popup-content {
+    text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 14px;
+}
