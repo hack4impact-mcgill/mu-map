@@ -34,7 +34,11 @@ export class AssociationSetup {
       through: "murals_in_tour",
       as: "murals",
     });
-    await database.sync({ force: true });
+    if (process.env.PROD == "true") {
+      await database.sync();
+    } else {
+      await database.sync({ force: true });
+    }
     if (process.env.MIGRATE == "true") {
       await this.sampleMigrations();
     }

@@ -6,31 +6,30 @@ beforeEach(async () => {
 });
 
 test("create borough", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const boroughService: BoroughService = new BoroughService();
   const params = {
     name: "testBorough",
   };
-  const create = await boroughService.create(params);
-  expect(create.success).toEqual(true);
-  expect(create.body.id).toEqual(1);
-  expect(create.body.name).toEqual("testBorough");
+  const create: Borough = await boroughService.create(params);
+  expect(create.id).toEqual(1);
+  expect(create.name).toEqual("testBorough");
 });
 
 test("show valid borough", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const boroughService: BoroughService = new BoroughService();
   const params = {
     name: "testBorough",
   };
-  const create = await boroughService.create(params);
-  if (!create.success) {
-    fail("Creating borough failed.");
-  }
-  const show = await boroughService.show(create.body.id);
-  expect(show.success).toEqual(true);
-  expect(show.borough.id).toEqual(create.body.id);
-  expect(show.borough.name).toEqual(create.body.name);
+  const create: Borough = await boroughService
+    .create(params)
+    .catch((err: Error) => fail());
+  const show: Borough = await boroughService
+    .show(create.id)
+    .catch((err: Error) => fail());
+  expect(show.id).toEqual(create.id);
+  expect(show.name).toEqual(create.name);
 });
 
 test("Show invalid borough", async () => {
@@ -43,28 +42,25 @@ test("Show invalid borough", async () => {
 });
 
 test("update borough", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const boroughService: BoroughService = new BoroughService();
   const params = {
     name: "testBorough",
   };
 
-  const create = await boroughService.create(params);
-  if (!create.success) {
-    fail("Creating borough failed.");
-  }
-  const borough = create.body;
-
+  const borough: Borough = await boroughService
+    .create(params)
+    .catch((err: Error) => fail());
   const updateParams = {
     name: "testBorough2",
   };
-  const update = await boroughService.update(borough.id, updateParams);
-  expect(update.success).toEqual(true);
+  await boroughService
+    .update(borough.id, updateParams)
+    .catch((err: Error) => fail());
 
-  const show = await boroughService
+  const updatedBorough: Borough = await boroughService
     .show(borough.id)
     .catch((err: Error) => fail("Could not find the borough by ID"));
-  const updatedBorough = show.borough;
   expect(updatedBorough.id).toEqual(borough.id);
   expect(updatedBorough.name).toEqual("testBorough2");
 });

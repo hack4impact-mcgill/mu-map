@@ -1,4 +1,3 @@
-import { database } from "../../config/database";
 import { Tour } from "../../models/tour.model";
 import { TourService } from "../tour.service";
 
@@ -7,35 +6,35 @@ beforeEach(async () => {
 });
 
 test("create tour", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const tourService: TourService = new TourService();
   const params = {
     name: "testtour",
-    description: "testtour"
+    description: "testtour",
   };
-  const create = await tourService.create(params, []);
-  expect(create.success).toEqual(true);
-  expect(create.body!.id).toEqual(1);
-  expect(create.body!.name).toEqual("testtour");
+  const create = await tourService
+    .create(params, [])
+    .catch((err: Error) => fail());
+  expect(create.tour.id).toEqual(1);
+  expect(create.tour.name).toEqual("testtour");
+  expect(create.muralsNotFound);
 });
 
 test("show valid tour", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const tourService: TourService = new TourService();
   const params = {
     name: "testtour",
-    description: "testtour"
+    description: "testtour",
   };
-  const create = await tourService.create(params, []);
-  if (!create.success) {
-    fail("Creating tour failed.");
-  }
-  const tour = create.body!;
+  const create = await tourService
+    .create(params, [])
+    .catch((err: Error) => fail());
+  const tour = create.tour;
 
-  const show = await tourService.show(tour.id);
-  expect(show.success).toEqual(true);
-  expect(show.tour!.id).toEqual(tour.id);
-  expect(show.tour!.name).toEqual(tour.name);
+  const show = await tourService.show(tour.id).catch((err: Error) => fail());
+  expect(show.id).toEqual(tour.id);
+  expect(show.name).toEqual(tour.name);
 });
 
 test("show invalid tour", async () => {

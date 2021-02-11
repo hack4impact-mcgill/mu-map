@@ -87,7 +87,7 @@ test("valid GET request", async () => {
 
   await artistController.show(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith(
     expect.objectContaining({
       artist: expect.objectContaining({
@@ -141,7 +141,7 @@ test("valid PUT request", async () => {
 
   await artistController.update(req, res);
 
-  expect(res.status).toHaveBeenCalledWith(202);
+  expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith({
     data: "successfully updated",
   });

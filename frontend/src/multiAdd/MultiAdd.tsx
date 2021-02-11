@@ -3,15 +3,16 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MultiAddItem from "./MultiAddItem";
-import FilledInput from "@material-ui/core/FilledInput";
+import InputBase from "@material-ui/core/InputBase";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flexContainer: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      width: "195px",
-      margin: theme.spacing(1),
+      alignItems: "left",
+      width: "100%",
+      margin: theme.spacing(0, 0, 3, 0),
     },
     addIcon: {
       cursor: "pointer",
@@ -53,10 +54,11 @@ function MultiAdd(props: IMultiAddProps) {
 
   return (
     <div className={styles.flexContainer}>
-      <FilledInput
+      <InputBase
         placeholder={props.placeholder}
         onChange={(e) => setCurrentInput(e.target.value)}
         value={currentInput}
+        onKeyDown={e => e.key === "Enter" && addItem()}
         endAdornment={
           <InputAdornment position="end">
             <AddIcon className={styles.addIcon} onClick={addItem} />

@@ -6,6 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import { useState, useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+interface ISearchBarProps {
+  searchCallBack: (data: any) => void;
+}
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -20,20 +23,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchBar() {
+
+export default function SearchBar({ searchCallBack}: ISearchBarProps) {
   const [murals, setMurals] = useState([]);
   const [query, setQuery] = useState('');
   const classes = useStyles();
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.murals.rows) }).catch(err => console.log(err));
+    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.rows) }).catch(err => console.log(err));
   }, []);
 
   useEffect(() => {
     const filtered = murals.filter((mural: any) => { return mural.name.toLowerCase().includes(query) });
     setResult(filtered);
+  
   }, [query, murals]);
+
+  const toggleSearch = (event: any) => {
+    setQuery(event.target.value.toLowerCase())
+    searchCallBack(result);
+  }
 
   return (
     <form className={classes.root} >
@@ -47,7 +57,7 @@ export default function SearchBar() {
             id="outlined-basic"
             label="Search..."
             variant="outlined"
-            onChange={(e) => setQuery(e.target.value.toLowerCase())}
+            onChange={(e) =>toggleSearch(e)}
           />
         )}
       />
