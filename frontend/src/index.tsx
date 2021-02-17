@@ -21,6 +21,8 @@ const avantGarde = {
   fontStyle: 'normal',
   fontDisplay: 'swap' as 'swap',
   fontWeight: 500,
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
   src: `
     local('AvantGarde LT'),
     url(${AvantGarde}) format('woff'),
@@ -54,7 +56,7 @@ let theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: 'AvantGarde LT, Arial',
+    fontFamily: 'AvantGarde LT, Arial'
   },
   overrides: {
     MuiCssBaseline: {
