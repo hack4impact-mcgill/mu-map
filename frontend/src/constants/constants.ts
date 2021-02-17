@@ -13,6 +13,8 @@ export const MTL_MAX_LONGITUDE = -73.33952;
 export const MTL_MAX_LATITUDE = 45.752154;
 export const MAPBOX_GEOCODING_API =
   "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-export const GET_ALL_ARTISTS_API = "http://localhost:3000/artist";
-export const GET_ALL_BOROUGH_API = "http://localhost:3000/borough";
-export const CREATE_MURAL_API = "http://localhost:3000/mural";
+export const MAPBOX_STYLE_URL =
+  "mapbox://styles/mumap/ckhb8l6je01ki1ao4tabh8e2q";
+export const GET_ALL_ARTISTS_API = "localhost:3000/artist";
+export const GET_ALL_BOROUGH_API = "localhost:3000/borough";
+export const CREATE_MURAL_API = "localhost:3000/mural";
