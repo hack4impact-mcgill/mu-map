@@ -5,8 +5,8 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { createMuiTheme, CssBaseline, responsiveFontSizes } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
-import AvantGarde from './fonts/AvantGardeCE-Book.woff';
-import AvantGarde2 from './fonts/AvantGardeCE-Book.woff2';
+import AvantGarde from './fonts/AvantGardeLT-Book.woff';
+import AvantGarde2 from './fonts/AvantGardeLT-Book.woff2';
 import {
   PRIMARY,
   SECONDARY,
@@ -17,12 +17,12 @@ import {
 } from 'constants/constants';
 
 const avantGarde = {
-  fontFamily: 'AvantGarde CE',
+  fontFamily: 'AvantGarde LT',
   fontStyle: 'normal',
   fontDisplay: 'swap' as 'swap',
   fontWeight: 500,
   src: `
-    local('AvantGarde CE'),
+    local('AvantGarde LT'),
     url(${AvantGarde}) format('woff'),
     url(${AvantGarde2}) format('woff2')
   `,
@@ -54,7 +54,7 @@ let theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: 'AvantGarde CE',
+    fontFamily: 'AvantGarde LT',
   },
   overrides: {
     MuiCssBaseline: {
