@@ -131,7 +131,7 @@ function Map({ mapContainer, murals }: IMapProps) {
           <p>
             <h3> {popupInfo.name} </h3>
             {popupInfo.address} </p>
-          <Button variant="contained" color="primary" onClick={() => editMural(popupInfo)}>EDIT</Button>
+          <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button>
         </Popup>
       )
       }
