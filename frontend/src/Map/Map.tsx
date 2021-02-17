@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import mapboxgl from "mapbox-gl";
 import ReactMapGL, { Popup, GeolocateControl, AttributionControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -20,9 +20,9 @@ interface IMapProps {
 }
 
 function Map({ mapContainer, murals }: IMapProps) {
-  const [lng, setLng] = useState(DEFAULT_LONGITUDE);
-  const [lat, setLat] = useState(DEFAULT_LATITUDE);
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const lng = DEFAULT_LONGITUDE;
+  const lat = DEFAULT_LATITUDE;
+  const zoom = DEFAULT_ZOOM;
 
   const [viewport, setViewport] = useState({
     width: "100vw",
@@ -54,6 +54,9 @@ function Map({ mapContainer, murals }: IMapProps) {
   const [editMural, setEditMural] = useState<any>([]);
 
   // ----------------------USING MAPBOX----------------------------------- //
+  // const [lng, setLng] = useState(DEFAULT_LONGITUDE);
+  // const [lat, setLat] = useState(DEFAULT_LATITUDE);
+  // const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   // useEffect(() => {
   //   const map = new mapboxgl.Map({
   //     container: (mapContainer as any),
