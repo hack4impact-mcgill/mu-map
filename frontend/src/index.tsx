@@ -54,7 +54,7 @@ let theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: 'AvantGarde LT',
+    fontFamily: 'AvantGarde LT, Arial',
   },
   overrides: {
     MuiCssBaseline: {
