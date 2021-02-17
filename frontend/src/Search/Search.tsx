@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SearchBar({ searchCallBack}: ISearchBarProps) {
+export default function SearchBar({ searchCallBack }: ISearchBarProps) {
   const [murals, setMurals] = useState([]);
   const [query, setQuery] = useState('');
   const classes = useStyles();
@@ -37,7 +37,7 @@ export default function SearchBar({ searchCallBack}: ISearchBarProps) {
   useEffect(() => {
     const filtered = murals.filter((mural: any) => { return mural.name.toLowerCase().includes(query) });
     setResult(filtered);
-  
+
   }, [query, murals]);
 
   const toggleSearch = (event: any) => {
@@ -46,7 +46,7 @@ export default function SearchBar({ searchCallBack}: ISearchBarProps) {
   }
 
   return (
-    <form className={classes.root} >
+    <form className={classes.root}>
       <Autocomplete
         freeSolo
         disableClearable
@@ -57,7 +57,7 @@ export default function SearchBar({ searchCallBack}: ISearchBarProps) {
             id="outlined-basic"
             label="Search..."
             variant="outlined"
-            onChange={(e) =>toggleSearch(e)}
+            onChange={(e) => toggleSearch(e)}
           />
         )}
       />
