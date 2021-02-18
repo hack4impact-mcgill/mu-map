@@ -1,16 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, CssBaseline, responsiveFontSizes } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
+import AvantGarde from './fonts/AvantGardeLT-Book.woff';
+import AvantGarde2 from './fonts/AvantGardeLT-Book.woff2';
 import {
-  PRIMARY, SECONDARY, SUCCESS, WARNING, ERROR, CONTRAST
+  PRIMARY,
+  SECONDARY,
+  SUCCESS,
+  WARNING,
+  ERROR,
+  CONTRAST
 } from 'constants/constants';
 
-const theme = createMuiTheme({
+const avantGarde = {
+  fontFamily: 'AvantGarde LT',
+  fontStyle: 'normal',
+  fontDisplay: 'swap' as 'swap',
+  fontWeight: 500,
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
+  src: `
+    local('AvantGarde LT'),
+    url(${AvantGarde}) format('woff'),
+    url(${AvantGarde2}) format('woff2')
+  `,
+  unicodeRange:
+    'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF',
+};
+
+let theme = createMuiTheme({
   palette: {
     primary: {
       main: PRIMARY,
@@ -32,24 +54,33 @@ const theme = createMuiTheme({
       main: ERROR,
       contrastText: CONTRAST
     }
-  }
+  },
+  typography: {
+    fontFamily: 'AvantGarde LT, Arial'
+  },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '@font-face': [avantGarde],
+      },
+    },
+  },
 });
+
+theme = responsiveFontSizes(theme);
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <App />
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
+// Change unregister() to register() when the app is ready for distribution
 serviceWorkerRegistration.unregister();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// See https://bit.ly/CRA-vitals for analytics instructions
 reportWebVitals();
