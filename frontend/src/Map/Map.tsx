@@ -20,16 +20,13 @@ interface IMapProps {
 }
 
 function Map({ mapContainer, murals }: IMapProps) {
-  const lng = DEFAULT_LONGITUDE;
-  const lat = DEFAULT_LATITUDE;
-  const zoom = DEFAULT_ZOOM;
 
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",
-    latitude: lat,
-    longitude: lng,
-    zoom: zoom,
+    latitude: DEFAULT_LATITUDE,
+    longitude: DEFAULT_LONGITUDE,
+    zoom: DEFAULT_ZOOM,
   });
 
   const geolocateStyle = {
@@ -53,58 +50,7 @@ function Map({ mapContainer, murals }: IMapProps) {
   const [popupInfo, setPopupInfo] = useState<any>([]);
   const [editMural, setEditMural] = useState<any>([]);
 
-  // ----------------------USING MAPBOX----------------------------------- //
-  // const [lng, setLng] = useState(DEFAULT_LONGITUDE);
-  // const [lat, setLat] = useState(DEFAULT_LATITUDE);
-  // const [zoom, setZoom] = useState(DEFAULT_ZOOM);
-  // useEffect(() => {
-  //   const map = new mapboxgl.Map({
-  //     container: (mapContainer as any),
-  //     style: "mapbox://styles/mapbox/streets-v11",
-  //     center: [lng, lat],
-  //     zoom: zoom,
-  //     attributionControl: false
-  //   });
-  //   map.addControl(
-  //     new mapboxgl.GeolocateControl({
-  //       positionOptions: {
-  //         enableHighAccuracy: true
-  //       },
-  //       trackUserLocation: true
-  //     }),
-  //     'bottom-right'
-  //   );
-
-  //   map.addControl(new mapboxgl.AttributionControl(), 'top-left');
-
-  //   map.on("move", () => {
-  //     setLng(map.getCenter().lng);
-  //     setLat(map.getCenter().lat);
-  //     setZoom(map.getZoom());
-  //   });
-
-  //   murals.forEach((mural: any) => {
-  //     // new mapboxgl.Marker({ color: "red" })
-  //     //   .setLngLat([
-  //     //     mural.coordinates.coordinates[0],
-  //     //     mural.coordinates.coordinates[1],
-  //     //   ])
-  //     //   .addTo(map);
-  //     <Marker key={mural.name} latitude={mural.coordinates.coordinates[0]} longitude={mural.coordinates.coordinates[1]}>
-  //       <img src="https://toppng.com/uploads/preview/pin-drop-icon-drop-pin-icon-11553428790llctccp464.png" alt="Pin" />
-  //     </Marker >
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [murals]);
-
-  // ----------------------------------------------------------------------- //
-
   return (
-    // ----------------------USING MAPBOX----------------------------------- //
-    // <div>
-    //   <div ref={(el) => (mapContainer = el)} className="mapContainer" />
-    // </div>
-    // ----------------------------------------------------------------------- //
     <ReactMapGL
       {...viewport}
       onViewportChange={(nextViewport: any) => setViewport(nextViewport)
