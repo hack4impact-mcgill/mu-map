@@ -16,3 +16,8 @@ export const MAPBOX_GEOCODING_API =
 export const GET_ALL_ARTISTS_API = "http://localhost:3000/artist";
 export const GET_ALL_BOROUGH_API = "http://localhost:3000/borough";
 export const CREATE_MURAL_API = "http://localhost:3000/mural";
+export enum FORM {
+  MURAL = "Mural",
+  COLLECTION = "Collection",
+  TOUR = "Tour"
+};
