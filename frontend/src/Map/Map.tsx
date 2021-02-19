@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-import mapboxgl from "mapbox-gl";
+import React, { useState } from "react";
+import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import CustomMarker from "../CustomMarker/CustomMarker";
+import Button from '@material-ui/core/Button';
+
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
+  MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
-
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || "";
 
 interface IMapProps {
   mapContainer: HTMLElement | string | null;
@@ -15,53 +18,63 @@ interface IMapProps {
 }
 
 function Map({ mapContainer, murals }: IMapProps) {
-  const [lng, setLng] = useState(DEFAULT_LONGITUDE);
-  const [lat, setLat] = useState(DEFAULT_LATITUDE);
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
+  const [viewport, setViewport] = useState({
+    width: "100vw",
+    height: "100vh",
+    latitude: DEFAULT_LATITUDE,
+    longitude: DEFAULT_LONGITUDE,
+    zoom: DEFAULT_ZOOM,
+  });
 
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: (mapContainer as any),
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: zoom,
-      attributionControl: false
-    });
+  const geolocateStyle = {
+    bottom: 30,
+    right: 0,
+    padding: '10px'
+  };
 
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      }),
-      'bottom-right'
-    );
+  const imgStyle = {
+    maxWidth: '200px',
+    maxHeight: '200px',
+    padding: 'none'
+  };
 
-    map.addControl(new mapboxgl.AttributionControl(), 'top-left');
-
-    map.on("move", () => {
-      setLng(map.getCenter().lng);
-      setLat(map.getCenter().lat);
-      setZoom(map.getZoom());
-    });
-
-    murals.forEach((mural: any) => {
-      new mapboxgl.Marker()
-        .setLngLat([
-          mural.coordinates.coordinates[0],
-          mural.coordinates.coordinates[1],
-        ])
-        .addTo(map);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [murals]);
+  const [popupInfo, setPopupInfo] = useState<any>([]);
+  // const [editMural, setEditMural] = useState<any>([]); -> For the EDIT button of the popup
 
   return (
-    <div>
-      <div ref={(el) => (mapContainer = el)} className="mapContainer" />
-    </div>
+    <ReactMapGL
+      {...viewport}
+      onViewportChange={(nextViewport: any) => setViewport(nextViewport)
+      }
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN || ""}
+      mapStyle={MAPBOX_STYLE_URL}
+    >
+      <GeolocateControl
+        style={geolocateStyle}
+        positionOptions={{ enableHighAccuracy: true }}
+        trackUserLocation={true}
+      />
+      <CustomMarker murals={murals} setInfo={setPopupInfo} />
+      {popupInfo && popupInfo.coordinates && (
+        <Popup
+          tipSize={0}
+          anchor={"top"}
+          longitude={popupInfo.coordinates.coordinates[0]}
+          latitude={popupInfo.coordinates.coordinates[1]}
+          closeOnClick={false}
+          onClose={setPopupInfo}
+        >
+          <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
+          <p>
+            <h3> {popupInfo.name} </h3>
+            {popupInfo.address} </p>
+          {/* <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button> */}
+          <Button variant="contained" color="primary" >EDIT</Button>
+        </Popup>
+      )
+      }
+    </ReactMapGL >
   );
 }
 

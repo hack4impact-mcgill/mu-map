@@ -5,3 +5,11 @@
     left: 0;
     bottom: 0;
     }
+
+.mapboxgl-popup-content {
+    padding: 10px;
+    text-align: left;
+    font-family: "Avant Garde Gothic", "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 14px;
+}
+
