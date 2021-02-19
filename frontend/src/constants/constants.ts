@@ -17,3 +17,8 @@ export const MAPBOX_STYLE_URL = "mapbox://styles/mumap/ckhb8l6je01ki1ao4tabh8e2q
 export const GET_ALL_ARTISTS_API = "http://localhost:3000/artist";
 export const GET_ALL_BOROUGH_API = "http://localhost:3000/borough";
 export const CREATE_MURAL_API = "http://localhost:3000/mural";
+export enum FORM {
+  MURAL = "Mural",
+  COLLECTION = "Collection",
+  TOUR = "Tour"
+};

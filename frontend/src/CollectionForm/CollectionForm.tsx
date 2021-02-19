@@ -35,7 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function CollectionForm() {
+interface ICollectionFormProps {
+  handleCancel: () => void;
+};
+
+function CollectionForm({ handleCancel }: ICollectionFormProps) {
   const [murals, setMurals] = useState<any>([]);
   const [muralsInCollection, setMuralsInCollection] = useState<any>([]);
   const [muralResults, setMuralResults] = useState<any>([]);
@@ -76,10 +80,6 @@ function CollectionForm() {
         setTimeout(() => setPopup(false), 5000);
       })
       .catch((err: any) => console.log(err));
-  };
-
-  const handleCancel = () => {
-    console.log("cancel")
   };
 
   useEffect(() => {
