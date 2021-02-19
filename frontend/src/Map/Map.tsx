@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import mapboxgl from "mapbox-gl";
 import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import CustomMarker from "../CustomMarker/CustomMarker";
@@ -12,8 +11,6 @@ import {
   MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
-
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || "";
 
 interface IMapProps {
   mapContainer: HTMLElement | string | null;
