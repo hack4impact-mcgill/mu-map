@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import CustomMarker from "../CustomMarker/CustomMarker";
 import Button from '@material-ui/core/Button';
