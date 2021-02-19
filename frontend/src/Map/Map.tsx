@@ -3,7 +3,6 @@ import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import CustomMarker from "../CustomMarker/CustomMarker";
 import Button from '@material-ui/core/Button';
-
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,

@@ -14,6 +14,7 @@ import FirebaseAuth from "../firebase";
 import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
