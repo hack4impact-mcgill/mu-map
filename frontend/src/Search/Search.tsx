@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: '70vw',
+      maxWidth: '350px',
       backgroundColor: '#fff',
       zIndex: 1,
-      position: 'relative',
-      display: 'inline-block',
-
+      position: 'absolute',
+      left: '35vw',
     },
   },
 }));

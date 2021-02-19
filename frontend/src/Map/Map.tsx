@@ -48,7 +48,7 @@ function Map({ mapContainer, murals }: IMapProps) {
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
-  const [editMural, setEditMural] = useState<any>([]);
+  // const [editMural, setEditMural] = useState<any>([]); -> For the EDIT button of the popup
 
   return (
     <ReactMapGL
@@ -77,7 +77,8 @@ function Map({ mapContainer, murals }: IMapProps) {
           <p>
             <h3> {popupInfo.name} </h3>
             {popupInfo.address} </p>
-          <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button>
+          {/* <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button> */}
+          <Button variant="contained" color="primary" >EDIT</Button>
         </Popup>
       )
       }
