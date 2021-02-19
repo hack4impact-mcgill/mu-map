@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import CustomMarker from "../CustomMarker/CustomMarker";
 import Button from '@material-ui/core/Button';
@@ -12,6 +10,11 @@ import {
   MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import mapboxgl from "mapbox-gl";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+(mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 interface IMapProps {
   mapContainer: HTMLElement | string | null;
