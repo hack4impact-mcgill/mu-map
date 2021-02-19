@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fff',
       zIndex: 1,
       position: 'absolute',
-      left: '35vw',
     },
   },
 }));

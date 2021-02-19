@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import mapboxgl from "mapbox-gl";
-import ReactMapGL, { Popup, GeolocateControl, AttributionControl } from 'react-map-gl';
+import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import CustomMarker from "../CustomMarker/CustomMarker";
 import Button from '@material-ui/core/Button';
@@ -9,6 +9,7 @@ import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
+  MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
 
@@ -30,15 +31,9 @@ function Map({ mapContainer, murals }: IMapProps) {
   });
 
   const geolocateStyle = {
-    //bottom: 0,
+    bottom: 30,
     right: 0,
     padding: '10px'
-  };
-  const attributionStyle = {
-    top: 0,
-    left: 0,
-    padding: '1px',
-    width: "25vw",
   };
 
   const imgStyle = {
@@ -56,8 +51,8 @@ function Map({ mapContainer, murals }: IMapProps) {
       onViewportChange={(nextViewport: any) => setViewport(nextViewport)
       }
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN || ""}
-      mapStyle={'mapbox://styles/mumap/ckhb8l6je01ki1ao4tabh8e2q'} >
-      <AttributionControl style={attributionStyle} />
+      mapStyle={MAPBOX_STYLE_URL}
+    >
       <GeolocateControl
         style={geolocateStyle}
         positionOptions={{ enableHighAccuracy: true }}
@@ -82,11 +77,8 @@ function Map({ mapContainer, murals }: IMapProps) {
         </Popup>
       )
       }
-
     </ReactMapGL >
   );
 }
 
 export default Map;
-
-
