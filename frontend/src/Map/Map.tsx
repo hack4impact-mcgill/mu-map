@@ -46,7 +46,7 @@ function Map({ mapContainer, murals }: IMapProps) {
       {...viewport}
       onViewportChange={(nextViewport: any) => setViewport(nextViewport)
       }
-      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN || ""}
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       mapStyle={MAPBOX_STYLE_URL}
     >
       <GeolocateControl
