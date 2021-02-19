@@ -6,16 +6,17 @@ import FormatPaintIcon from '@material-ui/icons/FormatPaint';
 import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import "./PlusButton.css";
+import { FORM } from "constants/constants";
 
 interface IPlusButtonProps {
   isVisible: boolean;
-  handleClick: (formName: string) => void;
+  handleClick: (formName: FORM) => void;
 }
 
 const actions = [
-  { icon: <FormatPaintIcon />, name: 'Mural' },
-  { icon: <CollectionsBookmarkIcon />, name: 'Collection' },
-  { icon: <TimelineIcon />, name: 'Tour' },
+  { icon: <FormatPaintIcon />, name: FORM.MURAL },
+  { icon: <CollectionsBookmarkIcon />, name: FORM.COLLECTION },
+  { icon: <TimelineIcon />, name: FORM.TOUR },
 ];
 
 function PlusButton(props: IPlusButtonProps) {

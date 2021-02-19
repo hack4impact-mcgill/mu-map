@@ -39,9 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface IMuralFormProps { }
+interface IMuralFormProps {
+  handleCancel: () => void;
+}
 
-function MuralForm(props: IMuralFormProps) {
+function MuralForm({ handleCancel }: IMuralFormProps) {
 
   const styles = useStyles();
 
@@ -203,7 +205,7 @@ function MuralForm(props: IMuralFormProps) {
           />
         </div>
       </form>
-      <ActionButtons saveCallback={submitForm} cancelCallback={() => console.log("cancel")} />
+      <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">
           Mural published successfully!
