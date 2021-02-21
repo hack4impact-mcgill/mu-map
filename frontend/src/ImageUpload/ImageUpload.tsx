@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
@@ -13,19 +13,24 @@ const useStyles = makeStyles((Theme: Theme) =>
   })
 );
 
+interface Image {
+  url: string,
+  path: string
+}
+
 interface IImageUpload {
-    uploadHandler: (url: string) => void,
-    removeHandler: (url: string) => void,
-    imgUrls: string[]
+    uploadHandler: (url: string, path: string) => void,
+    removeHandler: (path: string) => void,
+    imgsUrlAndPath: Image[]
 
 }
 
-function ImageUpload({uploadHandler, removeHandler, imgUrls}: IImageUpload) {
+function ImageUpload({uploadHandler, removeHandler, imgsUrlAndPath}: IImageUpload) {
   const styles = useStyles();
 
   function handleUpload(event: any) {
     const image = event.target.files[0];
-    console.log(image)
+    console.log(`${image.name}`)
     const uploadTask = FirebaseStorage.ref().child(`images/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
@@ -50,10 +55,19 @@ function ImageUpload({uploadHandler, removeHandler, imgUrls}: IImageUpload) {
         // Handle successful uploads on complete
         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
           console.log("File available at", downloadURL);
-          uploadHandler(downloadURL)
+          uploadHandler(downloadURL, `images/${image.name}`)
         });
       }
     );
+  }
+
+  function handleRemove(path: string) {
+    var desertRef = FirebaseStorage.ref().child(path);
+    desertRef.delete().then(() => {
+      removeHandler(path)
+    }).catch((error) => {
+      console.log(error)
+    });
   }
 
   return (
@@ -62,10 +76,13 @@ function ImageUpload({uploadHandler, removeHandler, imgUrls}: IImageUpload) {
         Upload File
         <input type="file" hidden onChange={handleUpload} accept="image/*" />
       </Button>
-      {imgUrls.map(url => {
+      {imgsUrlAndPath.map(urlAndPath => {
         return <div>
-          <HighlightOffOutlinedIcon></HighlightOffOutlinedIcon>
-          <img alt="mural" key={url} src={url}></img>
+          <IconButton key={urlAndPath.url+'_'} onClick={() => handleRemove(urlAndPath.path)}>
+            <HighlightOffOutlinedIcon></HighlightOffOutlinedIcon>
+          </IconButton>
+          
+          <img alt="mural" key={urlAndPath.url} src={urlAndPath.url}></img>
         </div>
       })}
     </div>

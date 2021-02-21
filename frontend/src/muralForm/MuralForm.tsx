@@ -49,6 +49,11 @@ interface IMuralFormProps {
   handleCancel: () => void;
 }
 
+interface Image {
+  url: string,
+  path: string
+}
+
 function MuralForm({ handleCancel }: IMuralFormProps) {
   const styles = useStyles();
 
@@ -65,8 +70,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
   const [partners, setPartners] = useState<string[]>([]);
   const [artist, setArtist] = useState<number | null>(null);
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
-
+  const [imgUrlsAndPath, setImgUrlsAndPath] = useState<Image[]>([]);
   const [editingName, setEditingName] = useState<boolean>(false);
   const [hoveringName, setHoveringName] = useState<boolean>(false);
 
@@ -130,14 +134,17 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
     setNeighbourhood(neighbourhood);
   }
 
-  function handleImgUrlAdd(urlToAdd: string) {
-    setImgUrls([...imgUrls, urlToAdd])
+  function handleImgUrlAdd(urlToAdd: string, pathToAdd: string) {
+    setImgUrlsAndPath([...imgUrlsAndPath, {
+      "url": urlToAdd,
+      "path": pathToAdd
+    }])
   }
 
-  function handleImgUrlRemove(urlToRemove: string) {
-    var urls = [...imgUrls]
-    const newUrls = urls.filter(url => urlToRemove === url)
-    setImgUrls(newUrls)
+  function handleImgUrlRemove(pathToRemove: string) {
+    var urlsAndPaths = [...imgUrlsAndPath]
+    const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
+    setImgUrlsAndPath(newUrlsAndPaths)
   }
   return (
     <div>
@@ -217,7 +224,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
               setSocialMedia(newSocialMedia)
             }
           />
-          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgUrls={imgUrls}></ImageUpload>
+          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgsUrlAndPath={imgUrlsAndPath}></ImageUpload>
         </div>
       </form>
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
