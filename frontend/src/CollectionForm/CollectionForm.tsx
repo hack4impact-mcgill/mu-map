@@ -14,6 +14,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import SearchCard from "SideBarSearch/searchCard";
 import Alert from "@material-ui/lab/Alert";
+import { CREATE_MURAL_API, GET_ALL_COLLECTION } from "constants/constants";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,7 +69,7 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
   const handleSave = () => {
     if (!title.length || !description.length) return;
 
-    axios.post('http://localhost:3000/collection', {
+    axios.post(GET_ALL_COLLECTION, {
       collection: {
         name: title,
         description: description
@@ -83,7 +84,7 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/mural')
+    axios.get(CREATE_MURAL_API)
       .then((response) => {
         if (response.data) setMurals(response.data.rows)
       })
