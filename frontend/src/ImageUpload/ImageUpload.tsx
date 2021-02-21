@@ -1,15 +1,33 @@
 import React from "react";
 import { Button, IconButton } from "@material-ui/core";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme, useTheme } from "@material-ui/core/styles";
 import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
 import firebase from "firebase/app";
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
-const useStyles = makeStyles((Theme: Theme) =>
+
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     imageUpload: {
       zIndex: 1,
+      width: '100%'
     },
+    imageCard: {
+      width: '35%',
+      height: '20%',
+
+      '& img': {
+        width: '100%',
+        height: '100%'
+      },
+      '& button': {
+        width: '10%',
+        height: '10%',
+        position: 'absolute',
+        top: theme.spacing(0),
+        right: theme.spacing(0)
+      }
+    }
   })
 );
 
@@ -27,10 +45,13 @@ interface IImageUpload {
 
 function ImageUpload({uploadHandler, removeHandler, imgsUrlAndPath}: IImageUpload) {
   const styles = useStyles();
-
+  const theme = useTheme();
   function handleUpload(event: any) {
     const image = event.target.files[0];
-    console.log(`${image.name}`)
+    if(image.size > 30 * 1024 * 1024) {  // 30 MB
+      alert("File is too big!")
+      return;
+    }
     const uploadTask = FirebaseStorage.ref().child(`images/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
@@ -77,11 +98,10 @@ function ImageUpload({uploadHandler, removeHandler, imgsUrlAndPath}: IImageUploa
         <input type="file" hidden onChange={handleUpload} accept="image/*" />
       </Button>
       {imgsUrlAndPath.map(urlAndPath => {
-        return <div>
+        return <div className={styles.imageCard}>
           <IconButton key={urlAndPath.url+'_'} onClick={() => handleRemove(urlAndPath.path)}>
             <HighlightOffOutlinedIcon></HighlightOffOutlinedIcon>
           </IconButton>
-          
           <img alt="mural" key={urlAndPath.url} src={urlAndPath.url}></img>
         </div>
       })}
