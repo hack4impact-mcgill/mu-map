@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { InputBase, InputAdornment, Typography, Snackbar } from "@material-ui/core";
+import {
+  InputBase,
+  InputAdornment,
+  Typography,
+  Snackbar,
+} from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
@@ -10,6 +15,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 import { CREATE_MURAL_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
+import ImageUpload from '../ImageUpload/ImageUpload'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,7 +50,6 @@ interface IMuralFormProps {
 }
 
 function MuralForm({ handleCancel }: IMuralFormProps) {
-
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -60,7 +65,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
   const [partners, setPartners] = useState<string[]>([]);
   const [artist, setArtist] = useState<number | null>(null);
-
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
 
   const [editingName, setEditingName] = useState<boolean>(false);
   const [hoveringName, setHoveringName] = useState<boolean>(false);
@@ -125,6 +130,15 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
     setNeighbourhood(neighbourhood);
   }
 
+  function handleImgUrlAdd(urlToAdd: string) {
+    setImgUrls([...imgUrls, urlToAdd])
+  }
+
+  function handleImgUrlRemove(urlToRemove: string) {
+    var urls = [...imgUrls]
+    const newUrls = urls.filter(url => urlToRemove === url)
+    setImgUrls(newUrls)
+  }
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -203,13 +217,12 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
               setSocialMedia(newSocialMedia)
             }
           />
+          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgUrls={imgUrls}></ImageUpload>
         </div>
       </form>
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
-        <Alert severity="success">
-          Mural published successfully!
-        </Alert>
+        <Alert severity="success">Mural published successfully!</Alert>
       </Snackbar>
     </div>
   );
