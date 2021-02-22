@@ -77,7 +77,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     setYear(mural.year);
     setAddress(mural.address);
     setAddressCoords(mural.coordinates.coordinates);
-    setBorough(mural.borough);
+    setBorough(mural.boroughId);
     setNeighbourhood(mural.neighbourhood);
     setAssistants(mural.assistants);
     setSocialMedia(mural.socialMediaURLs);
@@ -102,32 +102,49 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       alert("Please check validity of address.");
       return;
     }
-    axios
-      .post(CREATE_MURAL_API, {
-        name: name,
-        boroughId: borough,
-        artistId: artist,
-        year: year,
-        city: "Montreal",
-        longitude: addressCoords[0],
-        latitude: addressCoords[1],
-        assistants: assistants,
-        partners: partners,
-        description: description,
-        socialMedia: socialMedia,
-        address: address,
-        neighbourhood: neighbourhood,
-      })
-      .then(
-        (response) => {
-          console.log(response);
-          setPopup(true);
-          setTimeout(() => setPopup(false), 5000);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    let payload = {
+      name: name,
+      boroughId: borough,
+      artistId: artist,
+      year: year,
+      city: "Montreal",
+      longitude: addressCoords[0],
+      latitude: addressCoords[1],
+      assistants: assistants,
+      partners: partners,
+      description: description,
+      socialMedia: socialMedia,
+      address: address,
+      neighbourhood: neighbourhood,
+    } as any;
+    if (mural && Object.keys(mural)) {
+      payload.id = mural.id;
+      axios
+        .put(`${CREATE_MURAL_API}/${payload.id}`, payload)
+        .then(
+          (response) => {
+            console.log(response);
+            setPopup(true);
+            setTimeout(() => setPopup(false), 5000);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    } else {
+      axios
+        .post(CREATE_MURAL_API, payload)
+        .then(
+          (response) => {
+            console.log(response);
+            setPopup(true);
+            setTimeout(() => setPopup(false), 5000);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
   }
 
   function handleAddressUpdate(
