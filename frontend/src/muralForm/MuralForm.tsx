@@ -102,6 +102,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       alert("Please check validity of address.");
       return;
     }
+
     let payload = {
       name: name,
       boroughId: borough,
@@ -117,34 +118,24 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       address: address,
       neighbourhood: neighbourhood,
     } as any;
-    if (mural && Object.keys(mural)) {
-      payload.id = mural.id;
-      axios
-        .put(`${CREATE_MURAL_API}/${payload.id}`, payload)
-        .then(
-          (response) => {
-            console.log(response);
-            setPopup(true);
-            setTimeout(() => setPopup(false), 5000);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    } else {
-      axios
-        .post(CREATE_MURAL_API, payload)
-        .then(
-          (response) => {
-            console.log(response);
-            setPopup(true);
-            setTimeout(() => setPopup(false), 5000);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    }
+    let existingMural = mural && Object.keys(mural);
+    if (existingMural) payload.id = mural.id;
+    axios({
+      method: existingMural ? 'put' : 'post',
+      url: existingMural ?
+        `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
+      data: payload
+    })
+      .then(
+        (response) => {
+          console.log(response);
+          setPopup(true);
+          setTimeout(() => setPopup(false), 5000);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   function handleAddressUpdate(
