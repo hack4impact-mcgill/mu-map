@@ -16,15 +16,19 @@ import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 
 function App() {
+
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
-  const [user, setUser] = useState<any>({});
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [murals, setMurals] = useState<any>([]);
-  const [searchResult, setSearchResult] = useState<any>([]);
   const [signInError, setSignInError] = useState<string>("");
+  const [user, setUser] = useState<any>({});
+
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [searchResult, setSearchResult] = useState<any>([]);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
+
+  const [murals, setMurals] = useState<any>([]);
+  const [selectedMarker, setSelectedMarker] = useState<any>({} as any);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -84,6 +88,10 @@ function App() {
   };
 
   useEffect(() => {
+    console.log(selectedMarker)
+  }, [selectedMarker]);
+
+  useEffect(() => {
     getMural();
   }, []);
 
@@ -99,7 +107,9 @@ function App() {
           open={signingIn}
         />
         <Search searchCallBack={handleSearch} />
-        <Map murals={murals} mapContainer={document.getElementById("root")} />
+        <Map
+          murals={murals}
+          markerClick={(marker: any) => setSelectedMarker(marker)} />
         <DropdownMenu
           isSignedIn={isSignedIn}
           signinClick={openSignin}

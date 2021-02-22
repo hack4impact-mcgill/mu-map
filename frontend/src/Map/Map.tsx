@@ -10,17 +10,16 @@ import {
   MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
-
 import mapboxgl from "mapbox-gl";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 interface IMapProps {
-  mapContainer: HTMLElement | string | null;
+  markerClick: (marker: any) => void;
   murals: any;
 }
 
-function Map({ mapContainer, murals }: IMapProps) {
+function Map({ markerClick, murals }: IMapProps) {
 
   const [viewport, setViewport] = useState({
     width: "100vw",
@@ -43,7 +42,6 @@ function Map({ mapContainer, murals }: IMapProps) {
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
-  // const [editMural, setEditMural] = useState<any>([]); -> For the EDIT button of the popup
 
   return (
     <ReactMapGL
@@ -71,9 +69,13 @@ function Map({ mapContainer, murals }: IMapProps) {
           <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
           <p>
             <h3> {popupInfo.name} </h3>
-            {popupInfo.address} </p>
-          {/* <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button> */}
-          <Button variant="contained" color="primary" >EDIT</Button>
+            {popupInfo.address}
+          </p>
+          <Button
+            variant="outlined"
+            disableElevation
+            color="primary"
+            onClick={() => markerClick(popupInfo)}>DETAILS</Button>
         </Popup>
       )
       }
