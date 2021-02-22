@@ -134,7 +134,7 @@ function App() {
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={leaveForm} />
+          handleLeave={() => { leaveForm(); setSelectedMural(null) }} />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>

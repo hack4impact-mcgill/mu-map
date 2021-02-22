@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputBase, InputAdornment, Typography, Snackbar } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
@@ -50,9 +50,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [year, setYear] = useState<number>(mural ?
-    mural.year : new Date().getFullYear()
-  );
+  const [year, setYear] = useState<number>(new Date().getFullYear());
 
   const [address, setAddress] = useState<string>("");
   const [addressCoords, setAddressCoords] = useState<number[]>([]);
@@ -71,6 +69,21 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [hoveringDesc, setHoveringDesc] = useState<boolean>(false);
 
   const [popup, setPopup] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!mural || !Object.keys(mural)) return;
+    setName(mural.name);
+    setDescription(mural.description);
+    setYear(mural.year);
+    setAddress(mural.address);
+    setAddressCoords(mural.coordinates.coordinates);
+    setBorough(mural.borough);
+    setNeighbourhood(mural.neighbourhood);
+    setAssistants(mural.assistants);
+    setSocialMedia(mural.socialMediaURLs);
+    setPartners(mural.partners);
+    setArtist(mural.artistId);
+  }, [mural])
 
   function submitForm() {
     if (name === "") {
@@ -179,7 +192,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             required
             id="year"
             type="number"
-            defaultValue={year}
+            defaultValue={mural?.year}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setYear(e.target.value)}
           />
