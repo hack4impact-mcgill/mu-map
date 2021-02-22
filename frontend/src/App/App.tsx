@@ -28,7 +28,7 @@ function App() {
   const [formWarning, setFormWarning] = useState<boolean>(false);
 
   const [murals, setMurals] = useState<any>([]);
-  const [selectedMural, setSelectedMural] = useState<any>({} as any);
+  const [selectedMural, setSelectedMural] = useState<any>(null);
 
   const handleSignin = (creds: any) => {
     setSignInError("");

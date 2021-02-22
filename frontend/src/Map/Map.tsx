@@ -65,15 +65,19 @@ function Map({ muralClick, murals }: IMapProps) {
           longitude={popupInfo.coordinates.coordinates[0]}
           latitude={popupInfo.coordinates.coordinates[1]}
           closeOnClick={false}
+          captureDrag={true}
           onClose={setPopupInfo}
         >
           <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
-          <p>
+          <div>
             <Typography variant="h5" gutterBottom>
               {popupInfo.name}
             </Typography>
-            {popupInfo.address}
-          </p>
+            <Typography variant="caption">
+              {popupInfo.address}
+            </Typography>
+          </div>
+          <br />
           <Button
             variant="outlined"
             disableElevation
