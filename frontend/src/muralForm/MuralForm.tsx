@@ -198,6 +198,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           />
           <AddressSearch callback={handleAddressUpdate} />
           <BoroughSearchBar
+            defaultBorough={mural?.boroughId}
             callback={(boroughId: number | null) => setBorough(boroughId)}
           />
           <ArtistSearchBar

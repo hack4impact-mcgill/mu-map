@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IBoroughSearchBarProps {
+  defaultBorough?: string;
   callback: (boroughId: number | null) => void;
 }
 
@@ -25,6 +26,7 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
   const [query, setQuery] = useState("");
   const classes = useStyles();
   const [result, setResult] = useState([]);
+  const [defaultName, setDefaultName] = useState("");
 
   useEffect(() => {
     axios
@@ -42,12 +44,22 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
     setResult(filtered);
   }, [query, boroughs]);
 
+  useEffect(() => {
+    if (props.defaultBorough && boroughs.length > 0) {
+      const filtered: any = boroughs.filter((borough: any) => {
+        return borough.id === props.defaultBorough
+      })
+      setDefaultName(filtered[0].name);
+    }
+  }, [props.defaultBorough, boroughs])
+
   function getIdAndCallback(newValue: string) {
     // results has a default max size of 5 I believe, so this is O(1)
     const filtered: any = result.filter((result: any) => {
       return result.name.toLowerCase().includes(newValue.toLowerCase());
     });
     if (filtered.length === 0) props.callback(null);
+    setDefaultName(filtered[0].name);
     props.callback(filtered[0].id);
   }
 
@@ -56,6 +68,7 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
       <Autocomplete
         freeSolo={false}
         disableClearable
+        value={defaultName || null}
         options={result.map((borough: any) => borough.name)}
         onChange={(event: any, newValue: string) => {
           getIdAndCallback(newValue);

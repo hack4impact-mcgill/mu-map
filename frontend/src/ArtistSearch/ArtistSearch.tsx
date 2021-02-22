@@ -59,6 +59,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
       return result.name.toLowerCase().includes(newValue.toLowerCase());
     });
     if (filtered.length === 0) props.callback(null);
+    setDefaultName(filtered[0].name);
     props.callback(filtered[0].id);
   }
 
@@ -67,7 +68,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
       <Autocomplete
         freeSolo={false}
         disableClearable
-        value={defaultName ? defaultName : null}
+        value={defaultName || null}
         options={result.map((artist: any) => artist.name)}
         onChange={(event: any, newValue: string) => {
           getIdAndCallback(newValue);
