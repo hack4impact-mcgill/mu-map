@@ -88,7 +88,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log(selectedMural)
     if (!selectedMural) return;
     toggleSidebar(FORM.MURAL);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +111,8 @@ function App() {
         <Search searchCallBack={handleSearch} />
         <Map
           murals={murals}
-          muralClick={(mural: any) => setSelectedMural(mural)} />
+          muralClick={(mural: any) => setSelectedMural(mural)}
+        />
         <DropdownMenu
           isSignedIn={isSignedIn}
           signinClick={openSignin}

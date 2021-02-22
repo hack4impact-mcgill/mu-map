@@ -29,9 +29,7 @@ interface IMultiAddProps {
 
 function MultiAdd(props: IMultiAddProps) {
   const styles = useStyles();
-  const [items, setItems] = useState<string[]>(
-    props.defaultItems ? props.defaultItems : []
-  );
+  const [items, setItems] = useState<string[]>(props.defaultItems || []);
   const [currentInput, setCurrentInput] = useState<string>("");
 
   function addItem() {
