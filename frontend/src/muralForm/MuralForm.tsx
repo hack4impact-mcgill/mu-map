@@ -40,16 +40,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IMuralFormProps {
+  mural?: any;
   handleCancel: () => void;
 }
 
-function MuralForm({ handleCancel }: IMuralFormProps) {
+function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [year, setYear] = useState<number>(mural ?
+    mural.year : new Date().getFullYear()
+  );
 
   const [address, setAddress] = useState<string>("");
   const [addressCoords, setAddressCoords] = useState<number[]>([]);
@@ -60,7 +63,6 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
   const [partners, setPartners] = useState<string[]>([]);
   const [artist, setArtist] = useState<number | null>(null);
-
 
   const [editingName, setEditingName] = useState<boolean>(false);
   const [hoveringName, setHoveringName] = useState<boolean>(false);
@@ -134,6 +136,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
             required={true}
             placeholder="Name the mural"
             id="name"
+            defaultValue={mural?.name}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setName(e.target.value)}
             onClick={() => setEditingName(true)}
@@ -153,6 +156,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
             multiline
             rows={4}
             id="description"
+            defaultValue={mural?.description}
             placeholder="Add a description"
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setDescription(e.target.value)}
@@ -186,7 +190,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
           <ArtistSearchBar
             callback={(artistId: number | null) => setArtist(artistId)}
           />
-          <MultiAdd // TODO not sure how to make these borderless
+          <MultiAdd
             title={"Assistants"}
             placeholder={"Add assistants..."}
             callback={(newAssistants: string[]) => setAssistants(newAssistants)}

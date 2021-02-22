@@ -28,7 +28,7 @@ function App() {
   const [formWarning, setFormWarning] = useState<boolean>(false);
 
   const [murals, setMurals] = useState<any>([]);
-  const [selectedMarker, setSelectedMarker] = useState<any>({} as any);
+  const [selectedMural, setSelectedMural] = useState<any>({} as any);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -88,8 +88,11 @@ function App() {
   };
 
   useEffect(() => {
-    console.log(selectedMarker)
-  }, [selectedMarker]);
+    console.log(selectedMural)
+    if (!selectedMural) return;
+    toggleSidebar(FORM.MURAL);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMural]);
 
   useEffect(() => {
     getMural();
@@ -109,7 +112,7 @@ function App() {
         <Search searchCallBack={handleSearch} />
         <Map
           murals={murals}
-          markerClick={(marker: any) => setSelectedMarker(marker)} />
+          muralClick={(mural: any) => setSelectedMural(mural)} />
         <DropdownMenu
           isSignedIn={isSignedIn}
           signinClick={openSignin}
@@ -123,7 +126,7 @@ function App() {
           {searchResult.length ? (
             <SearchCard searchCards={searchResult} />
           ) : activeForm === FORM.MURAL ? (
-            <MuralForm handleCancel={toggleSidebar} />
+            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
             <CollectionForm handleCancel={toggleSidebar} />
           ) : null}

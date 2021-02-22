@@ -11,15 +11,16 @@ import {
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
+import { Typography } from "@material-ui/core";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 interface IMapProps {
-  markerClick: (marker: any) => void;
+  muralClick: (mural: any) => void;
   murals: any;
 }
 
-function Map({ markerClick, murals }: IMapProps) {
+function Map({ muralClick, murals }: IMapProps) {
 
   const [viewport, setViewport] = useState({
     width: "100vw",
@@ -68,14 +69,18 @@ function Map({ markerClick, murals }: IMapProps) {
         >
           <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
           <p>
-            <h3> {popupInfo.name} </h3>
+            <Typography variant="h5" gutterBottom>
+              {popupInfo.name}
+            </Typography>
             {popupInfo.address}
           </p>
           <Button
             variant="outlined"
             disableElevation
             color="primary"
-            onClick={() => markerClick(popupInfo)}>DETAILS</Button>
+            onClick={() => muralClick(popupInfo)}>
+            DETAILS
+          </Button>
         </Popup>
       )
       }
