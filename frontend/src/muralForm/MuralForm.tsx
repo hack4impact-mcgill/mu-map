@@ -196,7 +196,10 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setYear(e.target.value)}
           />
-          <AddressSearch callback={handleAddressUpdate} />
+          <AddressSearch
+            defaultAddress={mural?.address}
+            callback={handleAddressUpdate}
+          />
           <BoroughSearchBar
             defaultBorough={mural?.boroughId}
             callback={(boroughId: number | null) => setBorough(boroughId)}
