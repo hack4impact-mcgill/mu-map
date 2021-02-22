@@ -111,6 +111,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
         socialMedia: socialMedia,
         address: address,
         neighbourhood: neighbourhood,
+        imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
       })
       .then(
         (response) => {
