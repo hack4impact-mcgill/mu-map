@@ -193,16 +193,19 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           <MultiAdd
             title={"Assistants"}
             placeholder={"Add assistants..."}
+            defaultItems={mural?.assistants}
             callback={(newAssistants: string[]) => setAssistants(newAssistants)}
           />
           <MultiAdd
             title={"Partners"}
             placeholder={"Add partners..."}
+            defaultItems={mural?.partners}
             callback={(newPartners: string[]) => setPartners(newPartners)}
           />
           <MultiAdd
             title={"Social Media"}
             placeholder={"Add social media..."}
+            defaultItems={mural?.socialMediaURLs}
             callback={(newSocialMedia: string[]) =>
               setSocialMedia(newSocialMedia)
             }
