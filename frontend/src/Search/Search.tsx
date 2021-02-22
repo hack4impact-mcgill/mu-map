@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { useState, useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { CREATE_MURAL_API } from 'constants/constants';
 
 interface ISearchBarProps {
   searchCallBack: (data: any) => void;
@@ -30,7 +31,7 @@ export default function SearchBar({ searchCallBack }: ISearchBarProps) {
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/mural').then((response) => { if (response.data) setMurals(response.data.rows) }).catch(err => console.log(err));
+    axios.get(CREATE_MURAL_API).then((response) => { if (response.data) setMurals(response.data.rows) }).catch(err => console.log(err));
   }, []);
 
   useEffect(() => {
