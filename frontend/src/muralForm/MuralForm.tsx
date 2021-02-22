@@ -201,6 +201,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             callback={(boroughId: number | null) => setBorough(boroughId)}
           />
           <ArtistSearchBar
+            defaultArtist={mural?.artistId}
             callback={(artistId: number | null) => setArtist(artistId)}
           />
           <MultiAdd

@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IArtistSearchBarProps {
+  defaultArtist?: number;
   callback: (artistId: number | null) => void;
 }
 
@@ -25,6 +26,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
   const [query, setQuery] = useState("");
   const classes = useStyles();
   const [result, setResult] = useState([]);
+  const [defaultName, setDefaultName] = useState("");
 
   useEffect(() => {
     axios
@@ -42,6 +44,15 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
     setResult(filtered);
   }, [query, artists]);
 
+  useEffect(() => {
+    if (props.defaultArtist && artists.length > 0) {
+      const filtered: any = artists.filter((artist: any) => {
+        return artist.id === props.defaultArtist
+      })
+      setDefaultName(filtered[0].name);
+    }
+  }, [props.defaultArtist, artists]);
+
   function getIdAndCallback(newValue: string) {
     // results has a default max size of 5 I believe, so this is O(1)
     const filtered: any = result.filter((result: any) => {
@@ -56,6 +67,7 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
       <Autocomplete
         freeSolo={false}
         disableClearable
+        value={defaultName ? defaultName : null}
         options={result.map((artist: any) => artist.name)}
         onChange={(event: any, newValue: string) => {
           getIdAndCallback(newValue);
