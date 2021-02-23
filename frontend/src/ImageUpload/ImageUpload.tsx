@@ -4,7 +4,6 @@ import {
   makeStyles,
   createStyles,
   Theme,
-  useTheme,
 } from "@material-ui/core/styles";
 import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
@@ -64,7 +63,6 @@ function ImageUpload({
   imgsUrlAndPath,
 }: IImageUpload) {
   const styles = useStyles();
-  const theme = useTheme();
   function handleUpload(event: any) {
     const image = event.target.files[0];
     if (image) {
