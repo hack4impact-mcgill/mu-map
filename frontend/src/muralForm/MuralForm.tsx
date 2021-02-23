@@ -225,6 +225,9 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
               setSocialMedia(newSocialMedia)
             }
           />
+          <Typography variant="body1" display="block" color="textSecondary">
+            Gallery
+          </Typography>
           <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgsUrlAndPath={imgUrlsAndPath}></ImageUpload>
         </div>
       </form>

@@ -13,20 +13,37 @@ import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    imageUpload: {
-      zIndex: 0,
-      display: "flex",
+    root: {
+      width: '100%'
+    },
+    imageContainer: {
+      display: 'flex',
       flexDirection: "row",
-      flex: "100%",
+      width: '100%',
+      flexWrap: "wrap"
     },
     imageCard: {
-      width: "50%",
-      height: "20%",
+      display: 'flex',
+      width: '45%',
+      height: "30%",
+      flexDirection: "row-reverse",
+      position: 'relative',
+      margin: "0 auto",
+      padding: "3px"
+    },
+    uploadButton: {
+      width: '100%',
+      margin: '15px auto'
     },
     muralImage: {
-      width: "100%",
-      height: "100%",
+      borderRadius: '10px',
+      width: '100%',
+      height: '120px'
     },
+    deleteButton: {
+      position: 'absolute',
+      padding: theme.spacing(1)
+    }
   })
 );
 
@@ -101,20 +118,32 @@ function ImageUpload({
       });
   }
 
+  function dummyImage(imgsUrlAndPath: Image[]) {
+    if (imgsUrlAndPath.length % 2 === 1) {
+      return (
+        <div className={styles.imageCard}>
+          </div>
+      )
+    }
+  }
+
   return (
-    <div className={styles.imageUpload}>
-      <Button variant="contained" component="label">
-        Upload File
+    <div className={styles.root}>
+
+      <Button variant="contained" component="label" className={styles.uploadButton}>
+        Upload Mural Picture
         <input type="file" hidden onChange={handleUpload} accept="image/*" />
       </Button>
+      <div className={styles.imageContainer}>
       {imgsUrlAndPath.map((urlAndPath) => {
         return (
           <div className={styles.imageCard}>
-            <IconButton
+              <IconButton
               key={urlAndPath.url + "_"}
               onClick={() => handleRemove(urlAndPath.path)}
+              className={styles.deleteButton}
             >
-              <HighlightOffOutlinedIcon></HighlightOffOutlinedIcon>
+              <HighlightOffOutlinedIcon color="secondary" />
             </IconButton>
             <img
               alt="mural"
@@ -125,6 +154,8 @@ function ImageUpload({
           </div>
         );
       })}
+      {dummyImage(imgsUrlAndPath)}
+      </div>
     </div>
   );
 }
