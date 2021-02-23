@@ -67,7 +67,7 @@ function Map({ muralClick, murals }: IMapProps) {
           closeOnClick={false}
           onClose={setPopupInfo}
         >
-          <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
+          <img style={imgStyle} src={popupInfo.imgURLs?.[0]} alt="Mural_img" ></img>
           <div>
             <Typography variant="h5" gutterBottom>
               {popupInfo.name}
