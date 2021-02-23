@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { InputBase, InputAdornment, Typography, Snackbar } from "@material-ui/core";
+import {
+  InputBase,
+  InputAdornment,
+  Typography,
+  Snackbar,
+} from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
@@ -10,6 +15,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 import { CREATE_MURAL_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
+import ImageUpload from '../ImageUpload/ImageUpload'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,8 +49,12 @@ interface IMuralFormProps {
   handleCancel: () => void;
 }
 
-function MuralForm({ handleCancel }: IMuralFormProps) {
+interface Image {
+  url: string,
+  path: string
+}
 
+function MuralForm({ handleCancel }: IMuralFormProps) {
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -60,8 +70,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
   const [socialMedia, setSocialMedia] = useState<string[]>([]);
   const [partners, setPartners] = useState<string[]>([]);
   const [artist, setArtist] = useState<number | null>(null);
-
-
+  const [imgUrlsAndPath, setImgUrlsAndPath] = useState<Image[]>([]);
   const [editingName, setEditingName] = useState<boolean>(false);
   const [hoveringName, setHoveringName] = useState<boolean>(false);
 
@@ -102,6 +111,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
         socialMedia: socialMedia,
         address: address,
         neighbourhood: neighbourhood,
+        imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
       })
       .then(
         (response) => {
@@ -125,6 +135,18 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
     setNeighbourhood(neighbourhood);
   }
 
+  function handleImgUrlAdd(urlToAdd: string, pathToAdd: string) {
+    setImgUrlsAndPath([...imgUrlsAndPath, {
+      "url": urlToAdd,
+      "path": pathToAdd
+    }])
+  }
+
+  function handleImgUrlRemove(pathToRemove: string) {
+    var urlsAndPaths = [...imgUrlsAndPath]
+    const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
+    setImgUrlsAndPath(newUrlsAndPaths)
+  }
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -203,13 +225,15 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
               setSocialMedia(newSocialMedia)
             }
           />
+          <Typography variant="body1" display="block" color="textSecondary">
+            Gallery
+          </Typography>
+          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgsUrlAndPath={imgUrlsAndPath}></ImageUpload>
         </div>
       </form>
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
-        <Alert severity="success">
-          Mural published successfully!
-        </Alert>
+        <Alert severity="success">Mural published successfully!</Alert>
       </Snackbar>
     </div>
   );
