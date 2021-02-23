@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "row-reverse",
       position: 'relative',
       margin: "0 auto",
-      padding: "3px"
+      padding: "5px"
     },
     uploadButton: {
       width: '100%',
