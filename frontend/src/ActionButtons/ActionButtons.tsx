@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
       width: "40vw",
       maxWidth: "500px",
-      position: "fixed",
       bottom: 0
     },
   })
