@@ -44,6 +44,10 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
     setResult(filtered);
   }, [query, boroughs]);
 
+  /**
+   * If a default boroughId prop is supplied, find the corresponding
+   * borough's name
+   */
   useEffect(() => {
     if (props.defaultBorough && boroughs.length > 0) {
       const filtered: any = boroughs.filter((borough: any) => {

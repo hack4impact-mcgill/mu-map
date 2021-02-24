@@ -44,6 +44,10 @@ export default function ArtistSearchBar(props: IArtistSearchBarProps) {
     setResult(filtered);
   }, [query, artists]);
 
+  /**
+   * If a default artistId prop is supplied, find the corresponding
+   * artist's name
+   */
   useEffect(() => {
     if (props.defaultArtist && artists.length > 0) {
       const filtered: any = artists.filter((artist: any) => {
