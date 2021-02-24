@@ -87,6 +87,9 @@ function App() {
     setMurals(data.rows);
   };
 
+  /**
+   * When a mural marker is clicked, open the mural form
+   */
   useEffect(() => {
     if (!selectedMural) return;
     toggleSidebar(FORM.MURAL);
