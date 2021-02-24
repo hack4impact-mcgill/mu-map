@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import RootRef from "@material-ui/core/RootRef";
@@ -13,7 +13,7 @@ import {
 import InboxIcon from "@material-ui/icons/Inbox";
 import EditIcon from "@material-ui/icons/Edit";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
+// const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 interface IDragDropProps {
     passedItems: [];
@@ -33,7 +33,7 @@ const convertToDndForm = (items: []) => {
 }
 
 function DragDrop(props: IDragDropProps) {
-  const styles = useStyles();
+//   const styles = useStyles();
   const [items, setItems] = useState<any[]>(convertToDndForm(props.passedItems));
 
   /**

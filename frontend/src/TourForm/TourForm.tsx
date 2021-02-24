@@ -12,7 +12,6 @@ import {
   import EditIcon from '@material-ui/icons/Edit';
   import Autocomplete from "@material-ui/lab/Autocomplete";
   import ActionButtons from "../ActionButtons/ActionButtons";
-  import SearchCard from "SideBarSearch/searchCard";
   import DragDrop from "TourForm/DragDrop"
   import Alert from "@material-ui/lab/Alert";
   import { CREATE_MURAL_API, GET_ALL_TOUR } from "constants/constants";
