@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 interface IDragDropProps {
     passedItems: [];
-    itemsReorderedCallback: (idOrder: number[]) => void;
+    itemsReorderedCallback: (startIndex: number, endIndex: number) => void;
 }
 
 const convertToDndForm = (items: []) => {
@@ -49,14 +49,6 @@ function DragDrop(props: IDragDropProps) {
     return result;
   };
 
-  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
-    // styles we need to apply on draggables
-    ...draggableStyle,
-    ...(isDragging && {
-      background: "rgb(235,235,235)",
-    }),
-  });
-
   /**
    * if drag location is valid, reorders the list and calls back the parent component
    * @param result 
@@ -72,23 +64,14 @@ function DragDrop(props: IDragDropProps) {
       result.destination.index
     );
     setItems(newitems);
-    props.itemsReorderedCallback(dndToIdArray(newitems))
+    props.itemsReorderedCallback(result.source.index, result.destination.index)
   };
 
   /**
-   * function to convert a list of dnd format items {id; primary; secondary}
-   * to a number[] of ids
-   * @param items list of drag and drop items
+   * dynamically change list style during drag
+   * @param isDraggingOver determines if we are currently dragging
    */
-  const dndToIdArray = (items: any[]) => {
-    let ids: number[] = []
-    items.forEach(item => {
-        ids.push(parseInt(item.id!))
-    })
-    return ids
-  }
-
-  const getListStyle = (isDraggingOver:any) => ({
+  const getListStyle = (isDraggingOver:boolean) => ({
     background: isDraggingOver ? "lightblue" : "lightgrey",
   });
 
@@ -104,10 +87,6 @@ function DragDrop(props: IDragDropProps) {
                     <ListItem
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
                       ref={provided.innerRef}
                     >
                       <ListItemIcon>

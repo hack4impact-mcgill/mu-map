@@ -84,9 +84,12 @@ import {
         .catch((err: any) => console.log(err));
     };
 
-    const reorderMurals = (newMuralOrder: any[]) => {
-        console.log(newMuralOrder)
-    }
+    const reorderMurals = (startIndex: number, endIndex: number) => {
+        const result = Array.from(muralsInTour);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        setMuralsInTour(result)
+      };
   
     useEffect(() => {
       axios.get(CREATE_MURAL_API)
@@ -102,6 +105,10 @@ import {
       });
       setMuralResults(filtered);
     }, [muralQuery, murals]);
+
+    useEffect(() => {
+        console.log(muralsInTour)
+      }, [muralsInTour]);
   
     return (
       <div>
