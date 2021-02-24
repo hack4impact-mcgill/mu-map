@@ -97,6 +97,13 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     setSocialMedia(mural.socialMediaURLs);
     setPartners(mural.partners);
     setArtist(mural.artistId);
+    if (mural.imgURLs) {
+      setImgUrlsAndPath(mural.imgURLs.map(
+        (url: string) => {
+          return { url: url, path: pathFromUrl(url) }
+        }
+      ));
+    }
   }, [mural])
 
   function submitForm() {
@@ -177,6 +184,19 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     var urlsAndPaths = [...imgUrlsAndPath]
     const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
     setImgUrlsAndPath(newUrlsAndPaths)
+  }
+
+  /**
+   * Extract the Firebase-friendly path from a URL
+   * @param url download URL of mural image from Firebase Storage
+   */
+  function pathFromUrl(url: string) {
+    let substrings = url.split("/");
+    if (substrings.length < 1) return;
+    let path = substrings[substrings.length - 1].split("?")[0];
+    path = path.replaceAll("%20", " ");
+    path = path.replaceAll("%2F", "/");
+    return path;
   }
 
   return (
@@ -270,7 +290,11 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           <Typography variant="body1" display="block" color="textSecondary">
             Gallery
           </Typography>
-          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgsUrlAndPath={imgUrlsAndPath}></ImageUpload>
+          <ImageUpload
+            uploadHandler={handleImgUrlAdd}
+            removeHandler={handleImgUrlRemove}
+            imgsUrlAndPath={imgUrlsAndPath}
+          />
         </div>
       </form>
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />

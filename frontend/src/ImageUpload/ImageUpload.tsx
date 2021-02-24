@@ -120,7 +120,7 @@ function ImageUpload({
     if (imgsUrlAndPath.length % 2 === 1) {
       return (
         <div className={styles.imageCard}>
-          </div>
+        </div>
       )
     }
   }
@@ -133,26 +133,28 @@ function ImageUpload({
         <input type="file" hidden onChange={handleUpload} accept="image/*" />
       </Button>
       <div className={styles.imageContainer}>
-      {imgsUrlAndPath.map((urlAndPath) => {
-        return (
-          <div className={styles.imageCard}>
-              <IconButton
+        {imgsUrlAndPath.map((urlAndPath) => {
+          return (
+            <div
+              className={styles.imageCard}
               key={urlAndPath.url + "_"}
-              onClick={() => handleRemove(urlAndPath.path)}
-              className={styles.deleteButton}
             >
-              <HighlightOffOutlinedIcon color="secondary" />
-            </IconButton>
-            <img
-              alt="mural"
-              className={styles.muralImage}
-              key={urlAndPath.url}
-              src={urlAndPath.url}
-            ></img>
-          </div>
-        );
-      })}
-      {dummyImage(imgsUrlAndPath)}
+              <IconButton
+                onClick={() => handleRemove(urlAndPath.path)}
+                className={styles.deleteButton}
+              >
+                <HighlightOffOutlinedIcon color="secondary" />
+              </IconButton>
+              <img
+                alt="mural"
+                className={styles.muralImage}
+                key={urlAndPath.url}
+                src={urlAndPath.url}
+              />
+            </div>
+          );
+        })}
+        {dummyImage(imgsUrlAndPath)}
       </div>
     </div>
   );

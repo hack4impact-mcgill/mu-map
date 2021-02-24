@@ -39,7 +39,7 @@ function Map({ muralClick, murals }: IMapProps) {
   const imgStyle = {
     maxWidth: '200px',
     maxHeight: '200px',
-    padding: 'none'
+    paddingBottom: '10px'
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
