@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   InputBase,
   InputAdornment,
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface IMuralFormProps {
+  mural?: any;
   handleCancel: () => void;
 }
 
@@ -54,7 +55,8 @@ interface Image {
   path: string
 }
 
-function MuralForm({ handleCancel }: IMuralFormProps) {
+function MuralForm({ mural, handleCancel }: IMuralFormProps) {
+
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -79,6 +81,31 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
 
   const [popup, setPopup] = useState<boolean>(false);
 
+  /**
+   * Populate the form when an existing mural is passed as a prop
+   */
+  useEffect(() => {
+    if (!mural || !Object.keys(mural)) return;
+    setName(mural.name);
+    setDescription(mural.description);
+    setYear(mural.year);
+    setAddress(mural.address);
+    setAddressCoords(mural.coordinates.coordinates);
+    setBorough(mural.boroughId);
+    setNeighbourhood(mural.neighbourhood);
+    setAssistants(mural.assistants);
+    setSocialMedia(mural.socialMediaURLs);
+    setPartners(mural.partners);
+    setArtist(mural.artistId);
+    if (mural.imgURLs) {
+      setImgUrlsAndPath(mural.imgURLs.map(
+        (url: string) => {
+          return { url: url, path: pathFromUrl(url) }
+        }
+      ));
+    }
+  }, [mural])
+
   function submitForm() {
     if (name === "") {
       alert("Please enter a name.");
@@ -96,23 +123,34 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
       alert("Please check validity of address.");
       return;
     }
-    axios
-      .post(CREATE_MURAL_API, {
-        name: name,
-        boroughId: borough,
-        artistId: artist,
-        year: year,
-        city: "Montreal",
-        longitude: addressCoords[0],
-        latitude: addressCoords[1],
-        assistants: assistants,
-        partners: partners,
-        description: description,
-        socialMedia: socialMedia,
-        address: address,
-        neighbourhood: neighbourhood,
-        imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
-      })
+
+    // TODO: apply a Mural interface to this object
+    let payload = {
+      name: name,
+      boroughId: borough,
+      artistId: artist,
+      year: year,
+      city: "Montreal",
+      longitude: addressCoords[0],
+      latitude: addressCoords[1],
+      assistants: assistants,
+      partners: partners,
+      description: description,
+      socialMedia: socialMedia,
+      address: address,
+      neighbourhood: neighbourhood,
+      imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
+    } as any;
+
+    let existingMural = mural && Object.keys(mural);
+    if (existingMural) payload.id = mural.id;
+
+    axios({
+      method: existingMural ? 'put' : 'post',
+      url: existingMural ?
+        `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
+      data: payload
+    })
       .then(
         (response) => {
           console.log(response);
@@ -147,6 +185,20 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
     const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
     setImgUrlsAndPath(newUrlsAndPaths)
   }
+
+  /**
+   * Extract the Firebase-friendly path from a URL
+   * @param url download URL of mural image from Firebase Storage
+   */
+  function pathFromUrl(url: string) {
+    let substrings = url.split("/");
+    if (substrings.length < 1) return;
+    let path = substrings[substrings.length - 1].split("?")[0];
+    path = path.replaceAll("%20", " ");
+    path = path.replaceAll("%2F", "/");
+    return path;
+  }
+
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -156,6 +208,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
             required={true}
             placeholder="Name the mural"
             id="name"
+            defaultValue={mural?.name}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setName(e.target.value)}
             onClick={() => setEditingName(true)}
@@ -175,6 +228,7 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
             multiline
             rows={4}
             id="description"
+            defaultValue={mural?.description}
             placeholder="Add a description"
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setDescription(e.target.value)}
@@ -197,30 +251,38 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
             required
             id="year"
             type="number"
-            defaultValue={year}
+            defaultValue={mural?.year}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setYear(e.target.value)}
           />
-          <AddressSearch callback={handleAddressUpdate} />
+          <AddressSearch
+            defaultAddress={mural?.address}
+            callback={handleAddressUpdate}
+          />
           <BoroughSearchBar
+            defaultBorough={mural?.boroughId}
             callback={(boroughId: number | null) => setBorough(boroughId)}
           />
           <ArtistSearchBar
+            defaultArtist={mural?.artistId}
             callback={(artistId: number | null) => setArtist(artistId)}
           />
-          <MultiAdd // TODO not sure how to make these borderless
+          <MultiAdd
             title={"Assistants"}
             placeholder={"Add assistants..."}
+            defaultItems={mural?.assistants}
             callback={(newAssistants: string[]) => setAssistants(newAssistants)}
           />
           <MultiAdd
             title={"Partners"}
             placeholder={"Add partners..."}
+            defaultItems={mural?.partners}
             callback={(newPartners: string[]) => setPartners(newPartners)}
           />
           <MultiAdd
             title={"Social Media"}
             placeholder={"Add social media..."}
+            defaultItems={mural?.socialMediaURLs}
             callback={(newSocialMedia: string[]) =>
               setSocialMedia(newSocialMedia)
             }
@@ -228,7 +290,11 @@ function MuralForm({ handleCancel }: IMuralFormProps) {
           <Typography variant="body1" display="block" color="textSecondary">
             Gallery
           </Typography>
-          <ImageUpload uploadHandler={handleImgUrlAdd} removeHandler={handleImgUrlRemove} imgsUrlAndPath={imgUrlsAndPath}></ImageUpload>
+          <ImageUpload
+            uploadHandler={handleImgUrlAdd}
+            removeHandler={handleImgUrlRemove}
+            imgsUrlAndPath={imgUrlsAndPath}
+          />
         </div>
       </form>
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />

@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IAddressSearchBarProps {
+  defaultAddress?: string;
   callback: (coords: number[], address: string, neighbourhood: string) => void;
 }
 
@@ -99,6 +100,7 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
         loading={loading}
         id="address-search-bar"
         options={options}
+        defaultValue={props.defaultAddress}
         filterOptions={(options) => options}
         onOpen={() => {
           setOpen(true);

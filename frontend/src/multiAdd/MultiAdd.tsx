@@ -23,12 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IMultiAddProps {
   title: string;
   placeholder: string;
+  defaultItems?: string[];
   callback: (items: string[]) => void;
 }
 
 function MultiAdd(props: IMultiAddProps) {
   const styles = useStyles();
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<string[]>(props.defaultItems || []);
   const [currentInput, setCurrentInput] = useState<string>("");
 
   function addItem() {

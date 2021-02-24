@@ -10,17 +10,17 @@ import {
   MAPBOX_STYLE_URL,
 } from "constants/constants";
 import "./Map.css";
-
 import mapboxgl from "mapbox-gl";
+import { Typography } from "@material-ui/core";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 interface IMapProps {
-  mapContainer: HTMLElement | string | null;
+  muralClick: (mural: any) => void;
   murals: any;
 }
 
-function Map({ mapContainer, murals }: IMapProps) {
+function Map({ muralClick, murals }: IMapProps) {
 
   const [viewport, setViewport] = useState({
     width: "100vw",
@@ -39,11 +39,10 @@ function Map({ mapContainer, murals }: IMapProps) {
   const imgStyle = {
     maxWidth: '200px',
     maxHeight: '200px',
-    padding: 'none'
+    paddingBottom: '10px'
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
-  // const [editMural, setEditMural] = useState<any>([]); -> For the EDIT button of the popup
 
   return (
     <ReactMapGL
@@ -68,12 +67,23 @@ function Map({ mapContainer, murals }: IMapProps) {
           closeOnClick={false}
           onClose={setPopupInfo}
         >
-          <img style={imgStyle} src={popupInfo.ImgURLs} alt="Mural_img" ></img>
-          <p>
-            <h3> {popupInfo.name} </h3>
-            {popupInfo.address} </p>
-          {/* <Button variant="contained" color="primary" onClick={() => setEditMural(popupInfo)}>EDIT</Button> */}
-          <Button variant="contained" color="primary" >EDIT</Button>
+          <img style={imgStyle} src={popupInfo.imgURLs?.[0]} alt="Mural_img" ></img>
+          <div>
+            <Typography variant="h5" gutterBottom>
+              {popupInfo.name}
+            </Typography>
+            <Typography variant="caption">
+              {popupInfo.address}
+            </Typography>
+          </div>
+          <br />
+          <Button
+            variant="outlined"
+            disableElevation
+            color="primary"
+            onClick={() => muralClick(popupInfo)}>
+            DETAILS
+          </Button>
         </Popup>
       )
       }

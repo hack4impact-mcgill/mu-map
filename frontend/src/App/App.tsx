@@ -16,15 +16,19 @@ import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 
 function App() {
+
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
-  const [user, setUser] = useState<any>({});
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [murals, setMurals] = useState<any>([]);
-  const [searchResult, setSearchResult] = useState<any>([]);
   const [signInError, setSignInError] = useState<string>("");
+  const [user, setUser] = useState<any>({});
+
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [searchResult, setSearchResult] = useState<any>([]);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
+
+  const [murals, setMurals] = useState<any>([]);
+  const [selectedMural, setSelectedMural] = useState<any>(null);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -83,6 +87,15 @@ function App() {
     setMurals(data.rows);
   };
 
+  /**
+   * When a mural marker is clicked, open the mural form
+   */
+  useEffect(() => {
+    if (!selectedMural) return;
+    toggleSidebar(FORM.MURAL);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMural]);
+
   useEffect(() => {
     getMural();
   }, []);
@@ -99,7 +112,10 @@ function App() {
           open={signingIn}
         />
         <Search searchCallBack={handleSearch} />
-        <Map murals={murals} mapContainer={document.getElementById("root")} />
+        <Map
+          murals={murals}
+          muralClick={(mural: any) => setSelectedMural(mural)}
+        />
         <DropdownMenu
           isSignedIn={isSignedIn}
           signinClick={openSignin}
@@ -113,7 +129,7 @@ function App() {
           {searchResult.length ? (
             <SearchCard searchCards={searchResult} />
           ) : activeForm === FORM.MURAL ? (
-            <MuralForm handleCancel={toggleSidebar} />
+            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
             <CollectionForm handleCancel={toggleSidebar} />
           ) : null}
@@ -121,7 +137,7 @@ function App() {
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={leaveForm} />
+          handleLeave={() => { leaveForm(); setSelectedMural(null) }} />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>
