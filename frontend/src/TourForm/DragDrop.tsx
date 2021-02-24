@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+// import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import RootRef from "@material-ui/core/RootRef";
 import {
@@ -10,8 +10,8 @@ import {
   IconButton,
   ListItemSecondaryAction,
 } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/Inbox";
-import EditIcon from "@material-ui/icons/Edit";
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import ClearIcon from '@material-ui/icons/Clear';
 
 // const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -90,7 +90,7 @@ function DragDrop(props: IDragDropProps) {
                       ref={provided.innerRef}
                     >
                       <ListItemIcon>
-                        <InboxIcon />
+                        <DragHandleIcon />
                       </ListItemIcon>
                       <ListItemText
                         primary={item.primary}
@@ -98,7 +98,7 @@ function DragDrop(props: IDragDropProps) {
                       />
                       <ListItemSecondaryAction>
                         <IconButton>
-                          <EditIcon />
+                          <ClearIcon />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
