@@ -13,9 +13,10 @@ import {
   import Autocomplete from "@material-ui/lab/Autocomplete";
   import ActionButtons from "../ActionButtons/ActionButtons";
   import SearchCard from "SideBarSearch/searchCard";
+  import DragDrop from "TourForm/DragDrop"
   import Alert from "@material-ui/lab/Alert";
   import { CREATE_MURAL_API, GET_ALL_TOUR } from "constants/constants";
-  
+
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       flexContainer: {
@@ -82,6 +83,10 @@ import {
         })
         .catch((err: any) => console.log(err));
     };
+
+    const reorderMurals = (newMuralOrder: any[]) => {
+        console.log(newMuralOrder)
+    }
   
     useEffect(() => {
       axios.get(CREATE_MURAL_API)
@@ -157,7 +162,7 @@ import {
             </div>
           </div>
         </form>
-        <SearchCard searchCards={muralsInTour} />
+        <DragDrop key={muralsInTour} passedItems={muralsInTour} itemsReorderedCallback={reorderMurals}/>
         <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
         <Snackbar open={popup} autoHideDuration={6000}>
           <Alert severity="success">
