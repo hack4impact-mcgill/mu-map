@@ -14,6 +14,7 @@ import FirebaseAuth from "../firebase";
 import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
+import TourForm from "TourForm/TourForm";
 
 function App() {
 
@@ -132,7 +133,10 @@ function App() {
             <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
             <CollectionForm handleCancel={toggleSidebar} />
-          ) : null}
+          ) : activeForm === FORM.TOUR ? (
+            <TourForm handleCancel={toggleSidebar} />
+          )
+          : null}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
