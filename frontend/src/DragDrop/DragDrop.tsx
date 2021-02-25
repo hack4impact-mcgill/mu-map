@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import ClearIcon from "@material-ui/icons/Clear";
+import { LIGHTBLUE } from "constants/constants";
 
 interface IDragDropProps {
   passedItems: [];
@@ -85,7 +86,7 @@ function DragDrop(props: IDragDropProps) {
    * @param isDraggingOver determines if we are currently dragging
    */
   const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
+    background: isDraggingOver ? LIGHTBLUE : "lightgrey",
   });
 
   /**

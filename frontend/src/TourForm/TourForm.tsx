@@ -103,6 +103,9 @@ function TourForm({ handleCancel }: ITourFormProps) {
     setMuralsInTour(newMurals);
   };
 
+  /**
+   * Fetches the murals from backend upon component load
+   */
   useEffect(() => {
     axios
       .get(CREATE_MURAL_API)
@@ -112,16 +115,15 @@ function TourForm({ handleCancel }: ITourFormProps) {
       .catch((err) => console.log(err));
   }, []);
 
+  /**
+   * Filters through murals to determine what should appear in autocomplete
+   */
   useEffect(() => {
     const filtered = murals.filter((mural: any) => {
       return mural.name.toLowerCase().includes(muralQuery);
     });
     setMuralResults(filtered);
   }, [muralQuery, murals]);
-
-  useEffect(() => {
-    console.log(muralsInTour);
-  }, [muralsInTour]);
 
   return (
     <div>
