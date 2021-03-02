@@ -15,7 +15,7 @@ import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
-
+import SearchMenu from "SearchMenu/SearchMenu"
 function App() {
 
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -127,16 +127,9 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {searchResult.length ? (
-            <SearchCard searchCards={searchResult} />
-          ) : activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
-          ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm handleCancel={toggleSidebar} />
-          ) : activeForm === FORM.TOUR ? (
-            <TourForm handleCancel={toggleSidebar} />
-          )
-          : null}
+
+            <SearchMenu searchCards={searchResult} />
+            {/* <CollectionForm handleCancel={toggleSidebar} /> */}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
