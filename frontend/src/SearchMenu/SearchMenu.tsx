@@ -8,7 +8,6 @@ import {
 } from "constants/constants";
 import SearchResultCard from "SearchResultCard/SearchResultCard";
 import { FORM } from "constants/constants";
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flexContainer: {
@@ -20,14 +19,23 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
     },
     field: {
-      width: "100%",
-      margin: theme.spacing(0, 2, 2, 2),
+      width: "50%",
+      margin: theme.spacing(0, 0, 0, 2),
     },
     title: {
-      fontSize: "180%",
+      fontSize: "170%",
     },
     searchBar: {
-      width: "80%",
+      display: "flex",
+    },
+    icon: {
+      width: "10%",
+      height: "10%",
+      margin: theme.spacing(0, 2, 0, 2),
+    },
+    noResults: {
+      textAlign: "center",
+      fontSize: "170%",
     },
   })
 );
@@ -77,10 +85,11 @@ function SearchMenu(props: ISearchMenuProps) {
 
   function handleEnter(e: any) {
     if (e.keyCode === 13) {
-      if (searchQuery === "" ) {
-        setDisplayedCollections([])
-        setDisplayedMurals([])
-        setDisplayedTours([])
+      if (searchQuery === "") {
+        setDisplayedCollections([]);
+        setDisplayedMurals([]);
+        setDisplayedTours([]);
+        return;
       }
       setDisplayedMurals(filterItems(murals));
       setDisplayedTours(filterItems(tours));
@@ -91,6 +100,7 @@ function SearchMenu(props: ISearchMenuProps) {
   return (
     <div>
       <div className={styles.searchBar}>
+        <img className={styles.icon} src="/apple-touch-icon.png" alt="mural" />
         <InputBase
           className={`${styles.title} ${styles.field}`}
           placeholder="Search..."
@@ -100,6 +110,11 @@ function SearchMenu(props: ISearchMenuProps) {
         />
       </div>
       <div className={styles.flexContainer}>
+        {displayedCollections.length < 1 &&
+          displayedMurals.length < 1 &&
+          displayedTours.length < 1 && (
+            <p className={styles.noResults}>No Results</p>
+          )}
         {displayedMurals.map((mural: any) => {
           return (
             <SearchResultCard type={FORM.MURAL} item={mural} key={mural.id} />
