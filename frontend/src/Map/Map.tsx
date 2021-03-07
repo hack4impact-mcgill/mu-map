@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import ReactMapGL, {
+  Popup,
+  GeolocateControl,
+  Source,
+  Layer,
+} from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
@@ -21,7 +26,6 @@ interface IMapProps {
 }
 
 function Map({ muralClick, murals }: IMapProps) {
-
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",
@@ -33,13 +37,26 @@ function Map({ muralClick, murals }: IMapProps) {
   const geolocateStyle = {
     bottom: 30,
     right: 0,
-    padding: '10px'
+    padding: "10px",
   };
 
   const imgStyle = {
-    maxWidth: '200px',
-    maxHeight: '200px',
-    paddingBottom: '10px'
+    maxWidth: "200px",
+    maxHeight: "200px",
+    paddingBottom: "10px",
+  };
+
+  const geojsonTour = {
+    type: "MuralTour",
+    features: [
+      {
+        type: "Mural",
+        geometry: {
+          type: "Line",
+          coordinates: [0, 0], // fill in with mural.coordinates in tour.getMurals()
+        },
+      },
+    ],
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
@@ -47,8 +64,7 @@ function Map({ muralClick, murals }: IMapProps) {
   return (
     <ReactMapGL
       {...viewport}
-      onViewportChange={(nextViewport: any) => setViewport(nextViewport)
-      }
+      onViewportChange={(nextViewport: any) => setViewport(nextViewport)}
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       mapStyle={MAPBOX_STYLE_URL}
     >
@@ -67,27 +83,45 @@ function Map({ muralClick, murals }: IMapProps) {
           closeOnClick={false}
           onClose={setPopupInfo}
         >
-          <img style={imgStyle} src={popupInfo.imgURLs?.[0]} alt="Mural_img" ></img>
+          <img
+            style={imgStyle}
+            src={popupInfo.imgURLs?.[0]}
+            alt="Mural_img"
+          ></img>
           <div>
             <Typography variant="h5" gutterBottom>
               {popupInfo.name}
             </Typography>
-            <Typography variant="caption">
-              {popupInfo.address}
-            </Typography>
+            <Typography variant="caption">{popupInfo.address}</Typography>
           </div>
           <br />
           <Button
             variant="outlined"
             disableElevation
             color="primary"
-            onClick={() => muralClick(popupInfo)}>
+            onClick={() => muralClick(popupInfo)}
+          >
             DETAILS
           </Button>
         </Popup>
-      )
-      }
-    </ReactMapGL >
+      )}
+
+      <Source id="polylineLayer" type="geojson" data={geojsonTour}>
+        <Layer
+          id="lineLayer"
+          type="line"
+          source="my-data"
+          layout={{
+            "line-join": "round",
+            "line-cap": "round",
+          }}
+          paint={{
+            "line-color": "rgba(3, 170, 238, 0.5)",
+            "line-width": 5,
+          }}
+        />
+      </Source>
+    </ReactMapGL>
   );
 }
 
