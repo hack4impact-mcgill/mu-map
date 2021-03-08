@@ -13,6 +13,7 @@ import {
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
+  PRIMARY,
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
@@ -46,15 +47,13 @@ function Map({ muralClick, murals }: IMapProps) {
     paddingBottom: "10px",
   };
 
-  const geojsonTour = {
-    type: "MuralTour",
-    features: [
+  const geojson = {
+    type: "Feature" as "Feature",
+    properties: [],
+    geometry: [
       {
-        type: "Mural",
-        geometry: {
-          type: "Line",
-          coordinates: [0, 0], // fill in with mural.coordinates in tour.getMurals()
-        },
+        type: "LineString",
+        coordinates: [[0, 0]], // fill in with mural.coordinates in tour.getMurals()
       },
     ],
   };
@@ -106,17 +105,17 @@ function Map({ muralClick, murals }: IMapProps) {
         </Popup>
       )}
 
-      <Source id="polylineLayer" type="geojson" data={geojsonTour}>
+      <Source id="polylineLayer" type="geojson" data={geojson}>
         <Layer
-          id="lineLayer"
+          id="tour"
           type="line"
-          source="my-data"
+          source="" // add data?
           layout={{
             "line-join": "round",
             "line-cap": "round",
           }}
           paint={{
-            "line-color": "rgba(3, 170, 238, 0.5)",
+            "line-color": PRIMARY,
             "line-width": 5,
           }}
         />
