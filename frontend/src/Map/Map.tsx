@@ -48,12 +48,19 @@ function Map({ muralClick, murals }: IMapProps) {
   };
 
   const geojson = {
-    type: "Feature" as "Feature",
-    properties: [],
-    geometry: [
+    type: "FeatureCollection" as "FeatureCollection",
+    features: [
       {
-        type: "LineString" as "LineString",
-        coordinates: [[0, 0]], // fill in with mural.coordinates in tour.getMurals()
+        type: "Feature" as "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString" as "LineString",
+          coordinates: [
+            [-73.561668, 45.50888],
+            [-73.5, 45.6],
+            [-74, 46],
+          ],
+        },
       },
     ],
   };
@@ -105,11 +112,10 @@ function Map({ muralClick, murals }: IMapProps) {
         </Popup>
       )}
 
-      <Source id="polylineLayer" type="geojson" data={geojson}>
+      <Source type="geojson" data={geojson}>
         <Layer
           id="tour"
           type="line"
-          source="" // add data?
           layout={{
             "line-join": "round",
             "line-cap": "round",
