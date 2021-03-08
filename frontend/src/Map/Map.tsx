@@ -52,7 +52,7 @@ function Map({ muralClick, murals }: IMapProps) {
     properties: [],
     geometry: [
       {
-        type: "LineString",
+        type: "LineString" as "LineString",
         coordinates: [[0, 0]], // fill in with mural.coordinates in tour.getMurals()
       },
     ],

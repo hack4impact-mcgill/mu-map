@@ -12,12 +12,11 @@ import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
 import SearchCard from "../SideBarSearch/searchCard";
-import { CREATE_MURAL_API, FORM } from "constants/constants";
+import { CREATE_MURAL_API, FORM, GET_ALL_TOUR } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
 
 function App() {
-
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const [signInError, setSignInError] = useState<string>("");
@@ -30,6 +29,8 @@ function App() {
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
+
+  const [tours, setTours] = useState<any>([]);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -88,6 +89,13 @@ function App() {
     setMurals(data.rows);
   };
 
+  const getTour = async () => {
+    const response = await fetch(GET_ALL_TOUR);
+    const data = await response.json();
+
+    setTours(data.rows);
+  };
+
   /**
    * When a mural marker is clicked, open the mural form
    */
@@ -99,6 +107,7 @@ function App() {
 
   useEffect(() => {
     getMural();
+    getTour();
   }, []);
 
   const sidebarTitle = "";
@@ -135,13 +144,16 @@ function App() {
             <CollectionForm handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
             <TourForm handleCancel={toggleSidebar} />
-          )
-          : null}
+          ) : null}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={() => { leaveForm(); setSelectedMural(null) }} />
+          handleLeave={() => {
+            leaveForm();
+            setSelectedMural(null);
+          }}
+        />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>
