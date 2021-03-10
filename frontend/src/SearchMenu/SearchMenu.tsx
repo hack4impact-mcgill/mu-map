@@ -8,6 +8,7 @@ import {
 } from "constants/constants";
 import SearchResultCard from "SearchResultCard/SearchResultCard";
 import { FORM } from "constants/constants";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flexContainer: {
@@ -40,7 +41,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function SearchMenu() {
+interface ISearchMenuProps {
+  handleMuralClick: (lat: number, long: number) => void;
+  handleCancel: () => void;
+}
+
+function SearchMenu(props: ISearchMenuProps) {
   const styles = useStyles();
   const [murals, setMurals] = useState<any>([]);
   const [tours, setTours] = useState<any>([]);
@@ -123,12 +129,22 @@ function SearchMenu() {
           )}
         {displayedMurals.map((mural: any) => {
           return (
-            <SearchResultCard type={FORM.MURAL} item={mural} key={mural.id} />
+            <SearchResultCard
+              type={FORM.MURAL}
+              item={mural}
+              key={mural.id}
+              handleMuralClick={props.handleMuralClick}
+            />
           );
         })}
         {displayedTours.map((tour: any) => {
           return (
-            <SearchResultCard type={FORM.TOUR} item={tour} key={tour.id} />
+            <SearchResultCard
+              type={FORM.TOUR}
+              item={tour}
+              key={tour.id}
+              handleMuralClick={props.handleMuralClick}
+            />
           );
         })}
         {displayedCollections.map((colletion: any) => {
@@ -137,6 +153,7 @@ function SearchMenu() {
               type={FORM.COLLECTION}
               item={colletion}
               key={colletion.id}
+              handleMuralClick={props.handleMuralClick}
             />
           );
         })}

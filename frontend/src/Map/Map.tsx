@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import ReactMapGL, { Popup, GeolocateControl } from 'react-map-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import ReactMapGL, { Popup, GeolocateControl } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
+  PINPOINT_ZOOM,
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
@@ -20,8 +21,7 @@ interface IMapProps {
   murals: any;
 }
 
-function Map({ muralClick, murals }: IMapProps) {
-
+const Map = forwardRef(({ muralClick, murals }: IMapProps, ref: any) => {
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",
@@ -33,22 +33,41 @@ function Map({ muralClick, murals }: IMapProps) {
   const geolocateStyle = {
     bottom: 30,
     right: 0,
-    padding: '10px'
+    padding: "10px",
   };
 
   const imgStyle = {
-    maxWidth: '200px',
-    maxHeight: '200px',
-    paddingBottom: '10px'
+    maxWidth: "200px",
+    maxHeight: "200px",
+    paddingBottom: "10px",
   };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
 
+  /**
+   * Defines functions that can be called by a ref owner (App.tsx)
+   */
+  useImperativeHandle(ref, () => ({
+    /**
+     * Used for zooming to a selected mural from search
+     * @param long longitude to zoom to
+     * @param lat latitude to zoom to
+     */
+    setLongLat(long: number, lat: number) {
+      setViewport({
+        width: "100vw",
+        height: "100vh",
+        latitude: lat,
+        longitude: long,
+        zoom: PINPOINT_ZOOM,
+      });
+    },
+  }));
+
   return (
     <ReactMapGL
       {...viewport}
-      onViewportChange={(nextViewport: any) => setViewport(nextViewport)
-      }
+      onViewportChange={(nextViewport: any) => setViewport(nextViewport)}
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       mapStyle={MAPBOX_STYLE_URL}
     >
@@ -67,28 +86,30 @@ function Map({ muralClick, murals }: IMapProps) {
           closeOnClick={false}
           onClose={setPopupInfo}
         >
-          <img style={imgStyle} src={popupInfo.imgURLs?.[0]} alt="Mural_img" ></img>
+          <img
+            style={imgStyle}
+            src={popupInfo.imgURLs?.[0]}
+            alt="Mural_img"
+          ></img>
           <div>
             <Typography variant="h5" gutterBottom>
               {popupInfo.name}
             </Typography>
-            <Typography variant="caption">
-              {popupInfo.address}
-            </Typography>
+            <Typography variant="caption">{popupInfo.address}</Typography>
           </div>
           <br />
           <Button
             variant="outlined"
             disableElevation
             color="primary"
-            onClick={() => muralClick(popupInfo)}>
+            onClick={() => muralClick(popupInfo)}
+          >
             DETAILS
           </Button>
         </Popup>
-      )
-      }
-    </ReactMapGL >
+      )}
+    </ReactMapGL>
   );
-}
+});
 
 export default Map;

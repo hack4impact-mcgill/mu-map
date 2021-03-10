@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
@@ -28,6 +28,8 @@ function App() {
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
+
+  const mapRef: any = useRef(null);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -83,6 +85,15 @@ function App() {
   };
 
   /**
+   * Zooms the map to the coordiantes of the clicked searched mural
+   * @param long longitude
+   * @param lat latitude
+   */
+  const handleSearchedMuralZoom = (long: number, lat: number) => {
+    mapRef.current.setLongLat(long, lat);
+  };
+
+  /**
    * When a mural marker is clicked, open the mural form
    */
   useEffect(() => {
@@ -110,6 +121,7 @@ function App() {
         <Map
           murals={murals}
           muralClick={(mural: any) => setSelectedMural(mural)}
+          ref={mapRef}
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
@@ -128,7 +140,10 @@ function App() {
           ) : activeForm === FORM.TOUR ? (
             <TourForm handleCancel={toggleSidebar} />
           ) : (
-            <SearchMenu />
+            <SearchMenu
+              handleMuralClick={handleSearchedMuralZoom}
+              handleCancel={toggleSidebar}
+            />
           )}
         </Sidebar>
         <LeaveWarning

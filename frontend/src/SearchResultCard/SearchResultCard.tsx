@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface ISearchCardSetProps {
   type: FORM;
   item: any;
+  handleMuralClick: (lat: number, long: number) => void
 }
 
 function SearchResultCard(props: ISearchCardSetProps) {
@@ -50,10 +51,17 @@ function SearchResultCard(props: ISearchCardSetProps) {
     }
   }
 
+  function handleClick() {
+    switch (props.type) {
+      case FORM.MURAL:
+        props.handleMuralClick(props.item.coordinates.coordinates[0],props.item.coordinates.coordinates[1])
+    }
+  }
+
   const body = generateBody()
 
   return (
-    <Card className={styles.card}>
+    <Card className={styles.card} onClick={handleClick}>
       <img
         className={styles.icon}
         src="https://cdn2.lamag.com/wp-content/uploads/sites/6/2020/01/kobe-mural-mr-brainwash-chris-delmas-afp-getty-1068x712.jpg"
