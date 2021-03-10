@@ -14,6 +14,7 @@ interface IDropdownMenuProps {
   isSignedIn: boolean;
   signinClick: () => void;
   signoutClick: () => void;
+  donateClick: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 })
 );
 
-function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuProps) {
+function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,6 +44,11 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuPr
 
   const handleSignout = () => {
     signoutClick()
+    handleClose()
+  }
+
+  const handleDonate = () => {
+    donateClick()
     handleClose()
   }
 
@@ -82,9 +88,10 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuPr
           Visit MU site
         </MenuItem>
         <MenuItem
-          component="a"
+          /*component="a"
           href="https://www.canadahelps.org/en/charities/mu/"
-          target="_blank"
+          target="_blank"*/
+          onClick={handleDonate}
         >
           Donate
         </MenuItem>

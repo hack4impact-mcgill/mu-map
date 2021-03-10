@@ -15,6 +15,7 @@ import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
+import DonationModal from "DonationModal/DonationModal"
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
   const [searchResult, setSearchResult] = useState<any>([]);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
+  const [donateOpen, setDonateOpen] = useState<boolean>(false);
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
@@ -67,6 +69,10 @@ function App() {
   }, []);
 
   const openSignin = () => setSigningIn(true);
+
+  const handleDonationOpen = () => setDonateOpen(true);
+
+  const handleDonationClse = () => setDonateOpen(false)
 
   const handleCancelSignin = () => setSigningIn(false);
 
@@ -112,6 +118,7 @@ function App() {
           error={signInError}
           open={signingIn}
         />
+        <DonationModal open={donateOpen} handleClose={handleDonationClse}/>
         <Search searchCallBack={handleSearch} />
         <Map
           murals={murals}
@@ -121,6 +128,7 @@ function App() {
           isSignedIn={isSignedIn}
           signinClick={openSignin}
           signoutClick={handleSignout}
+          donateClick={handleDonationOpen}
         />
         <Sidebar
           name={sidebarTitle}
