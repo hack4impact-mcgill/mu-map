@@ -4,27 +4,25 @@ import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
-import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
 import CollectionForm from "../CollectionForm/CollectionForm";
 import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
-import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
-import SearchMenu from "SearchMenu/SearchMenu"
-function App() {
+import SearchMenu from "SearchMenu/SearchMenu";
+import SearchButton from "SearchButton/SearchButton";
 
+function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const [signInError, setSignInError] = useState<string>("");
   const [user, setUser] = useState<any>({});
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [searchResult, setSearchResult] = useState<any>([]);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
 
@@ -52,10 +50,6 @@ function App() {
 
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
-  };
-
-  const handleSearch = (results: any) => {
-    setSearchResult(results);
   };
 
   useEffect(() => {
@@ -112,7 +106,7 @@ function App() {
           error={signInError}
           open={signingIn}
         />
-        <Search searchCallBack={handleSearch} />
+        <SearchButton toggleSidebar={toggleSidebar} />
         <Map
           murals={murals}
           muralClick={(mural: any) => setSelectedMural(mural)}
@@ -127,14 +121,24 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-
-            <SearchMenu searchCards={searchResult} />
-            {/* <CollectionForm handleCancel={toggleSidebar} /> */}
+          {activeForm === FORM.MURAL ? (
+            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
+          ) : activeForm === FORM.COLLECTION ? (
+            <CollectionForm handleCancel={toggleSidebar} />
+          ) : activeForm === FORM.TOUR ? (
+            <TourForm handleCancel={toggleSidebar} />
+          ) : (
+            <SearchMenu />
+          )}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={() => { leaveForm(); setSelectedMural(null) }} />
+          handleLeave={() => {
+            leaveForm();
+            setSelectedMural(null);
+          }}
+        />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>

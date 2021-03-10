@@ -40,11 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface ISearchMenuProps {
-  searchCards: any;
-}
-
-function SearchMenu(props: ISearchMenuProps) {
+function SearchMenu() {
   const styles = useStyles();
   const [murals, setMurals] = useState<any>([]);
   const [tours, setTours] = useState<any>([]);
@@ -53,6 +49,7 @@ function SearchMenu(props: ISearchMenuProps) {
   const [displayedTours, setDisplayedTours] = useState<any>([]);
   const [displayedCollections, setDisplayedCollections] = useState<any>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
   /**
    * fetch all collections/tours/murals upon component load LOL!
    */
@@ -66,23 +63,32 @@ function SearchMenu(props: ISearchMenuProps) {
     axios
       .get(GET_ALL_COLLECTION)
       .then((response) => {
-        if (response.data) setTours(response.data.collections);
+        if (response.data) setCollections(response.data.collections);
       })
       .catch((err) => console.log(err));
     axios
       .get(GET_ALL_TOUR)
       .then((response) => {
-        if (response.data) setCollections(response.data.tours);
+        if (response.data) setTours(response.data.tours);
       })
       .catch((err) => console.log(err));
   }, []);
 
+  /**
+   * Filters a list of items matching the current search query
+   * @param collection a list of items to filter
+   * @returns a list of items matching the search query
+   */
   function filterItems(collection: any[]): any[] {
     return collection.filter(function (item: any) {
       return item.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
   }
 
+  /**
+   * Filter search results when enter is pressed
+   * @param e button click event
+   */
   function handleEnter(e: any) {
     if (e.keyCode === 13) {
       if (searchQuery === "") {

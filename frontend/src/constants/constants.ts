@@ -25,4 +25,5 @@ export enum FORM {
   MURAL = "Mural",
   COLLECTION = "Collection",
   TOUR = "Tour",
+  SEARCH = "Search",
 }

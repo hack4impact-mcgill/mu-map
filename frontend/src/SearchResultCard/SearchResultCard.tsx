@@ -1,13 +1,7 @@
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
-import { createStyles, InputBase, makeStyles, Theme } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import {
-  CREATE_MURAL_API,
-  GET_ALL_COLLECTION,
-  GET_ALL_TOUR,
-} from "constants/constants";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import React from "react";
 import { FORM } from "constants/constants";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,9 +40,9 @@ function SearchResultCard(props: ISearchCardSetProps) {
   function generateBody(): String {
     switch (props.type) {
       case FORM.TOUR:
-        return ""
+        return props.item.description
       case FORM.COLLECTION:
-          return ""
+          return props.item.description
       case FORM.MURAL:
         return props.item.address + ", " + props.item.city
       default:
