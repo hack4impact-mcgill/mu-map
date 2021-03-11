@@ -55,7 +55,7 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: ID
   const theme = useTheme();
   const buttonText = {
     signin: (
-      <strong style={{ color: theme.palette.primary.main }}>Sign in</strong>
+      'Sign in'
     ),
     signout: (
       <strong style={{ color: theme.palette.secondary.main }}>Sign out</strong>
@@ -90,7 +90,7 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: ID
         <MenuItem
           onClick={handleDonate}
         >
-          Donate
+          <strong style={{ color: theme.palette.secondary.main }}>Donate <span role="img" aria-label="praying hands">🙏</span> </strong>
         </MenuItem>
         <MenuItem onClick={isSignedIn ? handleSignout : handleSignin}>
           {isSignedIn ? buttonText.signout : buttonText.signin}
