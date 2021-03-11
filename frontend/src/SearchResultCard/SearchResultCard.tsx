@@ -10,7 +10,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 2, 2, 3),
       display: "flex",
       justifyContent: "flex-start",
-      width: "90%"
+      width: "90%",
+      cursor: "pointer"
     },
     icon: {
       maxWidth: "25%",
@@ -34,6 +35,7 @@ interface ISearchCardSetProps {
   type: FORM;
   item: any;
   handleMuralClick: (lat: number, long: number) => void
+  handleCancel: () => void
 }
 
 function SearchResultCard(props: ISearchCardSetProps) {
@@ -57,6 +59,7 @@ function SearchResultCard(props: ISearchCardSetProps) {
       case FORM.MURAL:
         props.handleMuralClick(props.item.coordinates.coordinates[0],props.item.coordinates.coordinates[1])
     }
+    props.handleCancel()
   }
 
   const body = generateBody()

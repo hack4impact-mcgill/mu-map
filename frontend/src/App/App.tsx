@@ -72,6 +72,10 @@ function App() {
     formName && setActiveForm(formName);
   };
 
+  const toggleSidebarNoWarning = () => {
+    setSidebarOpen(!sidebarOpen);
+  }
+
   const leaveForm = () => {
     setSidebarOpen(false);
     setFormWarning(false);
@@ -142,7 +146,7 @@ function App() {
           ) : (
             <SearchMenu
               handleMuralClick={handleSearchedMuralZoom}
-              handleCancel={toggleSidebar}
+              handleCancel={toggleSidebarNoWarning}
             />
           )}
         </Sidebar>

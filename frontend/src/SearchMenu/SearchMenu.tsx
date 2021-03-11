@@ -133,6 +133,7 @@ function SearchMenu(props: ISearchMenuProps) {
               item={mural}
               key={mural.id}
               handleMuralClick={props.handleMuralClick}
+              handleCancel={props.handleCancel}
             />
           );
         })}
@@ -143,6 +144,7 @@ function SearchMenu(props: ISearchMenuProps) {
               item={tour}
               key={tour.id}
               handleMuralClick={props.handleMuralClick}
+              handleCancel={props.handleCancel}
             />
           );
         })}
@@ -153,6 +155,7 @@ function SearchMenu(props: ISearchMenuProps) {
               item={collection}
               key={collection.id}
               handleMuralClick={props.handleMuralClick}
+              handleCancel={props.handleCancel}
             />
           );
         })}
