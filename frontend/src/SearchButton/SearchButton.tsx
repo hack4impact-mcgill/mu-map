@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
     searchButton: {
       width: "fit-content",
       position: "absolute",
-      bottom: "93%",
-      marginLeft: theme.spacing(1),
+      top: theme.spacing(1),
+      left: theme.spacing(1),
       zIndex: 1,
     },
   })

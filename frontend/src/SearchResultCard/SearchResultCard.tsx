@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 2, 2, 3),
       display: "flex",
       justifyContent: "flex-start",
+      width: "90%"
     },
     icon: {
       maxWidth: "25%",

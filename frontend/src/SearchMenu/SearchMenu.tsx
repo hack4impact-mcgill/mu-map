@@ -147,12 +147,12 @@ function SearchMenu(props: ISearchMenuProps) {
             />
           );
         })}
-        {displayedCollections.map((colletion: any) => {
+        {displayedCollections.map((collection: any) => {
           return (
             <SearchResultCard
               type={FORM.COLLECTION}
-              item={colletion}
-              key={colletion.id}
+              item={collection}
+              key={collection.id}
               handleMuralClick={props.handleMuralClick}
             />
           );
