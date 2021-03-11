@@ -78,7 +78,6 @@ const Map = forwardRef(({ muralClick, murals }: IMapProps, ref: any) => {
     <ReactMapGL
       {...viewport}
       onViewportChange={(nextViewport: any) => {
-        console.log(nextViewport);
         setViewport(nextViewport);
       }}
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
