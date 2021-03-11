@@ -88,9 +88,6 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: ID
           Visit MU site
         </MenuItem>
         <MenuItem
-          /*component="a"
-          href="https://www.canadahelps.org/en/charities/mu/"
-          target="_blank"*/
           onClick={handleDonate}
         >
           Donate

@@ -70,10 +70,6 @@ function App() {
 
   const openSignin = () => setSigningIn(true);
 
-  const handleDonationOpen = () => setDonateOpen(true);
-
-  const handleDonationClse = () => setDonateOpen(false)
-
   const handleCancelSignin = () => setSigningIn(false);
 
   const toggleSidebar = (formName: FORM = FORM.MURAL) => {
@@ -118,7 +114,7 @@ function App() {
           error={signInError}
           open={signingIn}
         />
-        <DonationModal open={donateOpen} handleClose={handleDonationClse}/>
+        <DonationModal open={donateOpen} handleClose={() => setDonateOpen(false)}/>
         <Search searchCallBack={handleSearch} />
         <Map
           murals={murals}
@@ -128,7 +124,7 @@ function App() {
           isSignedIn={isSignedIn}
           signinClick={openSignin}
           signoutClick={handleSignout}
-          donateClick={handleDonationOpen}
+          donateClick={() => setDonateOpen(true)}
         />
         <Sidebar
           name={sidebarTitle}
