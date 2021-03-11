@@ -19,8 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "90%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   title: {
     textAlign: "center",
@@ -34,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     right: "20px",
     cursor: "pointer",
   },
+  logo: {
+    margin: theme.spacing(1)
+  }
 }));
 
 function DonationModal(props: IDonationModalProps) {
@@ -65,11 +67,14 @@ function DonationModal(props: IDonationModalProps) {
               to trigger a social transformation and to turn Montreal into an
               open-air MUseum!
             </p>
-            <MULogo width="50%" height="100%"></MULogo>
+            <div className={classes.logo}>
+               <MULogo width="50%" height="100%"></MULogo>
+            </div>
+           
           </div>
         </DialogContentText>
       </DialogContent>
-      <Button
+        <Button
         className={classes.button}
         size="large"
         variant="contained"
@@ -93,6 +98,7 @@ function DonationModal(props: IDonationModalProps) {
       >
         Donate
       </Button>
+      
     </Dialog>
   );
 }
