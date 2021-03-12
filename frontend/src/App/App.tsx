@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import Sidebar from "../sidebar/Sidebar";
 import PlusButton from "../plusButton/PlusButton";
-import Search from "../Search/Search";
 import MuralForm from "../muralForm/MuralForm";
 import CollectionForm from "../CollectionForm/CollectionForm";
 import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
-import SearchCard from "../SideBarSearch/searchCard";
 import { CREATE_MURAL_API, FORM } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
+import SearchMenu from "SearchMenu/SearchMenu";
+import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal"
 
 function App() {
-
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const [signInError, setSignInError] = useState<string>("");
   const [user, setUser] = useState<any>({});
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [searchResult, setSearchResult] = useState<any>([]);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
   const [donateOpen, setDonateOpen] = useState<boolean>(false);
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
+
+  const mapRef: any = useRef(null);
 
   const handleSignin = (creds: any) => {
     setSignInError("");
@@ -56,10 +56,6 @@ function App() {
     await FirebaseAuth.signOut();
   };
 
-  const handleSearch = (results: any) => {
-    setSearchResult(results);
-  };
-
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
       setUser(user);
@@ -78,6 +74,10 @@ function App() {
     formName && setActiveForm(formName);
   };
 
+  const toggleSidebarNoWarning = () => {
+    setSidebarOpen(!sidebarOpen);
+  }
+
   const leaveForm = () => {
     setSidebarOpen(false);
     setFormWarning(false);
@@ -88,6 +88,15 @@ function App() {
     const data = await response.json();
 
     setMurals(data.rows);
+  };
+
+  /**
+   * Zooms the map to the coordiantes of the clicked searched mural
+   * @param long longitude
+   * @param lat latitude
+   */
+  const handleSearchedMuralZoom = (long: number, lat: number) => {
+    mapRef.current.setLongLat(long, lat);
   };
 
   /**
@@ -114,11 +123,12 @@ function App() {
           error={signInError}
           open={signingIn}
         />
+        <SearchButton toggleSidebar={toggleSidebar} />
         <DonationModal open={donateOpen} handleClose={() => setDonateOpen(false)}/>
-        <Search searchCallBack={handleSearch} />
         <Map
           murals={murals}
           muralClick={(mural: any) => setSelectedMural(mural)}
+          ref={mapRef}
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
@@ -131,21 +141,27 @@ function App() {
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {searchResult.length ? (
-            <SearchCard searchCards={searchResult} />
-          ) : activeForm === FORM.MURAL ? (
+          {activeForm === FORM.MURAL ? (
             <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
             <CollectionForm handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
             <TourForm handleCancel={toggleSidebar} />
-          )
-          : null}
+          ) : (
+            <SearchMenu
+              handleMuralClick={handleSearchedMuralZoom}
+              handleCancel={toggleSidebarNoWarning}
+            />
+          )}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={() => { leaveForm(); setSelectedMural(null) }} />
+          handleLeave={() => {
+            leaveForm();
+            setSelectedMural(null);
+          }}
+        />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>
