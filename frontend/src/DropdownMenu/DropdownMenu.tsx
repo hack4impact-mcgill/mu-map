@@ -14,6 +14,7 @@ interface IDropdownMenuProps {
   isSignedIn: boolean;
   signinClick: () => void;
   signoutClick: () => void;
+  donateClick: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 })
 );
 
-function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuProps) {
+function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: IDropdownMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,10 +47,15 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuPr
     handleClose()
   }
 
+  const handleDonate = () => {
+    donateClick()
+    handleClose()
+  }
+
   const theme = useTheme();
   const buttonText = {
     signin: (
-      <strong style={{ color: theme.palette.primary.main }}>Sign in</strong>
+      'Sign in'
     ),
     signout: (
       <strong style={{ color: theme.palette.secondary.main }}>Sign out</strong>
@@ -82,11 +88,9 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick }: IDropdownMenuPr
           Visit MU site
         </MenuItem>
         <MenuItem
-          component="a"
-          href="https://www.canadahelps.org/en/charities/mu/"
-          target="_blank"
+          onClick={handleDonate}
         >
-          Donate
+          <strong style={{ color: theme.palette.secondary.main }}>Donate <span role="img" aria-label="praying hands">🙏</span> </strong>
         </MenuItem>
         <MenuItem onClick={isSignedIn ? handleSignout : handleSignin}>
           {isSignedIn ? buttonText.signout : buttonText.signin}
