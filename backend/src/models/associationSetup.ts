@@ -47,17 +47,19 @@ export class AssociationSetup {
   // Creates some initial data in database for dev purposes.
   private async sampleMigrations() {
     console.log("Creating some data...");
-    const artistNames = ["Michaelangelo", "Banksy"];
+    const artistNames = ["Michaelangelo", "Michaelangelo"];
     const boroughNames = ["Cote des Neiges", "Plateau"];
-    artistNames.forEach(function (name) {
-      Artist.create<Artist>({
-        name: name,
-      });
+    await Artist.create<Artist>({
+      name: "Michaelangelo",
     });
-    boroughNames.forEach(function (name) {
-      Borough.create<Borough>({
-        name: name,
-      });
+    await Artist.create<Artist>({
+      name: "Masdasdasdasd",
+    });
+    await Borough.create<Borough>({
+      name: "Cote des Neiges",
+    });
+    await Borough.create<Borough>({
+      name: "Plateau",
     });
     const muralParams = {
       name: "example mural",
