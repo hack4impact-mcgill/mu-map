@@ -24,9 +24,10 @@ import { Typography } from "@material-ui/core";
 interface IMapProps {
   muralClick: (mural: any) => void;
   murals: any;
+  tours: any;
 }
 
-function Map({ muralClick, murals }: IMapProps) {
+function Map({ muralClick, murals, tours }: IMapProps) {
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",

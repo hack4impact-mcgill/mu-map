@@ -123,6 +123,7 @@ function App() {
         />
         <Search searchCallBack={handleSearch} />
         <Map
+          tours={tours}
           murals={murals}
           muralClick={(mural: any) => setSelectedMural(mural)}
         />
