@@ -6,6 +6,7 @@ import ReactMapGL, {
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
+import CustomSource from "../CustomSource/CustomSource";
 import Button from "@material-ui/core/Button";
 import {
   DEFAULT_LONGITUDE,
@@ -25,9 +26,10 @@ import { easeCubic } from "d3-ease";
 interface IMapProps {
   muralClick: (mural: any) => void;
   murals: any;
+  tours: any;
 }
 
-const Map = forwardRef(({ muralClick, murals }: IMapProps, ref: any) => {
+const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
   // type has to be 'any' for interpolator to work
   const [viewport, setViewport] = useState<any>({
     width: "100vw",
@@ -120,6 +122,8 @@ const Map = forwardRef(({ muralClick, murals }: IMapProps, ref: any) => {
           </Button>
         </Popup>
       )}
+
+      <CustomSource tours={tours} />
     </ReactMapGL>
   );
 });

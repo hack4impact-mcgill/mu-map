@@ -10,12 +10,12 @@ import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
-import { CREATE_MURAL_API, FORM } from "constants/constants";
+import { CREATE_MURAL_API, FORM, GET_ALL_TOUR } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
 import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
-import DonationModal from "DonationModal/DonationModal"
+import DonationModal from "DonationModal/DonationModal";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -30,6 +30,8 @@ function App() {
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
+
+  const [tours, setTours] = useState<any>([]);
 
   const mapRef: any = useRef(null);
 
@@ -76,7 +78,7 @@ function App() {
 
   const toggleSidebarNoWarning = () => {
     setSidebarOpen(!sidebarOpen);
-  }
+  };
 
   const leaveForm = () => {
     setSidebarOpen(false);
@@ -88,6 +90,13 @@ function App() {
     const data = await response.json();
 
     setMurals(data.rows);
+  };
+
+  const getTour = async () => {
+    const response = await fetch(GET_ALL_TOUR);
+    const data = await response.json();
+
+    setTours(data.tours);
   };
 
   /**
@@ -110,6 +119,7 @@ function App() {
 
   useEffect(() => {
     getMural();
+    getTour();
   }, []);
 
   const sidebarTitle = "";
@@ -124,8 +134,12 @@ function App() {
           open={signingIn}
         />
         <SearchButton toggleSidebar={toggleSidebar} />
-        <DonationModal open={donateOpen} handleClose={() => setDonateOpen(false)}/>
+        <DonationModal
+          open={donateOpen}
+          handleClose={() => setDonateOpen(false)}
+        />
         <Map
+          tours={tours}
           murals={murals}
           muralClick={(mural: any) => setSelectedMural(mural)}
           ref={mapRef}

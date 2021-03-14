@@ -81,7 +81,7 @@ export class TourService {
   }
 
   /**
-   * deletes a tour by id
+   * Deletes a tour by id
    * @param tourId tour's id
    */
   public async delete(tourId: number): Promise<void> {
@@ -111,7 +111,7 @@ export class TourService {
           {
             model: Mural,
             as: "murals",
-            attributes: ["id"],
+            attributes: ["id", "coordinates"],
             through: {
               attributes: [],
             },
