@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import ReactMapGL, { Popup, GeolocateControl } from "react-map-gl";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import ReactMapGL, {
+  Popup,
+  GeolocateControl,
+  FlyToInterpolator,
+} from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
 import CustomSource from "../CustomSource/CustomSource";
@@ -9,10 +13,13 @@ import {
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
+  PINPOINT_ZOOM,
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
 import { Typography } from "@material-ui/core";
+// @ts-ignore
+import { easeCubic } from "d3-ease";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
@@ -22,8 +29,9 @@ interface IMapProps {
   tours: any;
 }
 
-function Map({ muralClick, murals, tours }: IMapProps) {
-  const [viewport, setViewport] = useState({
+const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
+  // type has to be 'any' for interpolator to work
+  const [viewport, setViewport] = useState<any>({
     width: "100vw",
     height: "100vh",
     latitude: DEFAULT_LATITUDE,
@@ -43,30 +51,37 @@ function Map({ muralClick, murals, tours }: IMapProps) {
     paddingBottom: "10px",
   };
 
-  // const geojson = {
-  //   type: "FeatureCollection" as "FeatureCollection",
-  //   features: [
-  //     {
-  //       type: "Feature" as "Feature",
-  //       properties: {},
-  //       geometry: {
-  //         type: "LineString" as "LineString",
-  //         coordinates: [
-  //           [-73.561668, 45.50888],
-  //           [-73.5, 45.6],
-  //           [-74, 46],
-  //         ],
-  //       },
-  //     },
-  //   ],
-  // };
-
   const [popupInfo, setPopupInfo] = useState<any>([]);
+
+  /**
+   * Defines functions that can be called by a ref owner (App.tsx)
+   */
+  useImperativeHandle(ref, () => ({
+    /**
+     * Used for zooming to a selected mural from search
+     * @param long longitude to zoom to
+     * @param lat latitude to zoom to
+     */
+    setLongLat(long: number, lat: number) {
+      setViewport({
+        width: "100vw",
+        height: "100vh",
+        latitude: lat,
+        longitude: long,
+        zoom: PINPOINT_ZOOM,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+        transitionDuration: 3000,
+      });
+    },
+  }));
 
   return (
     <ReactMapGL
       {...viewport}
-      onViewportChange={(nextViewport: any) => setViewport(nextViewport)}
+      onViewportChange={(nextViewport: any) => {
+        setViewport(nextViewport);
+      }}
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       mapStyle={MAPBOX_STYLE_URL}
     >
@@ -111,6 +126,6 @@ function Map({ muralClick, murals, tours }: IMapProps) {
       <CustomSource tours={tours} />
     </ReactMapGL>
   );
-}
+});
 
 export default Map;
