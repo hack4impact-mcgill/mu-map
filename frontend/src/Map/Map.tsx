@@ -1,19 +1,14 @@
 import React, { useState } from "react";
-import ReactMapGL, {
-  Popup,
-  GeolocateControl,
-  Source,
-  Layer,
-} from "react-map-gl";
+import ReactMapGL, { Popup, GeolocateControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
+import CustomSource from "../CustomSource/CustomSource";
 import Button from "@material-ui/core/Button";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
-  PRIMARY,
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
@@ -48,23 +43,23 @@ function Map({ muralClick, murals, tours }: IMapProps) {
     paddingBottom: "10px",
   };
 
-  const geojson = {
-    type: "FeatureCollection" as "FeatureCollection",
-    features: [
-      {
-        type: "Feature" as "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString" as "LineString",
-          coordinates: [
-            [-73.561668, 45.50888],
-            [-73.5, 45.6],
-            [-74, 46],
-          ],
-        },
-      },
-    ],
-  };
+  // const geojson = {
+  //   type: "FeatureCollection" as "FeatureCollection",
+  //   features: [
+  //     {
+  //       type: "Feature" as "Feature",
+  //       properties: {},
+  //       geometry: {
+  //         type: "LineString" as "LineString",
+  //         coordinates: [
+  //           [-73.561668, 45.50888],
+  //           [-73.5, 45.6],
+  //           [-74, 46],
+  //         ],
+  //       },
+  //     },
+  //   ],
+  // };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
 
@@ -113,20 +108,7 @@ function Map({ muralClick, murals, tours }: IMapProps) {
         </Popup>
       )}
 
-      <Source type="geojson" data={geojson}>
-        <Layer
-          id="tour"
-          type="line"
-          layout={{
-            "line-join": "round",
-            "line-cap": "round",
-          }}
-          paint={{
-            "line-color": PRIMARY,
-            "line-width": 5,
-          }}
-        />
-      </Source>
+      <CustomSource tours={tours} />
     </ReactMapGL>
   );
 }

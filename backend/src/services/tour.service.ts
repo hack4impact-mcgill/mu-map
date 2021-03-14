@@ -111,7 +111,7 @@ export class TourService {
           {
             model: Mural,
             as: "murals",
-            attributes: [],
+            attributes: ["id", "coordinates"],
             through: {
               attributes: [],
             },
