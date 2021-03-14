@@ -15,7 +15,7 @@ import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
 import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
-import DonationModal from "DonationModal/DonationModal"
+import DonationModal from "DonationModal/DonationModal";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -78,7 +78,7 @@ function App() {
 
   const toggleSidebarNoWarning = () => {
     setSidebarOpen(!sidebarOpen);
-  }
+  };
 
   const leaveForm = () => {
     setSidebarOpen(false);
@@ -96,7 +96,7 @@ function App() {
     const response = await fetch(GET_ALL_TOUR);
     const data = await response.json();
 
-    setTours(data.rows);
+    setTours(data.tours);
   };
 
   /**
@@ -134,7 +134,10 @@ function App() {
           open={signingIn}
         />
         <SearchButton toggleSidebar={toggleSidebar} />
-        <DonationModal open={donateOpen} handleClose={() => setDonateOpen(false)}/>
+        <DonationModal
+          open={donateOpen}
+          handleClose={() => setDonateOpen(false)}
+        />
         <Map
           tours={tours}
           murals={murals}

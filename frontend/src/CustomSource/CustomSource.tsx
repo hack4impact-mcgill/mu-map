@@ -31,24 +31,22 @@ function CustomSource({ tours }: ISourceProps) {
     };
   };
 
-  return tours
-    ? tours.map((tour: any) => (
-        <Source type="geojson" data={geojson(tour)}>
-          <Layer
-            id="tour"
-            type="line"
-            layout={{
-              "line-join": "round",
-              "line-cap": "round",
-            }}
-            paint={{
-              "line-color": PRIMARY,
-              "line-width": 5,
-            }}
-          />
-        </Source>
-      ))
-    : null;
+  return tours.map((tour: any) => (
+    <Source type="geojson" data={geojson(tour)}>
+      <Layer
+        id="tour"
+        type="line"
+        layout={{
+          "line-join": "round",
+          "line-cap": "round",
+        }}
+        paint={{
+          "line-color": PRIMARY,
+          "line-width": 5,
+        }}
+      />
+    </Source>
+  ));
 }
 
 export default React.memo(CustomSource);
