@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import MULogo from "MULogo/MULogo";
 import { makeStyles, useTheme, Theme } from "@material-ui/core/styles";
+import { LIGHTBLUE } from 'constants/constants';
 
 interface IWelcomeModalProps {
     open: boolean;
@@ -46,9 +47,8 @@ function WelcomeModal(props: IWelcomeModalProps) {
                 <DialogContentText>
                     <div>
                         <div className={classes.logo}>
-                            <MULogo width="50%" height="100%" color="#83dffa"></MULogo>
+                            <MULogo width="50%" height="100%" color={LIGHTBLUE}></MULogo>
                         </div>
-
                         <Typography variant="h4" className={classes.title}>
                             MU MTL's Open Air Museum
             </Typography>
@@ -59,8 +59,6 @@ function WelcomeModal(props: IWelcomeModalProps) {
                             to trigger a social transformation and to turn Montreal into an
                             open-air MUseum!
             </p>
-
-
                     </div>
                 </DialogContentText>
             </DialogContent>
@@ -74,11 +72,7 @@ function WelcomeModal(props: IWelcomeModalProps) {
             >
                 EXPLORE
       </Button>
-
-
-
         </Dialog>
     );
 }
-
 export default WelcomeModal;
