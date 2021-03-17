@@ -16,6 +16,7 @@ import TourForm from "TourForm/TourForm";
 import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
+import WelcomeModal from "WelcomeModal/WelcomeModal";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -27,6 +28,7 @@ function App() {
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
   const [donateOpen, setDonateOpen] = useState<boolean>(false);
+  const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
@@ -134,6 +136,10 @@ function App() {
           open={signingIn}
         />
         <SearchButton toggleSidebar={toggleSidebar} />
+        <WelcomeModal
+          open={welcomeOpen}
+          handleClose={() => setWelcomeOpen(false)}
+        />
         <DonationModal
           open={donateOpen}
           handleClose={() => setDonateOpen(false)}
