@@ -36,6 +36,9 @@ interface ISearchCardSetProps {
   item: any;
   handleMuralClick: (lat: number, long: number) => void
   handleCancel: () => void
+  setSelectedMural: (mural: any) => void;
+  setSelectedTour: (tour: any) => void;
+  setSelectedCollection: (collection: any) => void;
 }
 
 function SearchResultCard(props: ISearchCardSetProps) {
@@ -57,7 +60,15 @@ function SearchResultCard(props: ISearchCardSetProps) {
   function handleClick() {
     switch (props.type) {
       case FORM.MURAL:
+        props.setSelectedMural(props.item)
         props.handleMuralClick(props.item.coordinates.coordinates[0],props.item.coordinates.coordinates[1])
+        break;
+      case FORM.TOUR:
+        props.setSelectedTour(props.item)
+        break;
+      case FORM.COLLECTION:
+        props.setSelectedCollection(props.item)
+        break;
     }
     props.handleCancel()
   }

@@ -32,6 +32,8 @@ function App() {
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedMural, setSelectedMural] = useState<any>(null);
+  const [selectedTour, setSelectedTour] = useState<any>(null);
+  const [selectedCollection, setSelectedCollection] = useState<any>(null);
 
   const [tours, setTours] = useState<any>([]);
 
@@ -119,6 +121,24 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMural]);
 
+  /**
+   * When a tour marker is clicked, open the tour form
+   */
+     useEffect(() => {
+      if (!selectedTour) return;
+      toggleSidebar(FORM.TOUR);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTour]);
+
+  /**
+   * When a collection marker is clicked, open the collection form
+   */
+  useEffect(() => {
+    if (!selectedCollection) return;
+    toggleSidebar(FORM.COLLECTION);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCollection]);
+
   useEffect(() => {
     getMural();
     getTour();
@@ -164,13 +184,16 @@ function App() {
           {activeForm === FORM.MURAL ? (
             <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm handleCancel={toggleSidebar} />
+            <CollectionForm collection={selectedCollection} muralsData={murals} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
-            <TourForm handleCancel={toggleSidebar} />
+            <TourForm tour={selectedTour} muralsData={murals} handleCancel={toggleSidebar} />
           ) : (
             <SearchMenu
               handleMuralClick={handleSearchedMuralZoom}
               handleCancel={toggleSidebarNoWarning}
+              setSelectedMural={setSelectedMural}
+              setSelectedTour={setSelectedTour}
+              setSelectedCollection={setSelectedCollection}
             />
           )}
         </Sidebar>
@@ -180,6 +203,8 @@ function App() {
           handleLeave={() => {
             leaveForm();
             setSelectedMural(null);
+            setSelectedTour(null);
+            setSelectedCollection(null);
           }}
         />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
