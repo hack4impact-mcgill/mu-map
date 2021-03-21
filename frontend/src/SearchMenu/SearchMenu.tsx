@@ -43,9 +43,8 @@ const useStyles = makeStyles((theme: Theme) =>
 interface ISearchMenuProps {
   handleMuralClick: (lat: number, long: number) => void;
   handleCancel: () => void;
-  setSelectedMural: (mural: any) => void;
-  setSelectedTour: (tour: any) => void;
-  setSelectedCollection: (collection: any) => void;
+  setSelectedResource: (resource: any) => void;
+  setResourceType: (type: FORM) => void;
 }
 
 function SearchMenu(props: ISearchMenuProps) {
@@ -137,9 +136,8 @@ function SearchMenu(props: ISearchMenuProps) {
               key={mural.id}
               handleMuralClick={props.handleMuralClick}
               handleCancel={props.handleCancel}
-              setSelectedMural={props.setSelectedMural}
-              setSelectedTour={props.setSelectedTour}
-              setSelectedCollection={props.setSelectedCollection}
+              setSelectedResource={props.setSelectedResource}
+              setResourceType={props.setResourceType}
             />
           );
         })}
@@ -151,9 +149,8 @@ function SearchMenu(props: ISearchMenuProps) {
               key={tour.id}
               handleMuralClick={props.handleMuralClick}
               handleCancel={props.handleCancel}
-              setSelectedMural={props.setSelectedMural}
-              setSelectedTour={props.setSelectedTour}
-              setSelectedCollection={props.setSelectedCollection}
+              setSelectedResource={props.setSelectedResource}
+              setResourceType={props.setResourceType}
             />
           );
         })}
@@ -165,9 +162,8 @@ function SearchMenu(props: ISearchMenuProps) {
               key={collection.id}
               handleMuralClick={props.handleMuralClick}
               handleCancel={props.handleCancel}
-              setSelectedMural={props.setSelectedMural}
-              setSelectedTour={props.setSelectedTour}
-              setSelectedCollection={props.setSelectedCollection}
+              setSelectedResource={props.setSelectedResource}
+              setResourceType={props.setResourceType}
             />
           );
         })}
