@@ -31,7 +31,8 @@ function App() {
   const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
 
   const [murals, setMurals] = useState<any>([]);
-  const [selectedMural, setSelectedMural] = useState<any>(null);
+  const [resourceType, setResourceType] = useState<FORM>(FORM.MURAL);
+  const [selectedResource, setSelectedResource] = useState<any>(null);
 
   const [tours, setTours] = useState<any>([]);
 
@@ -111,13 +112,14 @@ function App() {
   };
 
   /**
-   * When a mural marker is clicked, open the mural form
+   * When a resource marker is clicked, open its respective form
    */
   useEffect(() => {
-    if (!selectedMural) return;
-    toggleSidebar(FORM.MURAL);
+    if (selectedResource) {
+      toggleSidebar(resourceType);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMural]);
+  }, [selectedResource]);
 
   useEffect(() => {
     getMural();
@@ -147,7 +149,7 @@ function App() {
         <Map
           tours={tours}
           murals={murals}
-          muralClick={(mural: any) => setSelectedMural(mural)}
+          muralClick={(mural: any) => setSelectedResource(mural)}
           ref={mapRef}
         />
         <DropdownMenu
@@ -162,15 +164,17 @@ function App() {
           closeSidebar={toggleSidebar}
         >
           {activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
+            <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm handleCancel={toggleSidebar} />
+            <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
-            <TourForm handleCancel={toggleSidebar} />
+            <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : (
             <SearchMenu
               handleMuralClick={handleSearchedMuralZoom}
               handleCancel={toggleSidebarNoWarning}
+              setSelectedResource={setSelectedResource}
+              setResourceType={setResourceType}
             />
           )}
         </Sidebar>
@@ -179,7 +183,7 @@ function App() {
           handleStay={() => setFormWarning(false)}
           handleLeave={() => {
             leaveForm();
-            setSelectedMural(null);
+            setSelectedResource(null);
           }}
         />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
