@@ -72,8 +72,18 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
     if (!tour || !Object.keys(tour)) return;
     setTitle(tour.name);
     setDescription(tour.description);
-    setMuralsInTour(tour.murals);
   }, [tour])
+
+  useEffect(() => {
+    if (!tour || murals.length === 0) return;
+    let temp: any[] = [];
+    tour.murals.forEach((tourMural: any) => {
+      let found = murals.find((mural: any) => mural.id === tourMural.id);
+      console.log(found);
+      temp = ([...temp, found]);
+    })
+    setMuralsInTour(temp);
+  }, [tour, murals])
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return;

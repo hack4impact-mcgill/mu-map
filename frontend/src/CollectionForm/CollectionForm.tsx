@@ -67,8 +67,18 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
     if (!collection || !Object.keys(collection)) return;
     setTitle(collection.name);
     setDescription(collection.description);
-    setMuralsInCollection(collection.murals);
   }, [collection])
+
+  useEffect(() => {
+    if (!collection || murals.length === 0) return;
+    let temp: any[] = [];
+    collection.murals.forEach((tourMural: any) => {
+      let found = murals.find((mural: any) => mural.id === tourMural.id);
+      console.log(found);
+      temp = ([...temp, found]);
+    })
+    setMuralsInCollection(temp);
+  }, [collection, murals])  
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return
