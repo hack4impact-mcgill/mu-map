@@ -79,7 +79,6 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
     let temp: any[] = [];
     tour.murals.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
-      console.log(found);
       temp = ([...temp, found]);
     })
     setMuralsInTour(temp);

@@ -74,7 +74,6 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
     let temp: any[] = [];
     collection.murals.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
-      console.log(found);
       temp = ([...temp, found]);
     })
     setMuralsInCollection(temp);
