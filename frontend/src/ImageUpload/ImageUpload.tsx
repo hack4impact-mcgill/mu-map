@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, IconButton } from "@material-ui/core";
 import {
   makeStyles,
@@ -9,6 +9,7 @@ import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
 import firebase from "firebase/app";
 import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,6 +64,15 @@ function ImageUpload({
   imgsUrlAndPath,
 }: IImageUpload) {
   const styles = useStyles();
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  
+  /**
+   * Enable image deletion for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+
   function handleUpload(event: any) {
     const image = event.target.files[0];
     if (image) {
@@ -127,11 +137,13 @@ function ImageUpload({
 
   return (
     <div className={styles.root}>
-
-      <Button variant="contained" component="label" className={styles.uploadButton}>
-        Upload Mural Picture
-        <input type="file" hidden onChange={handleUpload} accept="image/*" />
-      </Button>
+      {
+        isAdmin &&
+        <Button variant="contained" component="label" className={styles.uploadButton}>
+          Upload Mural Picture
+          <input type="file" hidden onChange={handleUpload} accept="image/*" />
+        </Button>
+      }
       <div className={styles.imageContainer}>
         {imgsUrlAndPath.map((urlAndPath) => {
           return (
@@ -139,12 +151,15 @@ function ImageUpload({
               className={styles.imageCard}
               key={urlAndPath.url + "_"}
             >
+            {
+              isAdmin &&
               <IconButton
                 onClick={() => handleRemove(urlAndPath.path)}
                 className={styles.deleteButton}
-              >
+                >
                 <HighlightOffOutlinedIcon color="secondary" />
               </IconButton>
+              }
               <img
                 alt="mural"
                 className={styles.muralImage}
