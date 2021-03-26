@@ -31,7 +31,7 @@ function MultiAddItem(props: IMultiAddItemProps) {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   
   /**
-   * Enable image deletion for admin users
+   * Enable multi-add item editing and deletion for admin users
    */
   const userContext = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);

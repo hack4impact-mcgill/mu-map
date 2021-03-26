@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -12,6 +12,8 @@ import {
   MTL_MIN_LATITUDE,
 } from "../constants/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Context from "context";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +37,8 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
   const [options, setOptions] = useState([]);
   const [response, setResponse] = useState([]);
   const loading = open && options.length === 0;
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     let active = true;
@@ -79,6 +83,12 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
     }
   }, [open]);
 
+  /**
+   * Enable editing for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+
   function updateCoordinates(selection: string) {
     const filtered: any = response.filter((option: any) => {
       return option.place_name === selection;
@@ -93,47 +103,56 @@ export default function AddressSearchBar(props: IAddressSearchBarProps) {
 
   return (
     <div className={styles.root}>
-      <Autocomplete
-        freeSolo={false}
-        disableClearable
-        open={open}
-        loading={loading}
-        id="address-search-bar"
-        options={options}
-        defaultValue={props.defaultAddress}
-        filterOptions={(options) => options}
-        onOpen={() => {
-          setOpen(true);
-        }}
-        onClose={() => {
-          setOpen(false);
-        }}
-        onChange={(event: any, selection: string) =>
-          updateCoordinates(selection)
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            id="autocomplete-text-f"
-            label="Address"
-            variant="outlined"
-            size="small"
-            placeholder="Type at least two characters"
-            onChange={(e) => setQuery(e.target.value.toLowerCase())}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <Fragment>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </Fragment>
-              ),
+      {
+        isAdmin ? (
+          <Autocomplete
+            freeSolo={false}
+            disableClearable
+            open={open}
+            loading={loading}
+            id="address-search-bar"
+            options={options}
+            defaultValue={props.defaultAddress}
+            filterOptions={(options) => options}
+            onOpen={() => {
+              setOpen(true);
             }}
+            onClose={() => {
+              setOpen(false);
+            }}
+            onChange={(event: any, selection: string) =>
+              updateCoordinates(selection)
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                id="autocomplete-text-f"
+                label="Address"
+                variant="outlined"
+                size="small"
+                placeholder="Type at least two characters"
+                onChange={(e) => setQuery(e.target.value.toLowerCase())}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <Fragment>
+                      {loading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </Fragment>
+                  ),
+                }}
+              />
+            )}
           />
-        )}
-      />
+          ) : (
+          <div>
+            <Typography variant="caption" color="textSecondary">Address</Typography>
+            <Typography variant="body1">{props.defaultAddress}</Typography>
+          </div>
+        )
+      }
     </div>
   );
 }

@@ -255,7 +255,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
               )
             }
           />
-          <Typography variant="body1" display="block" color="textSecondary">
+          <Typography variant="caption" display="block" color="textSecondary">
             Year
           </Typography>
           <InputBase
