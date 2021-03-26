@@ -22,6 +22,7 @@ function App() {
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const [signInError, setSignInError] = useState<string>("");
   const [user, setUser] = useState<any>({});
+  const [JWTtoken, setJWTtoken] = useState<any>();
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
@@ -39,6 +40,7 @@ function App() {
       .then(() => {
         handleCancelSignin();
         setSignInError("");
+        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true))
       })
       .catch((error: any) => {
         console.log(error.message);
@@ -54,6 +56,7 @@ function App() {
 
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
+    setJWTtoken(null);
   };
 
   useEffect(() => {
@@ -116,7 +119,7 @@ function App() {
 
   return (
     <div className="App">
-      <Context.Provider value={{ user: user }}>
+      <Context.Provider value={{ user: user, token : JWTtoken }}>
         <SigninForm
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}

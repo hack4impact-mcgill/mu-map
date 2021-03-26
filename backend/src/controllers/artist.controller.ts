@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import { Artist, ArtistInterface } from "../models/artist.model";
 import { EmptyResultError, ValidationError } from "sequelize";
 import { ArtistService } from "../services/artist.service";
+import { TokenValidator } from "./utils/TokenValidator";
+import { TokenError } from "./customErrors/TokenError";
 
 export class ArtistController {
   public artistService: ArtistService = new ArtistService();
-
+  private tokenValidator: TokenValidator = new TokenValidator();
   /**
    * POST /artist
    * @param req HTTP request containing ArtistInterface attributes:
@@ -17,9 +19,13 @@ export class ArtistController {
   public async create(req: Request, res: Response) {
     const params: ArtistInterface = req.body;
     try {
+      await this.tokenValidator.validateToken(req.headers.authorization);
       const createdArtist: Artist = await this.artistService.create(params);
       res.status(201).json(createdArtist);
     } catch (e) {
+      if (e instanceof TokenError) {
+        res.status(403).json({ error: e.message });
+      }
       if (e instanceof ValidationError) {
         res.status(400).json({ error: "Invalid body parameters!" });
       } else {
