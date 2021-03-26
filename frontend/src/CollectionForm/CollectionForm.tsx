@@ -37,10 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ICollectionFormProps {
+  collection?: any;
+  muralsData?: any;
   handleCancel: () => void;
 };
 
-function CollectionForm({ handleCancel }: ICollectionFormProps) {
+function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFormProps) {
   const [murals, setMurals] = useState<any>([]);
   const [muralsInCollection, setMuralsInCollection] = useState<any>([]);
   const [muralResults, setMuralResults] = useState<any>([]);
@@ -57,6 +59,25 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
   const [popup, setPopup] = useState<boolean>(false);
 
   const styles = useStyles();
+
+  /**
+   * Populate the form when an existing collection is passed as a prop
+   */
+  useEffect(() => {
+    if (!collection || !Object.keys(collection)) return;
+    setTitle(collection.name);
+    setDescription(collection.description);
+  }, [collection])
+
+  useEffect(() => {
+    if (!collection || murals.length === 0) return;
+    let temp: any[] = [];
+    collection.murals.forEach((tourMural: any) => {
+      let found = murals.find((mural: any) => mural.id === tourMural.id);
+      temp = ([...temp, found]);
+    })
+    setMuralsInCollection(temp);
+  }, [collection, murals])  
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return
@@ -92,10 +113,14 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
   }, []);
 
   useEffect(() => {
-    const filtered = murals.filter((mural: any) => {
+    if (muralQuery) {
+      const filtered = murals.filter((mural: any) => {
       return mural.name.toLowerCase().includes(muralQuery)
-    });
-    setMuralResults(filtered);
+      });
+      setMuralResults(filtered);
+    } else {
+      setMuralResults(murals);
+    }
   }, [muralQuery, murals]);
 
   return (
@@ -108,6 +133,7 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
           <InputBase
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the collection"
+            defaultValue={collection?.name}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ 'aria-label': 'New collection title' }}
             onClick={() => setEditingTitle(true)}
@@ -125,6 +151,7 @@ function CollectionForm({ handleCancel }: ICollectionFormProps) {
             multiline
             rows={4}
             placeholder="Add a description"
+            defaultValue={collection?.description}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
             onBlur={() => setEditingDesc(false)}

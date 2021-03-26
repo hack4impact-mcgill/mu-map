@@ -68,13 +68,13 @@ function DonationModal(props: IDonationModalProps) {
               open-air MUseum!
             </p>
             <div className={classes.logo}>
-               <MULogo width="50%" height="100%"></MULogo>
+              <MULogo width="50%" height="100%" color="#E6E5E6" ></MULogo>
             </div>
-           
+
           </div>
         </DialogContentText>
       </DialogContent>
-        <Button
+      <Button
         className={classes.button}
         size="large"
         variant="contained"
@@ -98,8 +98,8 @@ function DonationModal(props: IDonationModalProps) {
       >
         Donate
       </Button>
-      
-    </Dialog>
+
+    </Dialog >
   );
 }
 

@@ -42,10 +42,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ITourFormProps {
+  tour?: any;
+  muralsData?: any;
   handleCancel: () => void;
 }
 
-function TourForm({ handleCancel }: ITourFormProps) {
+function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
   const [murals, setMurals] = useState<any>([]);
   const [muralsInTour, setMuralsInTour] = useState<any>([]);
   const [muralResults, setMuralResults] = useState<any>([]);
@@ -62,6 +64,25 @@ function TourForm({ handleCancel }: ITourFormProps) {
   const [popup, setPopup] = useState<boolean>(false);
 
   const styles = useStyles();
+
+  /**
+   * Populate the form when an existing tour is passed as a prop
+   */
+   useEffect(() => {
+    if (!tour || !Object.keys(tour)) return;
+    setTitle(tour.name);
+    setDescription(tour.description);
+  }, [tour])
+
+  useEffect(() => {
+    if (!tour || murals.length === 0) return;
+    let temp: any[] = [];
+    tour.murals.forEach((tourMural: any) => {
+      let found = murals.find((mural: any) => mural.id === tourMural.id);
+      temp = ([...temp, found]);
+    })
+    setMuralsInTour(temp);
+  }, [tour, murals])
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return;
@@ -119,11 +140,15 @@ function TourForm({ handleCancel }: ITourFormProps) {
    * Filters through murals to determine what should appear in autocomplete
    */
   useEffect(() => {
-    const filtered = murals.filter((mural: any) => {
-      return mural.name.toLowerCase().includes(muralQuery);
-    });
-    setMuralResults(filtered);
-  }, [muralQuery, murals]);
+    if (muralQuery) {
+      const filtered = murals.filter((mural: any) => {
+        return mural.name.toLowerCase().includes(muralQuery);
+      });
+      setMuralResults(filtered);
+    } else {
+      setMuralResults(murals);
+    }
+  }, [muralQuery, murals, muralsData]);
 
   return (
     <div>
@@ -139,6 +164,7 @@ function TourForm({ handleCancel }: ITourFormProps) {
           <InputBase
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the tour"
+            defaultValue={tour?.name}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ "aria-label": "New tour title" }}
             onClick={() => setEditingTitle(true)}
@@ -158,6 +184,7 @@ function TourForm({ handleCancel }: ITourFormProps) {
             multiline
             rows={4}
             placeholder="Add a description"
+            defaultValue={tour?.description}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
             onBlur={() => setEditingDesc(false)}

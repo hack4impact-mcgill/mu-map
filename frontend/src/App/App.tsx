@@ -10,12 +10,13 @@ import SigninForm from "../SignInForm/SigninForm";
 import Context from "../context";
 import "firebase/auth";
 import FirebaseAuth from "../firebase";
-import { CREATE_MURAL_API, FORM } from "constants/constants";
+import { CREATE_MURAL_API, FORM, GET_ALL_TOUR } from "constants/constants";
 import LeaveWarning from "components/LeaveWarning";
 import TourForm from "TourForm/TourForm";
 import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
-import DonationModal from "DonationModal/DonationModal"
+import DonationModal from "DonationModal/DonationModal";
+import WelcomeModal from "WelcomeModal/WelcomeModal";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -28,9 +29,13 @@ function App() {
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
   const [donateOpen, setDonateOpen] = useState<boolean>(false);
+  const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
 
   const [murals, setMurals] = useState<any>([]);
-  const [selectedMural, setSelectedMural] = useState<any>(null);
+  const [resourceType, setResourceType] = useState<FORM>(FORM.MURAL);
+  const [selectedResource, setSelectedResource] = useState<any>(null);
+
+  const [tours, setTours] = useState<any>([]);
 
   const mapRef: any = useRef(null);
 
@@ -79,7 +84,7 @@ function App() {
 
   const toggleSidebarNoWarning = () => {
     setSidebarOpen(!sidebarOpen);
-  }
+  };
 
   const leaveForm = () => {
     setSidebarOpen(false);
@@ -93,6 +98,13 @@ function App() {
     setMurals(data.rows);
   };
 
+  const getTour = async () => {
+    const response = await fetch(GET_ALL_TOUR);
+    const data = await response.json();
+
+    setTours(data.tours);
+  };
+
   /**
    * Zooms the map to the coordiantes of the clicked searched mural
    * @param long longitude
@@ -103,16 +115,18 @@ function App() {
   };
 
   /**
-   * When a mural marker is clicked, open the mural form
+   * When a resource marker is clicked, open its respective form
    */
   useEffect(() => {
-    if (!selectedMural) return;
-    toggleSidebar(FORM.MURAL);
+    if (selectedResource) {
+      toggleSidebar(resourceType);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMural]);
+  }, [selectedResource]);
 
   useEffect(() => {
     getMural();
+    getTour();
   }, []);
 
   const sidebarTitle = "";
@@ -127,10 +141,18 @@ function App() {
           open={signingIn}
         />
         <SearchButton toggleSidebar={toggleSidebar} />
-        <DonationModal open={donateOpen} handleClose={() => setDonateOpen(false)}/>
+        <WelcomeModal
+          open={welcomeOpen}
+          handleClose={() => setWelcomeOpen(false)}
+        />
+        <DonationModal
+          open={donateOpen}
+          handleClose={() => setDonateOpen(false)}
+        />
         <Map
+          tours={tours}
           murals={murals}
-          muralClick={(mural: any) => setSelectedMural(mural)}
+          muralClick={(mural: any) => setSelectedResource(mural)}
           ref={mapRef}
         />
         <DropdownMenu
@@ -145,15 +167,17 @@ function App() {
           closeSidebar={toggleSidebar}
         >
           {activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedMural} handleCancel={toggleSidebar} />
+            <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm handleCancel={toggleSidebar} />
+            <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
-            <TourForm handleCancel={toggleSidebar} />
+            <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : (
             <SearchMenu
               handleMuralClick={handleSearchedMuralZoom}
               handleCancel={toggleSidebarNoWarning}
+              setSelectedResource={setSelectedResource}
+              setResourceType={setResourceType}
             />
           )}
         </Sidebar>
@@ -162,7 +186,7 @@ function App() {
           handleStay={() => setFormWarning(false)}
           handleLeave={() => {
             leaveForm();
-            setSelectedMural(null);
+            setSelectedResource(null);
           }}
         />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />

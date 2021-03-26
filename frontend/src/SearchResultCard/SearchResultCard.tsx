@@ -36,6 +36,8 @@ interface ISearchCardSetProps {
   item: any;
   handleMuralClick: (lat: number, long: number) => void
   handleCancel: () => void
+  setSelectedResource: (resource: any) => void;
+  setResourceType: (type: FORM) => void;
 }
 
 function SearchResultCard(props: ISearchCardSetProps) {
@@ -57,7 +59,18 @@ function SearchResultCard(props: ISearchCardSetProps) {
   function handleClick() {
     switch (props.type) {
       case FORM.MURAL:
+        props.setResourceType(FORM.MURAL);
+        props.setSelectedResource(props.item)
         props.handleMuralClick(props.item.coordinates.coordinates[0],props.item.coordinates.coordinates[1])
+        break;
+      case FORM.TOUR:
+        props.setResourceType(FORM.TOUR);
+        props.setSelectedResource(props.item)
+        break;
+      case FORM.COLLECTION:
+        props.setResourceType(FORM.COLLECTION);
+        props.setSelectedResource(props.item)
+        break;
     }
     props.handleCancel()
   }
