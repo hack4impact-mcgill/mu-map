@@ -18,7 +18,6 @@ import { CREATE_MURAL_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import Directions from "../Directions/Directions";
-import classes from "*.module.css";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -210,7 +209,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     path = path.replaceAll("%2F", "/");
     return path;
   }
-
+  
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -312,8 +311,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         <Directions
         open={directionOpen}
         handleClose={() => setDirectionOpen(false)}
-        muralCoords={addressCoords}
-        muralName={name}
+        mural={mural}
       ></Directions>
       
       <div>

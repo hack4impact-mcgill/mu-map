@@ -1,5 +1,10 @@
-import React from "react";
-import { createStyles, makeStyles, StylesProvider, Theme } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import {
+  createStyles,
+  makeStyles,
+  StylesProvider,
+  Theme,
+} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -13,14 +18,16 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import Paper from "@material-ui/core/Paper";
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import { TransitionProps } from "@material-ui/core/transitions";
+import { MAPBOX_DIRECTIONS_API } from "../constants/constants";
+import {mural} from "../interfaces/index"
+import axios from "axios";
 
 interface IDirctionsProps {
   open: boolean;
   handleClose: () => void;
-  muralCoords: number[];
-  muralName: string;
+  mural: mural;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,10 +51,11 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "center",
       margin: theme.spacing(1),
-      marginRight: theme.spacing(3)
+      marginRight: theme.spacing(3),
     },
   })
 );
+
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -60,6 +68,9 @@ const Transition = React.forwardRef(function Transition(
 
 function Directions(props: IDirctionsProps) {
   const classes = useStyles();
+  const [response, setResponse] = useState<any>({});
+  const [timeRequired, setTimeRequired] = useState<string>("");
+  const mural = props.mural
 
   // get current location
   if ("geolocation" in navigator) {
@@ -68,31 +79,60 @@ function Directions(props: IDirctionsProps) {
     console.log("Location not available");
   }
 
+  function getRoute(start: number[]) {
+    // use this as starting point for testing, my current position exceeds the maximum distance limit
+    start[0] =- 73.572
+    start[1] = 45.5048
+    var url =
+      MAPBOX_DIRECTIONS_API +
+      start[0] +
+      "," +
+      start[1] +
+      ";" +
+      mural.coordinates.coordinates[0]+
+      "," +
+      mural.coordinates.coordinates[1] +
+      "?steps=true&geometries=geojson&access_token=" +
+      process.env.REACT_APP_MAPBOX_TOKEN;
+    axios
+      .get(url)
+      .then((res) => {
+        setResponse(res.data);
+        console.log(res.data);
+        const timeRequired = new Date(res.data.routes[0].weight * 1000).toISOString().substr(11, 8)
+        console.log(timeRequired)
+        setTimeRequired(timeRequired)
+      })
+      .catch(() => {
+        console.log("error");
+      });
+  }
+
+
+
   var options = {
     enableHighAccuracy: true,
-    timeout: 5000,
+    timeout: 60000,
     maximumAge: 0,
   };
 
   function success(pos: any) {
-    var currentPos = pos.coords;
-
-    console.log("Your current position is:");
-    console.log(currentPos)
-    console.log(`Latitude : ${currentPos.latitude}`);
-    console.log(`Longitude: ${currentPos.longitude}`);
-    console.log(`More or less ${currentPos.accuracy} meters.`);
+    var currentCoords = [pos.coords.longitude, pos.coords.latitude];
+    console.log("Finish coords")
+    getRoute(currentCoords)
+    console.log("Finish response")
   }
 
   function error(err: any) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 
-  navigator.geolocation.getCurrentPosition(success, error, options);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }, []);
 
   return (
     <div className={classes.container}>
-        
       <Dialog
         fullScreen
         open={props.open}
@@ -110,89 +150,90 @@ function Directions(props: IDirctionsProps) {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              {props.muralName}
+              {mural?.name}
             </Typography>
           </Toolbar>
         </AppBar>
         <Paper style={{ maxHeight: 900, overflow: "auto" }}>
           <List>
-          <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+            <ListItem>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
             <ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
-            <Divider /><ListItem>
-                <div className={classes.arrowContainer}>
-                    <ArrowUpwardIcon/>
-                    <p>500 m</p>
-                </div>
-              <ListItemText primary="Test text"/>
+            <Divider />
+            <ListItem>
+              <div className={classes.arrowContainer}>
+                <ArrowUpwardIcon />
+                <p>500 m</p>
+              </div>
+              <ListItemText primary="Test text" />
             </ListItem>
             <Divider />
           </List>
