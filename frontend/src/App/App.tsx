@@ -88,7 +88,6 @@ function App() {
   const leaveForm = () => {
     setSidebarOpen(false);
     setFormWarning(false);
-    // setSelectedResource(null);
   };
 
   const getMural = async () => {
