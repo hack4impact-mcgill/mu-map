@@ -4,6 +4,7 @@ import {
   InputAdornment,
   Typography,
   Snackbar,
+  Button,
 } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
@@ -15,7 +16,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 import { CREATE_MURAL_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
-import ImageUpload from '../ImageUpload/ImageUpload'
+import ImageUpload from "../ImageUpload/ImageUpload";
+import Directions from "../Directions/Directions";
+import classes from "*.module.css";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,6 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
     name: {
       fontSize: "180%",
     },
+    directionButton: {
+      display: "block",
+      margin: "0 auto"
+    }
   })
 );
 
@@ -51,12 +58,11 @@ interface IMuralFormProps {
 }
 
 interface Image {
-  url: string,
-  path: string
+  url: string;
+  path: string;
 }
 
 function MuralForm({ mural, handleCancel }: IMuralFormProps) {
-
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -80,6 +86,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [hoveringDesc, setHoveringDesc] = useState<boolean>(false);
 
   const [popup, setPopup] = useState<boolean>(false);
+  const [directionOpen, setDirectionOpen] = useState<boolean>(false);
 
   /**
    * Populate the form when an existing mural is passed as a prop
@@ -98,13 +105,13 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     setPartners(mural.partners);
     setArtist(mural.artistId);
     if (mural.imgURLs) {
-      setImgUrlsAndPath(mural.imgURLs.map(
-        (url: string) => {
-          return { url: url, path: pathFromUrl(url) }
-        }
-      ));
+      setImgUrlsAndPath(
+        mural.imgURLs.map((url: string) => {
+          return { url: url, path: pathFromUrl(url) };
+        })
+      );
     }
-  }, [mural])
+  }, [mural]);
 
   function submitForm() {
     if (name === "") {
@@ -139,28 +146,28 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       socialMedia: socialMedia,
       address: address,
       neighbourhood: neighbourhood,
-      imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
+      imgURLs: imgUrlsAndPath.map((urlAndPath) => urlAndPath.url),
     } as any;
 
     let existingMural = mural && Object.keys(mural);
     if (existingMural) payload.id = mural.id;
 
     axios({
-      method: existingMural ? 'put' : 'post',
-      url: existingMural ?
-        `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
-      data: payload
-    })
-      .then(
-        (response) => {
-          console.log(response);
-          setPopup(true);
-          setTimeout(() => setPopup(false), 5000);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      method: existingMural ? "put" : "post",
+      url: existingMural
+        ? `${CREATE_MURAL_API}/${payload.id}`
+        : CREATE_MURAL_API,
+      data: payload,
+    }).then(
+      (response) => {
+        console.log(response);
+        setPopup(true);
+        setTimeout(() => setPopup(false), 5000);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   function handleAddressUpdate(
@@ -174,16 +181,21 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   }
 
   function handleImgUrlAdd(urlToAdd: string, pathToAdd: string) {
-    setImgUrlsAndPath([...imgUrlsAndPath, {
-      "url": urlToAdd,
-      "path": pathToAdd
-    }])
+    setImgUrlsAndPath([
+      ...imgUrlsAndPath,
+      {
+        url: urlToAdd,
+        path: pathToAdd,
+      },
+    ]);
   }
 
   function handleImgUrlRemove(pathToRemove: string) {
-    var urlsAndPaths = [...imgUrlsAndPath]
-    const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
-    setImgUrlsAndPath(newUrlsAndPaths)
+    var urlsAndPaths = [...imgUrlsAndPath];
+    const newUrlsAndPaths = urlsAndPaths.filter(
+      (urlAndPath) => pathToRemove !== urlAndPath.path
+    );
+    setImgUrlsAndPath(newUrlsAndPaths);
   }
 
   /**
@@ -297,6 +309,26 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           />
         </div>
       </form>
+        <Directions
+        open={directionOpen}
+        handleClose={() => setDirectionOpen(false)}
+        muralCoords={addressCoords}
+        muralName={name}
+      ></Directions>
+      
+      <div>
+        <Button
+        color="primary"
+        size="medium"
+        variant="contained"
+        disableElevation
+        className={styles.directionButton}
+        onClick={() => setDirectionOpen(true)}
+      >
+        Direction
+      </Button>
+      </div>
+      
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Mural published successfully!</Alert>
