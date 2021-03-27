@@ -85,13 +85,10 @@ function App() {
     formName && setActiveForm(formName);
   };
 
-  const toggleSidebarNoWarning = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
   const leaveForm = () => {
     setSidebarOpen(false);
     setFormWarning(false);
+    // setSelectedResource(null);
   };
 
   const getMural = async () => {
@@ -121,7 +118,7 @@ function App() {
    * When a resource marker is clicked, open its respective form
    */
   useEffect(() => {
-    if (selectedResource) toggleSidebar(activeForm);
+    if (selectedResource && !sidebarOpen) toggleSidebar(activeForm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResource]);
 
@@ -179,7 +176,7 @@ function App() {
           ) : (
             <SearchMenu
               handleMuralClick={handleSearchedMuralZoom}
-              handleCancel={toggleSidebarNoWarning}
+              handleCancel={leaveForm}
               setSelectedResource={setSelectedResource}
               setResourceType={setActiveForm}
             />
