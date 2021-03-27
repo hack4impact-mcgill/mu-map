@@ -187,7 +187,7 @@ function App() {
           handleStay={() => setFormWarning(false)}
           handleLeave={leaveForm}
         />
-        <PlusButton isVisible={true} handleClick={toggleSidebar} />
+        <PlusButton isVisible={isSignedIn} handleClick={toggleSidebar} />
       </Context.Provider>
     </div>
   );
