@@ -31,7 +31,6 @@ function App() {
   const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
 
   const [murals, setMurals] = useState<any>([]);
-  const [resourceType, setResourceType] = useState<FORM>(FORM.MURAL);
   const [selectedResource, setSelectedResource] = useState<any>(null);
 
   const [tours, setTours] = useState<any>([]);
@@ -73,8 +72,15 @@ function App() {
 
   const handleCancelSignin = () => setSigningIn(false);
 
+  /**
+   * If opening the sidebar, set the appropriate form type.
+   * If closing the sidebar and signed in, warn the admin
+   * to save progress.
+   * @param formName Type of form to be opened in the sidebar
+   */
   const toggleSidebar = (formName: FORM = FORM.MURAL) => {
-    if (sidebarOpen) return setFormWarning(true);
+    if (sidebarOpen && isSignedIn) return setFormWarning(true);
+    else if (sidebarOpen) return leaveForm();
     setSidebarOpen(!sidebarOpen);
     formName && setActiveForm(formName);
   };
@@ -115,9 +121,7 @@ function App() {
    * When a resource marker is clicked, open its respective form
    */
   useEffect(() => {
-    if (selectedResource) {
-      toggleSidebar(resourceType);
-    }
+    if (selectedResource) toggleSidebar(activeForm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResource]);
 
@@ -149,7 +153,10 @@ function App() {
         <Map
           tours={tours}
           murals={murals}
-          muralClick={(mural: any) => setSelectedResource(mural)}
+          muralClick={(mural: any) => {
+            setActiveForm(FORM.MURAL);
+            setSelectedResource(mural);
+          }}
           ref={mapRef}
         />
         <DropdownMenu
@@ -174,17 +181,14 @@ function App() {
               handleMuralClick={handleSearchedMuralZoom}
               handleCancel={toggleSidebarNoWarning}
               setSelectedResource={setSelectedResource}
-              setResourceType={setResourceType}
+              setResourceType={setActiveForm}
             />
           )}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
           handleStay={() => setFormWarning(false)}
-          handleLeave={() => {
-            leaveForm();
-            setSelectedResource(null);
-          }}
+          handleLeave={leaveForm}
         />
         <PlusButton isVisible={true} handleClick={toggleSidebar} />
       </Context.Provider>
