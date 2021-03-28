@@ -95,8 +95,6 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: ID
         <MenuItem onClick={isSignedIn ? handleSignout : handleSignin}>
           {isSignedIn ? buttonText.signout : buttonText.signin}
         </MenuItem>
-        <hr></hr>
-        <MenuItem onClick={handleClose}>Cancel</MenuItem>
       </Menu>
     </div>
   );
