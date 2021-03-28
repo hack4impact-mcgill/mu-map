@@ -83,7 +83,7 @@ function Directions(props: IDirctionsProps) {
 
   function getRoute(start: number[]) {
     // use this as starting point for testing, my current position exceeds the maximum distance limit
-    start[0] = -73.572;
+    start[0] = -73.072;
     start[1] = 45.5048;
     var url =
       MAPBOX_DIRECTIONS_API +
@@ -138,7 +138,7 @@ function Directions(props: IDirctionsProps) {
       timeRequired[1] += 1; // rounding
     }
     if (timeRequired[0] !== 0) {
-      return timeRequired[0] + " hrs," + timeRequired[1] + " mins";
+      return timeRequired[0] + " hrs, " + timeRequired[1] + " mins";
     } else if (timeRequired[1] !== 0) {
       return timeRequired[1] + " mins";
     } else {
