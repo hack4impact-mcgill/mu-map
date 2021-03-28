@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     directionButton: {
       display: "block",
-      margin: "0 auto"
-    }
+      margin: "0 auto",
+    },
   })
 );
 
@@ -87,6 +87,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [popup, setPopup] = useState<boolean>(false);
   const [directionOpen, setDirectionOpen] = useState<boolean>(false);
 
+  const [currentPos, setCurrentPos] = useState<number[]>([]);
+
   /**
    * Populate the form when an existing mural is passed as a prop
    */
@@ -111,6 +113,24 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       );
     }
   }, [mural]);
+
+  function success(pos: any) {
+    setCurrentPos([pos.coords.longitude, pos.coords.latitude]);
+  }
+
+  function error(err: any) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 60000,
+    maximumAge: 0,
+  };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }, []);
 
   function submitForm() {
     if (name === "") {
@@ -209,7 +229,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     path = path.replaceAll("%2F", "/");
     return path;
   }
-  
+
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -308,25 +328,27 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           />
         </div>
       </form>
-        <Directions
+      <Directions
         open={directionOpen}
         handleClose={() => setDirectionOpen(false)}
-        mural={mural}
+        name={name}
+        coordinates={[currentPos, addressCoords]}
+        wpNames={[name]}
       ></Directions>
-      
+
       <div>
         <Button
-        color="primary"
-        size="medium"
-        variant="contained"
-        disableElevation
-        className={styles.directionButton}
-        onClick={() => setDirectionOpen(true)}
-      >
-        Direction
-      </Button>
+          color="primary"
+          size="medium"
+          variant="contained"
+          disableElevation
+          className={styles.directionButton}
+          onClick={() => setDirectionOpen(true)}
+        >
+          Direction
+        </Button>
       </div>
-      
+
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Mural published successfully!</Alert>

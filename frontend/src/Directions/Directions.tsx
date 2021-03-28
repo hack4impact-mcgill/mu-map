@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from "react";
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-} from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Slide from "@material-ui/core/Slide";
 import Paper from "@material-ui/core/Paper";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import { TransitionProps } from "@material-ui/core/transitions";
+import CustomLegs from "../CustomLegs/CustomLegs";
 import { MAPBOX_DIRECTIONS_API } from "../constants/constants";
-import { mural } from "../interfaces/index";
 import axios from "axios";
 
-interface IDirctionsProps {
+interface IDirectionsProps {
   open: boolean;
   handleClose: () => void;
-  mural: mural;
+  name: string;
+  coordinates: number[][];
+  wpNames: string[]; // waypoint names excluding starting point
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       position: "relative",
-      height: "13%"
+      height: "13%",
     },
     title: {
       marginLeft: theme.spacing(2),
@@ -57,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       display: "flex",
       flexDirection: "column",
-    }
+    },
   })
 );
 
@@ -68,66 +62,46 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function Directions(props: IDirctionsProps) {
+function Directions(props: IDirectionsProps) {
   const classes = useStyles();
   const [response, setResponse] = useState<any>({});
   const [timeRequired, setTimeRequired] = useState<number[]>([]);
   const [totalDistance, setTotalDistance] = useState<number>(0);
-  const mural = props.mural;
+  const [waypoints, setWaypoints] = useState<any[]>([]);
 
-  // get current location
-  if ("geolocation" in navigator) {
-    console.log("Location available");
-  } else {
-    console.log("Location not available");
-  }
-
-  function getRoute(start: number[]) {
-    // use this as starting point for testing, my current position exceeds the maximum distance limit
-    start[0] = -73.072;
-    start[1] = 45.5048;
+  useEffect(() => {
+    console.log(props.coordinates);
+    let coordString = "";
+    for (let i = 0; i < props.coordinates.length; i++) {
+      coordString += props.coordinates[i][0];
+      coordString += ",";
+      coordString += props.coordinates[i][1];
+      if (i !== props.coordinates.length - 1) coordString += ";";
+    }
     var url =
       MAPBOX_DIRECTIONS_API +
-      start[0] +
-      "," +
-      start[1] +
-      ";" +
-      mural.coordinates.coordinates[0] +
-      "," +
-      mural.coordinates.coordinates[1] +
+      coordString +
       "?steps=true&geometries=geojson&access_token=" +
       process.env.REACT_APP_MAPBOX_TOKEN;
     axios
       .get(url)
       .then((res) => {
-        setResponse(res.data);
-        console.log(res.data);
-        const timeRequired = new Date(res.data.routes[0].weight * 1000)
+        setResponse(res);
+        let timeRequired = new Date(res.data.routes[0].duration * 1000)
           .toISOString()
           .substr(11, 8);
-        // convert "hh:mm:ss" to an array of int type, [hh, mm, ss]
+        // Converts "hh:mm:ss" to an array of int type, [hh, mm, ss]
         setTimeRequired(timeRequired.split(":").map((time) => parseInt(time)));
-        setTotalDistance(Math.round(res.data.routes[0].distance * 10) / 10)
+        setTotalDistance(Math.round(res.data.routes[0].distance / 1000)); // m -> km
+
+        var zip = props.wpNames.map((n, i) => [n, res.data.routes[0].legs[i]]);
+        setWaypoints(zip);
+        console.log(zip);
       })
       .catch(() => {
         console.log("error");
       });
-  }
-
-  var options = {
-    enableHighAccuracy: true,
-    timeout: 60000,
-    maximumAge: 0,
-  };
-
-  function success(pos: any) {
-    var currentCoords = [pos.coords.longitude, pos.coords.latitude];
-    getRoute(currentCoords);
-  }
-
-  function error(err: any) {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
-  }
+  }, [props.coordinates]);
 
   function timingText(timeRequired: number[]) {
     if (timeRequired[2] > 30) {
@@ -141,10 +115,6 @@ function Directions(props: IDirctionsProps) {
       return "Within 1 minute";
     }
   }
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
 
   return (
     <div className={classes.container}>
@@ -166,7 +136,7 @@ function Directions(props: IDirctionsProps) {
             </IconButton>
             <div className={classes.nameContainer}>
               <Typography variant="h3" className={classes.title}>
-                {mural?.name}
+                {props.name}
               </Typography>
               <Typography variant="subtitle1" className={classes.title}>
                 {timingText(timeRequired) + totalDistance + "km"}
@@ -176,86 +146,7 @@ function Directions(props: IDirctionsProps) {
         </AppBar>
         <Paper style={{ maxHeight: 900, overflow: "auto" }}>
           <List>
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <div className={classes.arrowContainer}>
-                <ArrowUpwardIcon />
-                <p>500 m</p>
-              </div>
-              <ListItemText primary="Test text" />
-            </ListItem>
-            <Divider />
+            <CustomLegs waypoints={waypoints} />
           </List>
         </Paper>
         <Button
