@@ -8,13 +8,15 @@ import {
   Theme,
 } from "@material-ui/core";
 import axios from "axios";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import EditIcon from "@material-ui/icons/Edit";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import DragDrop from "DragDrop/DragDrop";
 import Alert from "@material-ui/lab/Alert";
 import { CREATE_MURAL_API, GET_ALL_TOUR } from "constants/constants";
+import Context from "context";
+import SearchCard from "SideBarSearch/searchCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,6 +65,8 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
 
   const [popup, setPopup] = useState<boolean>(false);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const styles = useStyles();
 
   /**
@@ -83,6 +87,12 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
     })
     setMuralsInTour(temp);
   }, [tour, murals])
+
+  /**
+   * Enable editable form fields for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return;
@@ -165,6 +175,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the tour"
             defaultValue={tour?.name}
+            disabled={!isAdmin}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ "aria-label": "New tour title" }}
             onClick={() => setEditingTitle(true)}
@@ -172,7 +183,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             onMouseEnter={() => setHoveringTitle(true)}
             onMouseLeave={() => setHoveringTitle(false)}
             endAdornment={
-              !editingTitle && (
+              !editingTitle && isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringTitle ? "primary" : "action"} />
                 </InputAdornment>
@@ -185,13 +196,14 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             rows={4}
             placeholder="Add a description"
             defaultValue={tour?.description}
+            disabled={!isAdmin}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
             onBlur={() => setEditingDesc(false)}
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
             endAdornment={
-              !editingDesc && (
+              !editingDesc && isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringDesc ? "primary" : "action"} />
                 </InputAdornment>
@@ -199,35 +211,47 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             }
           />
           <div className={styles.field}>
-            <Autocomplete
-              freeSolo={false}
-              options={muralResults.map((mural: any) => mural)}
-              getOptionLabel={(mural: any) => mural.name}
-              onChange={(e: any, value: any) => handleAddMural(value)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Add a mural"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e: any) =>
-                    setMuralQuery(e.target.value.toLowerCase())
-                  }
-                />
-              )}
-            />
+            {
+              isAdmin &&
+              <Autocomplete
+                freeSolo={false}
+                options={muralResults.map((mural: any) => mural)}
+                getOptionLabel={(mural: any) => mural.name}
+                onChange={(e: any, value: any) => handleAddMural(value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Add a mural"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e: any) =>
+                      setMuralQuery(e.target.value.toLowerCase())
+                    }
+                  />
+                )}
+              />
+            }
           </div>
-          <p className={styles.muralCount}>
-            {muralsInTour.length} / 25 murals added
-          </p>
+          {
+            isAdmin &&
+            <p className={styles.muralCount}>
+              {muralsInTour.length} / 25 murals added
+            </p>
+          }
         </div>
       </form>
-      <DragDrop
-        key={muralsInTour}
-        passedItems={muralsInTour}
-        itemsReorderedCallback={reorderMurals}
-        itemDeletedCallback={removeMural}
-      />
+      {
+        isAdmin ? (
+          <DragDrop
+            key={muralsInTour}
+            passedItems={muralsInTour}
+            itemsReorderedCallback={reorderMurals}
+            itemDeletedCallback={removeMural}
+          />
+        ) : (
+          <SearchCard searchCards={muralsInTour} />
+        )
+      }
       <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Tour published successfully!</Alert>

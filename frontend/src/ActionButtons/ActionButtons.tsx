@@ -4,7 +4,8 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,14 @@ function ActionButtons({ saveCallback, cancelCallback }: IActionButtonsProps) {
 
   const styles = useStyles();
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  /**
+   * Show cancel and save buttons for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+
   const handleSave = () => {
     saveCallback()
   };
@@ -41,7 +50,9 @@ function ActionButtons({ saveCallback, cancelCallback }: IActionButtonsProps) {
 
   return (
     <div className={styles.bottomButtonContainer}>
-      <Button
+      {
+        isAdmin &&
+        <Button
         color="secondary"
         size="small"
         variant="outlined"
@@ -49,16 +60,20 @@ function ActionButtons({ saveCallback, cancelCallback }: IActionButtonsProps) {
         onClick={handleCancel}
       >
         Cancel
-      </Button>
-      <Button
-        color="primary"
-        size="small"
-        variant="contained"
-        disableElevation
-        className={styles.bottomButton}
-        onClick={handleSave}>
-        Save
-      </Button>
+        </Button>
+      }
+      {
+        isAdmin &&
+        <Button
+          color="primary"
+          size="small"
+          variant="contained"
+          disableElevation
+          className={styles.bottomButton}
+          onClick={handleSave}>
+          Save
+        </Button>
+      }
     </div>
   )
 }
