@@ -72,6 +72,7 @@ function Directions(props: IDirctionsProps) {
   const classes = useStyles();
   const [response, setResponse] = useState<any>({});
   const [timeRequired, setTimeRequired] = useState<number[]>([]);
+  const [totalDistance, setTotalDistance] = useState<number>(0);
   const mural = props.mural;
 
   // get current location
@@ -106,6 +107,7 @@ function Directions(props: IDirctionsProps) {
           .substr(11, 8);
         // convert "hh:mm:ss" to an array of int type, [hh, mm, ss]
         setTimeRequired(timeRequired.split(":").map((time) => parseInt(time)));
+        setTotalDistance(Math.round(res.data.routes[0].distance * 10) / 10)
       })
       .catch(() => {
         console.log("error");
@@ -120,31 +122,29 @@ function Directions(props: IDirctionsProps) {
 
   function success(pos: any) {
     var currentCoords = [pos.coords.longitude, pos.coords.latitude];
-    console.log("Finish coords");
     getRoute(currentCoords);
-    console.log("Finish response");
   }
 
   function error(err: any) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
-
   function timingText(timeRequired: number[]) {
     if (timeRequired[2] > 30) {
       timeRequired[1] += 1; // rounding
     }
     if (timeRequired[0] !== 0) {
-      return timeRequired[0] + " hrs, " + timeRequired[1] + " mins";
+      return timeRequired[0] + " hrs " + timeRequired[1] + " mins, ";
     } else if (timeRequired[1] !== 0) {
-      return timeRequired[1] + " mins";
+      return timeRequired[1] + " mins, ";
     } else {
       return "Within 1 minute";
     }
   }
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }, []);
 
   return (
     <div className={classes.container}>
@@ -165,11 +165,11 @@ function Directions(props: IDirctionsProps) {
               <ArrowBackIosIcon />
             </IconButton>
             <div className={classes.nameContainer}>
-              <Typography variant="h4" className={classes.title}>
+              <Typography variant="h3" className={classes.title}>
                 {mural?.name}
               </Typography>
-              <Typography variant="h6" className={classes.title}>
-                {timingText(timeRequired)}
+              <Typography variant="subtitle1" className={classes.title}>
+                {timingText(timeRequired) + totalDistance + "km"}
               </Typography>
             </div>
           </Toolbar>
