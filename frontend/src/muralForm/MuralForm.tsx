@@ -11,7 +11,7 @@ import MultiAdd from "../multiAdd/MultiAdd";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
-import { CREATE_MURAL_API } from "../constants/constants";
+import { CREATE_MURAL_API, GET_ALL_ARTISTS_API, GET_ALL_BOROUGH_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from '../ImageUpload/ImageUpload'
 import ArtistBoroughSearch from "RegionSearch/ArtistBoroughSearch";
@@ -259,10 +259,18 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             callback={handleAddressUpdate}
           />
           <ArtistBoroughSearch
-            defaultArtist={mural?.artistId}
-            defaultBorough={mural?.boroughId}
-            callbackArtist={(artistId: number | null) => setArtist(artistId)}
-            callbackBorough={(boroughId: number | null) => setBorough(boroughId)}
+            defaultSelection={mural?.artistId}
+            callback={(artistId: number | null) => setArtist(artistId)}
+            endpoint={GET_ALL_ARTISTS_API}
+            label="Artist"
+            placeHolder="Who made it"
+          />
+          <ArtistBoroughSearch
+            defaultSelection={mural?.boroughId}
+            callback={(boroughId: number | null) => setBorough(boroughId)}
+            endpoint={GET_ALL_BOROUGH_API}
+            label="Borough"
+            placeHolder="Choose a borough"
           />
           <MultiAdd
             title={"Assistants"}
