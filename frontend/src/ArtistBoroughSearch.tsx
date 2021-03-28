@@ -58,6 +58,10 @@ export default function ArtistBoroughSearch(props: IArtistBoroughSearchProps) {
         }
     }, [props.defaultSelection, selections]);
 
+    /**
+     * when the user finish inputting the borough or the artist, send to the parent component the object's id
+     * @param newValue
+     */
     function getSelectionAndCallback(newValue: string) {
         // results has a default max size of 5 I believe, so this is O(1)
         const filtered: any = selectionResult.filter((result: any) => {

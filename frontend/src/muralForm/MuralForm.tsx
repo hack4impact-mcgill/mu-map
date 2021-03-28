@@ -14,7 +14,7 @@ import axios from "axios";
 import { CREATE_MURAL_API, GET_ALL_ARTISTS_API, GET_ALL_BOROUGH_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from '../ImageUpload/ImageUpload'
-import ArtistBoroughSearch from "RegionSearch/ArtistBoroughSearch";
+import ArtistBoroughSearch from "ArtistBoroughSearch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
