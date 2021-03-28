@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useState, useEffect } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { GET_ALL_BOROUGH_API } from "../constants/constants";
+import Context from "context";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +29,8 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
   const classes = useStyles();
   const [result, setResult] = useState([]);
   const [defaultName, setDefaultName] = useState("");
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     axios
@@ -57,6 +61,12 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
     }
   }, [props.defaultBorough, boroughs])
 
+  /**
+   * Enable editing for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+  
   function getIdAndCallback(newValue: string) {
     // results has a default max size of 5 I believe, so this is O(1)
     const filtered: any = result.filter((result: any) => {
@@ -69,26 +79,35 @@ export default function BoroughSearchBar(props: IBoroughSearchBarProps) {
 
   return (
     <div className={classes.root}>
-      <Autocomplete
-        freeSolo={false}
-        disableClearable
-        value={defaultName || null}
-        options={result.map((borough: any) => borough.name)}
-        onChange={(event: any, newValue: string) => {
-          getIdAndCallback(newValue);
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            id="search-borough"
-            label="Borough"
-            variant="outlined"
-            size="small"
-            placeholder="Choose a borough"
-            onChange={(e) => setQuery(e.target.value.toLowerCase())}
+      {
+        isAdmin ? (
+          <Autocomplete
+            freeSolo={false}
+            disableClearable
+            value={defaultName || null}
+            options={result.map((borough: any) => borough.name)}
+            onChange={(event: any, newValue: string) => {
+              getIdAndCallback(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                id="search-borough"
+                label="Borough"
+                variant="outlined"
+                size="small"
+                placeholder="Choose a borough"
+                onChange={(e) => setQuery(e.target.value.toLowerCase())}
+              />
+            )}
           />
-        )}
-      />
+        ) : (
+          <div>
+            <Typography variant="caption" color="textSecondary">Borough</Typography>
+            <Typography variant="body1">{defaultName}</Typography>
+          </div>
+        )
+      }
     </div>
   );
 }

@@ -64,6 +64,11 @@ let theme = createMuiTheme({
         '@font-face': [avantGarde],
       },
     },
+    MuiInputBase: {
+      root: {
+        '&$disabled': { color: '#000000'}
+      }
+    }
   },
 });
 
