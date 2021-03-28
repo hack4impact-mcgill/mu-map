@@ -8,14 +8,13 @@ import {
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
-import ArtistSearchBar from "../ArtistSearch/ArtistSearch";
-import BoroughSearchBar from "../BoroughSearch/BoroughSearch";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 import { CREATE_MURAL_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from '../ImageUpload/ImageUpload'
+import ArtistBoroughSearch from "RegionSearch/ArtistBoroughSearch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -259,13 +258,11 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             defaultAddress={mural?.address}
             callback={handleAddressUpdate}
           />
-          <BoroughSearchBar
-            defaultBorough={mural?.boroughId}
-            callback={(boroughId: number | null) => setBorough(boroughId)}
-          />
-          <ArtistSearchBar
+          <ArtistBoroughSearch
             defaultArtist={mural?.artistId}
-            callback={(artistId: number | null) => setArtist(artistId)}
+            defaultBorough={mural?.boroughId}
+            callbackArtist={(artistId: number | null) => setArtist(artistId)}
+            callbackBorough={(boroughId: number | null) => setBorough(boroughId)}
           />
           <MultiAdd
             title={"Assistants"}
