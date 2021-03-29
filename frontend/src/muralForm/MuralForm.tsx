@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   InputBase,
   InputAdornment,
@@ -9,15 +9,15 @@ import {
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
-import ArtistSearchBar from "../ArtistSearch/ArtistSearch";
-import BoroughSearchBar from "../BoroughSearch/BoroughSearch";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
-import { CREATE_MURAL_API } from "../constants/constants";
+import { CREATE_MURAL_API, GET_ALL_ARTISTS_API, GET_ALL_BOROUGH_API } from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import Directions from "../Directions/Directions";
+import ArtistBoroughSearch from "ArtistBoroughSearch";
+import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,6 +89,14 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
   const [currentPos, setCurrentPos] = useState<number[]>([]);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  /**
+   * Enable editable form fields for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+  
   /**
    * Populate the form when an existing mural is passed as a prop
    */
@@ -240,6 +248,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             placeholder="Name the mural"
             id="name"
             defaultValue={mural?.name}
+            disabled={!isAdmin}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setName(e.target.value)}
             onClick={() => setEditingName(true)}
@@ -247,7 +256,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringName(true)}
             onMouseLeave={() => setHoveringName(false)}
             endAdornment={
-              !editingName && (
+              !editingName && isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringName ? "primary" : "action"} />
                 </InputAdornment>
@@ -261,6 +270,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             id="description"
             defaultValue={mural?.description}
             placeholder="Add a description"
+            disabled={!isAdmin}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
@@ -268,14 +278,14 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
             endAdornment={
-              !editingDesc && (
+              !editingDesc && isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringDesc ? "primary" : "action"} />
                 </InputAdornment>
               )
             }
           />
-          <Typography variant="body1" display="block" color="textSecondary">
+          <Typography variant="caption" display="block" color="textSecondary">
             Year
           </Typography>
           <InputBase
@@ -283,6 +293,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             id="year"
             type="number"
             defaultValue={mural?.year}
+            disabled={!isAdmin}
             inputProps={{ "aria-label": "naked" }}
             onChange={(e: any) => setYear(e.target.value)}
           />
@@ -290,13 +301,19 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             defaultAddress={mural?.address}
             callback={handleAddressUpdate}
           />
-          <BoroughSearchBar
-            defaultBorough={mural?.boroughId}
-            callback={(boroughId: number | null) => setBorough(boroughId)}
-          />
-          <ArtistSearchBar
-            defaultArtist={mural?.artistId}
+          <ArtistBoroughSearch
+            defaultSelection={mural?.artistId}
             callback={(artistId: number | null) => setArtist(artistId)}
+            endpoint={GET_ALL_ARTISTS_API}
+            label="Artist"
+            placeHolder="Who made it"
+          />
+          <ArtistBoroughSearch
+            defaultSelection={mural?.boroughId}
+            callback={(boroughId: number | null) => setBorough(boroughId)}
+            endpoint={GET_ALL_BOROUGH_API}
+            label="Borough"
+            placeHolder="Choose a borough"
           />
           <MultiAdd
             title={"Assistants"}

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MultiAddItem from "./MultiAddItem";
 import InputBase from "@material-ui/core/InputBase";
+import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,6 +33,8 @@ function MultiAdd(props: IMultiAddProps) {
   const [items, setItems] = useState<string[]>(props.defaultItems || []);
   const [currentInput, setCurrentInput] = useState<string>("");
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   function addItem() {
     if (currentInput === "") {
       return;
@@ -53,19 +56,27 @@ function MultiAdd(props: IMultiAddProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
+  /**
+   * Enable addition for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
+
   return (
     <div className={styles.flexContainer}>
-      <InputBase
-        placeholder={props.placeholder}
-        onChange={(e) => setCurrentInput(e.target.value)}
-        value={currentInput}
-        onKeyDown={e => e.key === "Enter" && addItem()}
-        endAdornment={
-          <InputAdornment position="end">
-            <AddIcon className={styles.addIcon} onClick={addItem} />
-          </InputAdornment>
-        }
-      />
+      {isAdmin &&
+        <InputBase
+          placeholder={props.placeholder}
+          onChange={(e) => setCurrentInput(e.target.value)}
+          value={currentInput}
+          onKeyDown={e => e.key === "Enter" && addItem()}
+          endAdornment={
+            <InputAdornment position="end">
+              <AddIcon className={styles.addIcon} onClick={addItem} />
+            </InputAdornment>
+          }
+        />
+      }
       {items.map((item, i) => (
         <MultiAddItem name={item} onDelete={handleItemDelete} key={item} />
       ))}
