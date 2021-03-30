@@ -7,9 +7,10 @@
     }
 
 .mapboxgl-popup-content {
-    padding: 10px;
+    padding: 0;
     text-align: left;
     font-family: "Avant Garde Gothic", "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 14px;
+    border-radius: 4px;
 }
 

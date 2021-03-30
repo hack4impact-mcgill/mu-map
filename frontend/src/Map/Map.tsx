@@ -7,17 +7,25 @@ import ReactMapGL, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
 import CustomSource from "../CustomSource/CustomSource";
-import Button from "@material-ui/core/Button";
+import {
+  Button,
+  IconButton,
+  createStyles,
+  makeStyles,
+  Typography,
+  Theme,
+} from "@material-ui/core";
+import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
   PINPOINT_ZOOM,
+  PLACEHOLDER_IMAGE
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
-import { Typography } from "@material-ui/core";
 // @ts-ignore
 import { easeCubic } from "d3-ease";
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -29,7 +37,40 @@ interface IMapProps {
   tours: any;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    popupDetailButton: {
+      width: "100%",
+      margin: theme.spacing(1, 0, 0, 0)
+    },
+    popupDetails: {
+      width: "300px",
+      padding: theme.spacing(0, 2, 2, 2)
+    },
+    geolocateControl: {
+      bottom: theme.spacing(2),
+      right: 0,
+      padding: theme.spacing(2)
+    },
+    popupImage: {
+      width: "300px",
+      height: "100px",
+      paddingBottom: "10px",
+      objectFit: "cover",
+      borderRadius: "4px"
+    },
+    popupCloseButton: {
+      position: 'absolute',
+      padding: theme.spacing(1),
+      margin: theme.spacing(-2, 0, 0, -3)
+    }
+  })
+);
+
 const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
+
+  const styles = useStyles();
+
   // type has to be 'any' for interpolator to work
   const [viewport, setViewport] = useState<any>({
     width: "100vw",
@@ -38,18 +79,6 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
     longitude: DEFAULT_LONGITUDE,
     zoom: DEFAULT_ZOOM,
   });
-
-  const geolocateStyle = {
-    bottom: 30,
-    right: 0,
-    padding: "10px",
-  };
-
-  const imgStyle = {
-    maxWidth: "200px",
-    maxHeight: "200px",
-    paddingBottom: "10px",
-  };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
 
@@ -86,7 +115,7 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
       mapStyle={MAPBOX_STYLE_URL}
     >
       <GeolocateControl
-        style={geolocateStyle}
+        className={styles.geolocateControl}
         positionOptions={{ enableHighAccuracy: true }}
         trackUserLocation={true}
       />
@@ -98,28 +127,37 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
           longitude={popupInfo.coordinates.coordinates[0]}
           latitude={popupInfo.coordinates.coordinates[1]}
           closeOnClick={false}
+          closeButton={false}
           onClose={setPopupInfo}
         >
           <img
-            style={imgStyle}
-            src={popupInfo.imgURLs?.[0]}
+            className={styles.popupImage}
+            src={!!popupInfo.imgURLs ? popupInfo.imgURLs[0] : PLACEHOLDER_IMAGE }
             alt="Mural_img"
-          ></img>
-          <div>
-            <Typography variant="h5" gutterBottom>
-              {popupInfo.name}
+          />
+          <IconButton
+            onClick={setPopupInfo}
+            className={styles.popupCloseButton}
+          >
+            <HighlightOffOutlinedIcon color="action" />
+          </IconButton>
+          <div className={styles.popupDetails}>
+            <Typography variant="h6">
+              <strong>
+                {popupInfo.name}
+              </strong>
             </Typography>
             <Typography variant="caption">{popupInfo.address}</Typography>
+            <Button
+              variant="outlined"
+              disableElevation
+              color="primary"
+              onClick={() => muralClick(popupInfo)}
+              className={styles.popupDetailButton}
+            >
+              DETAILS
+            </Button>
           </div>
-          <br />
-          <Button
-            variant="outlined"
-            disableElevation
-            color="primary"
-            onClick={() => muralClick(popupInfo)}
-          >
-            DETAILS
-          </Button>
         </Popup>
       )}
 
