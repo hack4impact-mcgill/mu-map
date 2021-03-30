@@ -18,7 +18,9 @@ class App {
   }
 
   private config(): void {
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: 'https://mumap.xyz'
+    }));
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
