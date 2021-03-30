@@ -1,6 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import ReactMapGL, {
-  Popup,
   GeolocateControl,
   FlyToInterpolator,
 } from "react-map-gl";
@@ -8,26 +7,22 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
 import CustomSource from "../CustomSource/CustomSource";
 import {
-  Button,
-  IconButton,
   createStyles,
   makeStyles,
-  Typography,
   Theme,
 } from "@material-ui/core";
-import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
   DEFAULT_ZOOM,
   MAPBOX_STYLE_URL,
   PINPOINT_ZOOM,
-  PLACEHOLDER_IMAGE
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
 // @ts-ignore
 import { easeCubic } from "d3-ease";
+import MapPopup from "./MapPopup";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
@@ -39,31 +34,11 @@ interface IMapProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    popupDetailButton: {
-      width: "100%",
-      margin: theme.spacing(1, 0, 0, 0)
-    },
-    popupDetails: {
-      width: "300px",
-      padding: theme.spacing(0, 2, 2, 2)
-    },
     geolocateControl: {
       bottom: theme.spacing(2),
       right: 0,
       padding: theme.spacing(2)
     },
-    popupImage: {
-      width: "300px",
-      height: "100px",
-      paddingBottom: "10px",
-      objectFit: "cover",
-      borderRadius: "4px"
-    },
-    popupCloseButton: {
-      position: 'absolute',
-      padding: theme.spacing(1),
-      margin: theme.spacing(-2, 0, 0, -3)
-    }
   })
 );
 
@@ -121,46 +96,12 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
       />
       <CustomMarker murals={murals} setInfo={setPopupInfo} />
       {popupInfo && popupInfo.coordinates && (
-        <Popup
-          tipSize={0}
-          anchor={"top"}
-          longitude={popupInfo.coordinates.coordinates[0]}
-          latitude={popupInfo.coordinates.coordinates[1]}
-          closeOnClick={false}
-          closeButton={false}
-          onClose={setPopupInfo}
-        >
-          <img
-            className={styles.popupImage}
-            src={!!popupInfo.imgURLs ? popupInfo.imgURLs[0] : PLACEHOLDER_IMAGE }
-            alt="Mural_img"
-          />
-          <IconButton
-            onClick={setPopupInfo}
-            className={styles.popupCloseButton}
-          >
-            <HighlightOffOutlinedIcon color="action" />
-          </IconButton>
-          <div className={styles.popupDetails}>
-            <Typography variant="h6">
-              <strong>
-                {popupInfo.name}
-              </strong>
-            </Typography>
-            <Typography variant="caption">{popupInfo.address}</Typography>
-            <Button
-              variant="outlined"
-              disableElevation
-              color="primary"
-              onClick={() => muralClick(popupInfo)}
-              className={styles.popupDetailButton}
-            >
-              DETAILS
-            </Button>
-          </div>
-        </Popup>
+        <MapPopup
+          popupInfo={popupInfo}
+          setInfo={setPopupInfo}
+          clickDetail={muralClick}
+        />
       )}
-
       <CustomSource tours={tours} />
     </ReactMapGL>
   );
