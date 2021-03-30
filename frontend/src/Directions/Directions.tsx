@@ -64,7 +64,6 @@ const Transition = React.forwardRef(function Transition(
 
 function Directions(props: IDirectionsProps) {
   const classes = useStyles();
-  const [response, setResponse] = useState<any>({});
   const [timeRequired, setTimeRequired] = useState<number[]>([]);
   const [totalDistance, setTotalDistance] = useState<number>(0);
   const [waypoints, setWaypoints] = useState<any[]>([]);
@@ -86,7 +85,6 @@ function Directions(props: IDirectionsProps) {
     axios
       .get(url)
       .then((res) => {
-        setResponse(res);
         let timeRequired = new Date(res.data.routes[0].duration * 1000)
           .toISOString()
           .substr(11, 8);
@@ -112,7 +110,7 @@ function Directions(props: IDirectionsProps) {
     } else if (timeRequired[1] !== 0) {
       return timeRequired[1] + " mins, ";
     } else {
-      return "Within 1 minute";
+      return "Within 1 minute ";
     }
   }
 
@@ -139,7 +137,7 @@ function Directions(props: IDirectionsProps) {
                 {props.name}
               </Typography>
               <Typography variant="subtitle1" className={classes.title}>
-                {timingText(timeRequired) + totalDistance + "km"}
+                {timingText(timeRequired) + totalDistance + " km"}
               </Typography>
             </div>
           </Toolbar>
