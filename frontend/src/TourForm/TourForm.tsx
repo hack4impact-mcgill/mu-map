@@ -8,13 +8,14 @@ import {
   Theme,
 } from "@material-ui/core";
 import axios from "axios";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState, useContext } from "react";
 import EditIcon from "@material-ui/icons/Edit";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import DragDrop from "DragDrop/DragDrop";
 import Alert from "@material-ui/lab/Alert";
 import { CREATE_MURAL_API, GET_ALL_TOUR } from "constants/constants";
+import  Context  from "../context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,7 +65,8 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
   const [popup, setPopup] = useState<boolean>(false);
 
   const styles = useStyles();
-
+  const context: any = useContext(Context)
+  console.log(context.token.i)
   /**
    * Populate the form when an existing tour is passed as a prop
    */
@@ -95,7 +97,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
 
   const handleSave = () => {
     if (!title.length || !description.length) return;
-
+    
     axios
       .post(GET_ALL_TOUR, {
         tour: {
@@ -103,6 +105,10 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
           description: description,
         },
         murals: muralsInTour.map((mural: any) => mural.id),
+      }, {
+        headers: {
+          authorization: context.token.i
+        }
       })
       .then(() => {
         setPopup(true);

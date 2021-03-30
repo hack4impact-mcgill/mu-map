@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
 import { TourInterface, Tour } from "../models/tour.model";
 import { TourService } from "../services/tour.service";
+import { TokenValidator } from "./utils/TokenValidator";
+import { TokenError } from "./customErrors/TokenError";
 
 export class TourController {
   public tourService: TourService = new TourService();
-
+  private tokenValidator: TokenValidator = new TokenValidator();
   /**
    * POST /tour to create a new tour associated with murals by id
    * @param req HTTP request containing a "tour" attribute containing TourInterface attributes
@@ -23,10 +25,16 @@ export class TourController {
     const tour: TourInterface = req.body.tour;
     const murals: number[] = req.body.murals;
     try {
+      console.log(req.headers.authorization);
+      await this.tokenValidator.validateToken(req.headers.authorization);
       const createdTour = await this.tourService.create(tour, murals);
       res.status(201).json(createdTour);
     } catch (e) {
-      res.status(500).json({ error: "Something went wrong." });
+      if (e instanceof TokenError) {
+        res.status(403).json({ error: e.message });
+      } else {
+        res.status(500).json({ error: "Something went wrong." });
+      }
     }
   }
 
