@@ -99,7 +99,7 @@ function Directions(props: IDirectionsProps) {
       .catch(() => {
         console.log("error");
       });
-  }, [props.coordinates]);
+  }, [props.coordinates, props.wpNames]);
 
   function timingText(timeRequired: number[]) {
     if (timeRequired[2] > 30) {
