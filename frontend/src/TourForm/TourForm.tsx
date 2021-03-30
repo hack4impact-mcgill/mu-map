@@ -68,8 +68,6 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const styles = useStyles();
-  const context: any = useContext(Context)
-  console.log(context.token.i)
   /**
    * Populate the form when an existing tour is passed as a prop
    */
@@ -92,7 +90,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
   /**
    * Enable editable form fields for admin users
    */
-  const userContext = useContext(Context)
+  const userContext: any = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
@@ -116,7 +114,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
         murals: muralsInTour.map((mural: any) => mural.id),
       }, {
         headers: {
-          authorization: context.token.i
+          authorization: userContext.token.i
         }
       })
       .then(() => {
