@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { Artist, ArtistInterface } from "../models/artist.model";
 import { EmptyResultError, ValidationError } from "sequelize";
 import { ArtistService } from "../services/artist.service";
-import { TokenError } from "./customErrors/TokenError";
 
 export class ArtistController {
   public artistService: ArtistService = new ArtistService();
@@ -20,9 +19,6 @@ export class ArtistController {
       const createdArtist: Artist = await this.artistService.create(params);
       res.status(201).json(createdArtist);
     } catch (e) {
-      if (e instanceof TokenError) {
-        res.status(403).json({ error: e.message });
-      }
       if (e instanceof ValidationError) {
         res.status(400).json({ error: "Invalid body parameters!" });
       } else {
