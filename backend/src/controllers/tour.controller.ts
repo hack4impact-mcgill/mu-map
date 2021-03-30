@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { EmptyResultError } from "sequelize";
 import { TourInterface, Tour } from "../models/tour.model";
 import { TourService } from "../services/tour.service";
-import { TokenError } from "./customErrors/TokenError";
 
 export class TourController {
   public tourService: TourService = new TourService();
@@ -26,11 +25,7 @@ export class TourController {
       const createdTour = await this.tourService.create(tour, murals);
       res.status(201).json(createdTour);
     } catch (e) {
-      if (e instanceof TokenError) {
-        res.status(403).json({ error: e.message });
-      } else {
-        res.status(500).json({ error: "Something went wrong." });
-      }
+      res.status(500).json({ error: "Something went wrong." });
     }
   }
 
