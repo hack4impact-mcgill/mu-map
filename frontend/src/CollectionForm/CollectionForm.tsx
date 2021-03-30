@@ -8,13 +8,14 @@ import {
   Theme
 } from "@material-ui/core";
 import axios from "axios";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import EditIcon from '@material-ui/icons/Edit';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import SearchCard from "SideBarSearch/searchCard";
 import Alert from "@material-ui/lab/Alert";
 import { CREATE_MURAL_API, GET_ALL_COLLECTION } from "constants/constants";
+import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,6 +59,8 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
 
   const [popup, setPopup] = useState<boolean>(false);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const styles = useStyles();
 
   /**
@@ -77,7 +80,13 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
       temp = ([...temp, found]);
     })
     setMuralsInCollection(temp);
-  }, [collection, murals])  
+  }, [collection, murals]);
+
+  /**
+   * Enable editable form fields for admin users
+   */
+  const userContext = useContext(Context)
+  useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
     if (!addedMural) return
@@ -134,13 +143,14 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the collection"
             defaultValue={collection?.name}
+            disabled={!isAdmin}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ 'aria-label': 'New collection title' }}
             onClick={() => setEditingTitle(true)}
             onBlur={() => setEditingTitle(false)}
             onMouseEnter={() => setHoveringTitle(true)}
             onMouseLeave={() => setHoveringTitle(false)}
-            endAdornment={!editingTitle && (
+            endAdornment={!editingTitle && isAdmin && (
               <InputAdornment position="start">
                 <EditIcon color={hoveringTitle ? "primary" : "action"} />
               </InputAdornment>
@@ -152,35 +162,39 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
             rows={4}
             placeholder="Add a description"
             defaultValue={collection?.description}
+            disabled={!isAdmin}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
             onBlur={() => setEditingDesc(false)}
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
-            endAdornment={!editingDesc && (
+            endAdornment={!editingDesc && isAdmin && (
               <InputAdornment position="start">
                 <EditIcon color={hoveringDesc ? "primary" : "action"} />
               </InputAdornment>
             )}
           />
           <div className={styles.field}>
-            <Autocomplete
-              freeSolo={false}
-              options={muralResults.map((mural: any) => mural)}
-              getOptionLabel={(mural: any) => mural.name}
-              onChange={(e: any, value: any) => handleAddMural(value)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Add a mural"
-                  variant="outlined"
-                  size="small"
-                  onChange={
-                    (e: any) => setMuralQuery(e.target.value.toLowerCase())
-                  }
-                />
-              )}
-            />
+            {
+              isAdmin && (
+                <Autocomplete
+                  freeSolo={false}
+                  options={muralResults.map((mural: any) => mural)}
+                  getOptionLabel={(mural: any) => mural.name}
+                  onChange={(e: any, value: any) => handleAddMural(value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Add a mural"
+                      variant="outlined"
+                      size="small"
+                      onChange={
+                        (e: any) => setMuralQuery(e.target.value.toLowerCase())
+                      }
+                    />
+                  )}
+                />)
+            }
           </div>
         </div>
       </form>
