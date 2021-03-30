@@ -4,6 +4,7 @@ import { BoroughController } from "../controllers/borough.controller";
 import { ArtistController } from "../controllers/artist.controller";
 import { TourController } from "../controllers/tour.controller";
 import { Application } from "express";
+import { authMiddleware } from "../auth/AuthMiddleware"
 
 export class Routes {
   public muralController: MuralController = new MuralController();
@@ -36,7 +37,7 @@ export class Routes {
     app
       .route("/artist")
       .get(this.artistController.showAll.bind(this.artistController))
-      .post(this.artistController.create.bind(this.artistController));
+      .post(authMiddleware, this.artistController.create.bind(this.artistController));
 
     app
       .route("/artist/:id")
@@ -46,7 +47,7 @@ export class Routes {
     app
       .route("/tour")
       .get(this.tourController.showAll.bind(this.tourController))
-      .post(this.tourController.create.bind(this.tourController));
+      .post(authMiddleware, this.tourController.create.bind(this.tourController));
 
     app
       .route("/tour/:id")
