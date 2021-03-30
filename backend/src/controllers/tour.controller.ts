@@ -23,7 +23,6 @@ export class TourController {
     const tour: TourInterface = req.body.tour;
     const murals: number[] = req.body.murals;
     try {
-      console.log(req.headers.authorization);
       const createdTour = await this.tourService.create(tour, murals);
       res.status(201).json(createdTour);
     } catch (e) {
