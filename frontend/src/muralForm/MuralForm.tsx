@@ -88,7 +88,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
    */
   const userContext = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
-  
+
   /**
    * Populate the form when an existing mural is passed as a prop
    */
