@@ -1,13 +1,16 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import ReactMapGL, {
-  Popup,
   GeolocateControl,
   FlyToInterpolator,
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CustomMarker from "../CustomMarker/CustomMarker";
 import CustomSource from "../CustomSource/CustomSource";
-import Button from "@material-ui/core/Button";
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+} from "@material-ui/core";
 import {
   DEFAULT_LONGITUDE,
   DEFAULT_LATITUDE,
@@ -17,9 +20,9 @@ import {
 } from "constants/constants";
 import "./Map.css";
 import mapboxgl from "mapbox-gl";
-import { Typography } from "@material-ui/core";
 // @ts-ignore
 import { easeCubic } from "d3-ease";
+import MapPopup from "./MapPopup";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 (mapboxgl as any).workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
@@ -29,7 +32,20 @@ interface IMapProps {
   tours: any;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    geolocateControl: {
+      bottom: theme.spacing(2),
+      right: 0,
+      padding: theme.spacing(2)
+    },
+  })
+);
+
 const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
+
+  const styles = useStyles();
+
   // type has to be 'any' for interpolator to work
   const [viewport, setViewport] = useState<any>({
     width: "100vw",
@@ -38,18 +54,6 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
     longitude: DEFAULT_LONGITUDE,
     zoom: DEFAULT_ZOOM,
   });
-
-  const geolocateStyle = {
-    bottom: 30,
-    right: 0,
-    padding: "10px",
-  };
-
-  const imgStyle = {
-    maxWidth: "200px",
-    maxHeight: "200px",
-    paddingBottom: "10px",
-  };
 
   const [popupInfo, setPopupInfo] = useState<any>([]);
 
@@ -86,43 +90,18 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
       mapStyle={MAPBOX_STYLE_URL}
     >
       <GeolocateControl
-        style={geolocateStyle}
+        className={styles.geolocateControl}
         positionOptions={{ enableHighAccuracy: true }}
         trackUserLocation={true}
       />
       <CustomMarker murals={murals} setInfo={setPopupInfo} />
       {popupInfo && popupInfo.coordinates && (
-        <Popup
-          tipSize={0}
-          anchor={"top"}
-          longitude={popupInfo.coordinates.coordinates[0]}
-          latitude={popupInfo.coordinates.coordinates[1]}
-          closeOnClick={false}
-          onClose={setPopupInfo}
-        >
-          <img
-            style={imgStyle}
-            src={popupInfo.imgURLs?.[0]}
-            alt="Mural_img"
-          ></img>
-          <div>
-            <Typography variant="h5" gutterBottom>
-              {popupInfo.name}
-            </Typography>
-            <Typography variant="caption">{popupInfo.address}</Typography>
-          </div>
-          <br />
-          <Button
-            variant="outlined"
-            disableElevation
-            color="primary"
-            onClick={() => muralClick(popupInfo)}
-          >
-            DETAILS
-          </Button>
-        </Popup>
+        <MapPopup
+          popupInfo={popupInfo}
+          setInfo={setPopupInfo}
+          clickDetail={muralClick}
+        />
       )}
-
       <CustomSource tours={tours} />
     </ReactMapGL>
   );
