@@ -166,17 +166,24 @@ function App() {
           {activeForm === FORM.MURAL ? (
             <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
+              <CollectionForm
+                collection={selectedResource}
+                muralsData={murals}
+                handleCancel={toggleSidebar}
+                handleMuralClick={handleSearchedMuralZoom}
+                setSelectedResource={setSelectedResource}
+                setResourceType={setActiveForm}
+              />
           ) : activeForm === FORM.TOUR ? (
             <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : (
-                  <SearchMenu
-                    handleMuralClick={handleSearchedMuralZoom}
-                    handleCancel={leaveForm}
-                    setSelectedResource={setSelectedResource}
-                    setResourceType={setActiveForm}
-                  />
-                )}
+            <SearchMenu
+              handleMuralClick={handleSearchedMuralZoom}
+              handleCancel={leaveForm}
+              setSelectedResource={setSelectedResource}
+              setResourceType={setActiveForm}
+            />
+          )}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
