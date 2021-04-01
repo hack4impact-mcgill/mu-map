@@ -152,6 +152,12 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
     let existingMural = mural && Object.keys(mural);
     if (existingMural) payload.id = mural.id;
+
+    /**
+     * An axios request to add a new mural to AWS database
+     * Depending on whether the mural exists already
+     * we either update or add a new mural.
+     */
     axios({
       method: existingMural ? 'put' : 'post',
       url: existingMural ?
