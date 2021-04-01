@@ -2,31 +2,35 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
-import { FORM } from "constants/constants";
+import { FORM, PLACEHOLDER_IMAGE } from "constants/constants";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      margin: theme.spacing(0, 2, 2, 3),
+      marginBottom: theme.spacing(2),
       display: "flex",
-      justifyContent: "flex-start",
-      width: "90%",
-      cursor: "pointer"
+      width: "100%",
+      maxHeight: "80px",
+      cursor: "pointer",
+      boxShadow: "0px 0px 20px 0px #99999940"
     },
     icon: {
-      maxWidth: "25%",
-      height: "100%",
+      width: "25%",
+      minHeight: "100%",
+      objectFit: "cover"
     },
     properties: {
       display: "flex",
       flexDirection: "column",
-      justifyContent: "space-between",
-      padding: theme.spacing(0, 0, 1, 2),
-      width: "50%",
+      flexGrow: 1,
+      justifyContent: "space-around",
+      margin: theme.spacing(1, 2, 1, 2),
+      width: "75%",
     },
-    type: {
-      margin: theme.spacing(1, 0, 0, 1),
-      color: theme.palette.error.main,
+    title: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
     },
   })
 );
@@ -81,16 +85,20 @@ function SearchResultCard(props: ISearchCardSetProps) {
     <Card className={styles.card} onClick={handleClick}>
       <img
         className={styles.icon}
-        src="https://cdn2.lamag.com/wp-content/uploads/sites/6/2020/01/kobe-mural-mr-brainwash-chris-delmas-afp-getty-1068x712.jpg"
+        src={props.item.imgURLs ? props.item.imgURLs[0] : PLACEHOLDER_IMAGE}
         alt="mural"
-      ></img>
+      />
       <div className={styles.properties}>
-        <Typography variant="subtitle1">{props.item.name}</Typography>
-        <Typography variant="body2">{body}</Typography>
+        <div className={styles.title}>
+          <Typography variant="body2">
+            <strong>{props.item.name}</strong>
+          </Typography>
+          <Typography variant="overline" color="error">
+            {props.type}
+          </Typography>
+        </div>
+        <Typography variant="caption">{body}</Typography>
       </div>
-      <Typography variant="body1" className={styles.type}>
-        {props.type}
-      </Typography>
     </Card>
   );
 }
