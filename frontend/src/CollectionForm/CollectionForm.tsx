@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "start",
       width: "500px",
-      maxWidth: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3)
     },
     field: {
