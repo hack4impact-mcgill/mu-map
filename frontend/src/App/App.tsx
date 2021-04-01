@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Map from "../Map/Map";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
