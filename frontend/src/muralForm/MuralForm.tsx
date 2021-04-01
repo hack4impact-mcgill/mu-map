@@ -152,7 +152,6 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
     let existingMural = mural && Object.keys(mural);
     if (existingMural) payload.id = mural.id;
-
     axios({
       method: existingMural ? 'put' : 'post',
       url: existingMural ?
@@ -163,6 +162,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         (response) => {
           console.log(response);
           setPopup(true);
+          let context = userContext as any;
+          context.getMural();
           setTimeout(() => setPopup(false), 5000);
         },
         (error) => {
