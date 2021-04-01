@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       justifyContent: "flex-end",
       padding: theme.spacing(3),
-      width: "40vw",
-      maxWidth: "500px",
+      width: "100%",
+      maxWidth: "100vw",
       bottom: 0
     },
   })

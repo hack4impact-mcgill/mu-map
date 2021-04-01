@@ -9,6 +9,7 @@ import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
 import firebase from "firebase/app";
 import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,29 +21,30 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: "row",
       width: '100%',
-      flexWrap: "wrap"
+      flexWrap: "wrap",
+      justifyContent: "space-between"
     },
     imageCard: {
       display: 'flex',
-      width: '45%',
+      width: '48%',
       height: "30%",
       flexDirection: "row-reverse",
       position: 'relative',
-      margin: "0 auto",
-      padding: "5px"
+      padding: theme.spacing(1, 0, 1, 0)
     },
     uploadButton: {
-      width: '100%',
-      margin: '15px auto'
+      margin: theme.spacing(1, 0, 1, 0),
     },
     muralImage: {
       borderRadius: '10px',
       width: '100%',
-      height: '120px'
+      height: '120px',
+      objectFit: 'cover'
     },
     deleteButton: {
       position: 'absolute',
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
+      margin: theme.spacing(-2, -2, 0, 0)
     }
   })
 );
@@ -129,46 +131,59 @@ function ImageUpload({
   function dummyImage(imgsUrlAndPath: Image[]) {
     if (imgsUrlAndPath.length % 2 === 1) {
       return (
-        <div className={styles.imageCard}>
-        </div>
+        <div className={styles.imageCard} />
       )
     }
   }
+
+  /**
+   * Loop over the mural's images and create image components
+   * If the user is an admin, show a remove button
+   */
+  const uploadedImages = imgsUrlAndPath.map(
+    (urlAndPath: any) => {
+      return (
+        <div
+          className={styles.imageCard}
+          key={urlAndPath.url + "_"}
+        >
+          <img
+            alt="mural"
+            className={styles.muralImage}
+            key={urlAndPath.url}
+            src={urlAndPath.url}
+            />
+          {
+            isAdmin &&
+            <IconButton
+              onClick={() => handleRemove(urlAndPath.path)}
+              className={styles.deleteButton}
+            >
+              <HighlightOffOutlinedIcon color="secondary" />
+            </IconButton>
+          }
+        </div>
+      );
+    }
+  );
 
   return (
     <div className={styles.root}>
       {
         isAdmin &&
-        <Button variant="contained" component="label" className={styles.uploadButton}>
+        <Button
+          variant="outlined"
+          component="label"
+          disableElevation
+          className={styles.uploadButton}
+          startIcon={<CloudUploadIcon />}
+        >
           Upload Mural Picture
           <input type="file" hidden onChange={handleUpload} accept="image/*" />
         </Button>
       }
       <div className={styles.imageContainer}>
-        {imgsUrlAndPath.map((urlAndPath) => {
-          return (
-            <div
-              className={styles.imageCard}
-              key={urlAndPath.url + "_"}
-            >
-            {
-              isAdmin &&
-              <IconButton
-                onClick={() => handleRemove(urlAndPath.path)}
-                className={styles.deleteButton}
-                >
-                <HighlightOffOutlinedIcon color="secondary" />
-              </IconButton>
-              }
-              <img
-                alt="mural"
-                className={styles.muralImage}
-                key={urlAndPath.url}
-                src={urlAndPath.url}
-              />
-            </div>
-          );
-        })}
+        {uploadedImages}
         {dummyImage(imgsUrlAndPath)}
       </div>
     </div>

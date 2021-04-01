@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
       paddingBottom: theme.spacing(0),
     },
@@ -81,7 +81,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
   useEffect(() => {
     if (!tour || murals.length === 0) return;
     let temp: any[] = [];
-    tour.murals.forEach((tourMural: any) => {
+    tour.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
       temp = ([...temp, found]);
     })

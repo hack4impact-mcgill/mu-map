@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ISidebarProps {
-  name: string;
   children?: React.ReactNode | null;
   isVisible: boolean;
   closeSidebar: () => void;
@@ -52,7 +51,6 @@ function Sidebar(props: ISidebarProps) {
             className={styles.closeIcon}
           />
         </div>
-        <p className={styles.title}>{props.name}</p>
         <div className={styles.flexContainer}>{props.children}</div>
       </Drawer>
     </div>

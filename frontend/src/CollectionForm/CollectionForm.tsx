@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
+      width: "500px",
       maxWidth: "500px",
       padding: theme.spacing(3)
     },
@@ -75,7 +75,7 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
   useEffect(() => {
     if (!collection || murals.length === 0) return;
     let temp: any[] = [];
-    collection.murals.forEach((tourMural: any) => {
+    collection.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
       temp = ([...temp, found]);
     })

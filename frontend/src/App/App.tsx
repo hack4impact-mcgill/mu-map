@@ -105,7 +105,7 @@ function App() {
   };
 
   /**
-   * Zooms the map to the coordiantes of the clicked searched mural
+   * Zooms the map to the coordinates of the clicked searched mural
    * @param long longitude
    * @param lat latitude
    */
@@ -125,8 +125,6 @@ function App() {
     getMural();
     getTour();
   }, []);
-
-  const sidebarTitle = "";
 
   return (
     <div className="App">
@@ -162,7 +160,6 @@ function App() {
           donateClick={() => setDonateOpen(true)}
         />
         <Sidebar
-          name={sidebarTitle}
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >

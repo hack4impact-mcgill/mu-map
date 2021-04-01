@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
     },
     element: {
@@ -282,7 +282,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             callback={(artistId: number | null) => setArtist(artistId)}
             endpoint={GET_ALL_ARTISTS_API}
             label="Artist"
-            placeHolder="Who made it"
+            placeHolder="Who made it?"
           />
           <ArtistBoroughSearch
             defaultSelection={mural?.boroughId}
