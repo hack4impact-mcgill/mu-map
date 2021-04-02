@@ -8,8 +8,8 @@ import {
 import { FirebaseStorage } from "../firebase/index";
 import "firebase/storage";
 import firebase from "firebase/app";
-import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ClearIcon from "@material-ui/icons/Clear";
+import PublishIcon from '@material-ui/icons/Publish';
 import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "row",
       width: '100%',
       flexWrap: "wrap",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      marginBottom: theme.spacing(3)
     },
     imageCard: {
       display: 'flex',
@@ -34,17 +35,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     uploadButton: {
       margin: theme.spacing(1, 0, 1, 0),
+      width:"48%"
     },
     muralImage: {
-      borderRadius: '10px',
+      borderRadius: '4px',
       width: '100%',
       height: '120px',
       objectFit: 'cover'
     },
     deleteButton: {
       position: 'absolute',
-      padding: theme.spacing(1),
-      margin: theme.spacing(-2, -2, 0, 0)
+      margin: theme.spacing(1, 1, 0, 0),
+      backgroundColor: "#00000080"
     }
   })
 );
@@ -156,10 +158,11 @@ function ImageUpload({
           {
             isAdmin &&
             <IconButton
+              size="small"
               onClick={() => handleRemove(urlAndPath.path)}
               className={styles.deleteButton}
             >
-              <HighlightOffOutlinedIcon color="secondary" />
+              <ClearIcon style={{color:"#fff"}} />
             </IconButton>
           }
         </div>
@@ -168,24 +171,22 @@ function ImageUpload({
   );
 
   return (
-    <div className={styles.root}>
+    <div className={styles.imageContainer}>
       {
         isAdmin &&
         <Button
-          variant="outlined"
+          variant="contained"
           component="label"
           disableElevation
           className={styles.uploadButton}
-          startIcon={<CloudUploadIcon />}
+          startIcon={<PublishIcon />}
         >
-          Upload Mural Picture
+          Upload Image
           <input type="file" hidden onChange={handleUpload} accept="image/*" />
         </Button>
       }
-      <div className={styles.imageContainer}>
-        {uploadedImages}
-        {dummyImage(imgsUrlAndPath)}
-      </div>
+      {uploadedImages}
+      {dummyImage(imgsUrlAndPath)}
     </div>
   );
 }

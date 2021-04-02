@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     directionButton: {
       width: "100%",
-      marginTop: theme.spacing(2)
     },
   })
 );
