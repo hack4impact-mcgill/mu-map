@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     closeIcon: {
       cursor: "pointer",
       float: "right",
-      margin: theme.spacing(2),
+      margin: theme.spacing(2, 2, 0, 0),
     },
     flexContainer: {
       display: "flex",

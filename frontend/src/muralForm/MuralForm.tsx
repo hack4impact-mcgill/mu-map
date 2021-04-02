@@ -11,6 +11,7 @@ import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
+import DirectionsIcon from '@material-ui/icons/Directions';
 import axios from "axios";
 import {
   CREATE_MURAL_API,
@@ -49,8 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "180%",
     },
     directionButton: {
-      display: "block",
-      margin: "0 auto",
+      width: "100%"
     },
   })
 );
@@ -356,6 +356,17 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             removeHandler={handleImgUrlRemove}
             imgsUrlAndPath={imgUrlsAndPath}
           />
+          <Button
+            color="primary"
+            size="medium"
+            variant="outlined"
+            disableElevation
+            className={styles.directionButton}
+            onClick={() => setDirectionOpen(true)}
+            startIcon={<DirectionsIcon />}
+          >
+            Get Directions
+          </Button>
         </div>
       </form>
       <Directions
@@ -364,21 +375,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         coordinates={[currentPos, addressCoords]}
         wpNames={[name]}
         wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]} // use the first image to display
-      ></Directions>
-
-      <div>
-        <Button
-          color="primary"
-          size="medium"
-          variant="contained"
-          disableElevation
-          className={styles.directionButton}
-          onClick={() => setDirectionOpen(true)}
-        >
-          Direction
-        </Button>
-      </div>
-
+      />
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Mural published successfully!</Alert>
