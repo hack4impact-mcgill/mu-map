@@ -12,7 +12,11 @@ import MultiAdd from "../multiAdd/MultiAdd";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
-import { CREATE_MURAL_API, GET_ALL_ARTISTS_API, GET_ALL_BOROUGH_API } from "../constants/constants";
+import {
+  CREATE_MURAL_API,
+  GET_ALL_ARTISTS_API,
+  GET_ALL_BOROUGH_API,
+} from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import Directions from "../Directions/Directions";
@@ -94,9 +98,9 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   /**
    * Enable editable form fields for admin users
    */
-  const userContext = useContext(Context)
+  const userContext = useContext(Context);
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
-  
+
   /**
    * Populate the form when an existing mural is passed as a prop
    */
@@ -130,13 +134,12 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 
-  var options = {
-    enableHighAccuracy: true,
-    timeout: 60000,
-    maximumAge: 0,
-  };
-
   useEffect(() => {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 60000,
+      maximumAge: 0,
+    };
     navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
 
@@ -256,7 +259,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringName(true)}
             onMouseLeave={() => setHoveringName(false)}
             endAdornment={
-              !editingName && isAdmin && (
+              !editingName &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringName ? "primary" : "action"} />
                 </InputAdornment>
@@ -278,7 +282,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
             endAdornment={
-              !editingDesc && isAdmin && (
+              !editingDesc &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringDesc ? "primary" : "action"} />
                 </InputAdornment>
