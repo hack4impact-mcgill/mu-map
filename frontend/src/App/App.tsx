@@ -18,6 +18,7 @@ import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
 
+
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
@@ -66,6 +67,7 @@ function App() {
       setIsSignedIn(!!user);
       setSigningIn(false);
     });
+
   }, []);
 
   const openSignin = () => setSigningIn(true);
