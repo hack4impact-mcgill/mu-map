@@ -241,7 +241,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     return path;
   }
 
-  console.log(imgUrlsAndPath)
+  console.log(imgUrlsAndPath);
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -356,7 +356,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         handleClose={() => setDirectionOpen(false)}
         coordinates={[currentPos, addressCoords]}
         wpNames={[name]}
-        wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]}  // use the first image to display
+        wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]} // use the first image to display
       ></Directions>
 
       <div>
