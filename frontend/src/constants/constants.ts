@@ -15,6 +15,8 @@ export const MTL_MAX_LONGITUDE = -73.33952;
 export const MTL_MAX_LATITUDE = 45.752154;
 export const MAPBOX_GEOCODING_API =
   "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+export const MAPBOX_DIRECTIONS_API =
+  "https://api.mapbox.com/directions/v5/mapbox/walking/";
 export const MAPBOX_STYLE_URL =
   "mapbox://styles/mumap/ckhb8l6je01ki1ao4tabh8e2q";
 export const PLACEHOLDER_IMAGE =

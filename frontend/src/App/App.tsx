@@ -18,6 +18,7 @@ import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
 
+
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
@@ -66,6 +67,7 @@ function App() {
       setIsSignedIn(!!user);
       setSigningIn(false);
     });
+
   }, []);
 
   const openSignin = () => setSigningIn(true);
@@ -125,7 +127,8 @@ function App() {
     getMural();
     getTour();
   }, []);
-
+  
+  
   const sidebarTitle = "";
 
   return (
@@ -167,7 +170,7 @@ function App() {
           closeSidebar={toggleSidebar}
         >
           {activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
+            <MuralForm mural={selectedResource} handleCancel={toggleSidebar}/>
           ) : activeForm === FORM.COLLECTION ? (
             <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : activeForm === FORM.TOUR ? (
