@@ -11,7 +11,6 @@ import AddressSearch from "../AddressSearch/addressSearch";
 import MultiAdd from "../multiAdd/MultiAdd";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
-import DirectionsIcon from '@material-ui/icons/Directions';
 import axios from "axios";
 import {
   CREATE_MURAL_API,
@@ -364,7 +363,6 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             disableElevation
             className={styles.directionButton}
             onClick={() => setDirectionOpen(true)}
-            startIcon={<DirectionsIcon />}
           >
             Directions
           </Button>
