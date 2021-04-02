@@ -107,13 +107,62 @@ function App() {
   };
 
   /**
-   * Zooms the map to the coordiantes of the clicked searched mural
+   * Zooms the map to the coordinates of the clicked searched mural
    * @param long longitude
    * @param lat latitude
    */
   const handleSearchedMuralZoom = (long: number, lat: number) => {
     mapRef.current.setLongLat(long, lat);
   };
+
+  /**
+   * The mural form supplied with a mural and cancel handler
+   */
+  const muralForm = (
+    <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
+  );
+
+  /**
+   * The collection form supplied with a collection, all murals,
+   * and handlers for cancellation and mural click
+   */
+  const collectionForm = (
+    <CollectionForm
+      collection={selectedResource}
+      muralsData={murals}
+      handleCancel={toggleSidebar}
+      handleMuralClick={handleSearchedMuralZoom}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
+
+  /**
+   * The tour form supplied with a tour, all murals,
+   * and handlers for cancellation and mural click
+   */
+  const tourForm = (
+    <TourForm
+      tour={selectedResource}
+      muralsData={murals}
+      handleCancel={toggleSidebar}
+      handleMuralClick={handleSearchedMuralZoom}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
+
+  /**
+   * The search component which gets passed into the sidebar
+   */
+  const searchMenu = (
+    <SearchMenu
+      handleMuralClick={handleSearchedMuralZoom}
+      handleCancel={leaveForm}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
 
   /**
    * When a resource marker is clicked, open its respective form
@@ -127,9 +176,6 @@ function App() {
     getMural();
     getTour();
   }, []);
-  
-  
-  const sidebarTitle = "";
 
   return (
     <div className="App">
@@ -165,24 +211,15 @@ function App() {
           donateClick={() => setDonateOpen(true)}
         />
         <Sidebar
-          name={sidebarTitle}
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedResource} handleCancel={toggleSidebar}/>
-          ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
-          ) : activeForm === FORM.TOUR ? (
-            <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
-          ) : (
-                  <SearchMenu
-                    handleMuralClick={handleSearchedMuralZoom}
-                    handleCancel={leaveForm}
-                    setSelectedResource={setSelectedResource}
-                    setResourceType={setActiveForm}
-                  />
-                )}
+          {
+            activeForm === FORM.MURAL ? muralForm
+            : activeForm === FORM.COLLECTION ? collectionForm
+            : activeForm === FORM.TOUR ? tourForm
+            : searchMenu
+          }
         </Sidebar>
         <LeaveWarning
           open={formWarning}

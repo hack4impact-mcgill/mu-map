@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "flexStart",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
     },
     field: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
     noResults: {
       textAlign: "center",
       fontSize: "170%",
+      color: "grey"
     },
   })
 );
@@ -126,7 +128,7 @@ function SearchMenu(props: ISearchMenuProps) {
         {displayedCollections.length < 1 &&
           displayedMurals.length < 1 &&
           displayedTours.length < 1 && (
-            <p className={styles.noResults}>No Results</p>
+            <p className={styles.noResults}>Keep searching</p>
           )}
         {displayedMurals.map((mural: any) => {
           return (

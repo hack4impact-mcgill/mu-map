@@ -14,9 +14,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import DragDrop from "DragDrop/DragDrop";
 import Alert from "@material-ui/lab/Alert";
-import { CREATE_MURAL_API, GET_ALL_TOUR } from "constants/constants";
+import { CREATE_MURAL_API, FORM, GET_ALL_TOUR } from "constants/constants";
 import Context from "context";
-import SearchCard from "SideBarSearch/searchCard";
+import SearchResultCard from "SearchResultCard/SearchResultCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
       paddingBottom: theme.spacing(0),
     },
@@ -47,9 +47,12 @@ interface ITourFormProps {
   tour?: any;
   muralsData?: any;
   handleCancel: () => void;
+  handleMuralClick: (lat: number, long: number) => void;
+  setSelectedResource: (resource: any) => void;
+  setResourceType: (type: FORM) => void;
 }
 
-function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
+function TourForm(props: ITourFormProps) {
   const [murals, setMurals] = useState<any>([]);
   const [muralsInTour, setMuralsInTour] = useState<any>([]);
   const [muralResults, setMuralResults] = useState<any>([]);
@@ -73,20 +76,20 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
    * Populate the form when an existing tour is passed as a prop
    */
    useEffect(() => {
-    if (!tour || !Object.keys(tour)) return;
-    setTitle(tour.name);
-    setDescription(tour.description);
-  }, [tour])
+    if (!props.tour || !Object.keys(props.tour)) return;
+    setTitle(props.tour.name);
+    setDescription(props.tour.description);
+  }, [props.tour])
 
   useEffect(() => {
-    if (!tour || murals.length === 0) return;
+    if (!props.tour || murals.length === 0) return;
     let temp: any[] = [];
-    tour.murals.forEach((tourMural: any) => {
+    props.tour.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
       temp = ([...temp, found]);
     })
     setMuralsInTour(temp);
-  }, [tour, murals])
+  }, [props.tour, murals])
 
   /**
    * Enable editable form fields for admin users
@@ -158,7 +161,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
     } else {
       setMuralResults(murals);
     }
-  }, [muralQuery, murals, muralsData]);
+  }, [muralQuery, murals, props.muralsData]);
 
   return (
     <div>
@@ -174,7 +177,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
           <InputBase
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the tour"
-            defaultValue={tour?.name}
+            defaultValue={props.tour?.name}
             disabled={!isAdmin}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ "aria-label": "New tour title" }}
@@ -195,7 +198,7 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             multiline
             rows={4}
             placeholder="Add a description"
-            defaultValue={tour?.description}
+            defaultValue={props.tour?.description}
             disabled={!isAdmin}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
@@ -249,10 +252,27 @@ function TourForm({ tour, muralsData, handleCancel }: ITourFormProps) {
             itemDeletedCallback={removeMural}
           />
         ) : (
-          <SearchCard searchCards={muralsInTour} />
+          <div className={styles.flexContainer}>
+            {muralsInTour.map((mural: any) => {
+              return (
+                <SearchResultCard
+                  type={FORM.MURAL}
+                  item={mural}
+                  key={mural.id}
+                  handleMuralClick={props.handleMuralClick}
+                  handleCancel={props.handleCancel}
+                  setSelectedResource={props.setSelectedResource}
+                  setResourceType={props.setResourceType}
+                />
+              )
+            })}
+          </div>
         )
       }
-      <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
+      <ActionButtons
+        saveCallback={handleSave}
+        cancelCallback={props.handleCancel}
+      />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Tour published successfully!</Alert>
       </Snackbar>

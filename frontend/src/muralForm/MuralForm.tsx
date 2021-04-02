@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
     },
     element: {
@@ -49,8 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "180%",
     },
     directionButton: {
-      display: "block",
-      margin: "0 auto",
+      width: "100%",
     },
   })
 );
@@ -319,7 +318,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             callback={(artistId: number | null) => setArtist(artistId)}
             endpoint={GET_ALL_ARTISTS_API}
             label="Artist"
-            placeHolder="Who made it"
+            placeHolder="Who made it?"
           />
           <ArtistBoroughSearch
             defaultSelection={mural?.boroughId}
@@ -356,6 +355,16 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             removeHandler={handleImgUrlRemove}
             imgsUrlAndPath={imgUrlsAndPath}
           />
+          <Button
+            color="primary"
+            size="medium"
+            variant="outlined"
+            disableElevation
+            className={styles.directionButton}
+            onClick={() => setDirectionOpen(true)}
+          >
+            Directions
+          </Button>
         </div>
       </form>
       <Directions
@@ -364,21 +373,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         coordinates={[currentPos, addressCoords]}
         wpNames={[name]}
         wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]} // use the first image to display
-      ></Directions>
-
-      <div>
-        <Button
-          color="primary"
-          size="medium"
-          variant="contained"
-          disableElevation
-          className={styles.directionButton}
-          onClick={() => setDirectionOpen(true)}
-        >
-          Direction
-        </Button>
-      </div>
-
+      />
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Mural published successfully!</Alert>

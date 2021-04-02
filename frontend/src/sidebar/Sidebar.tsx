@@ -2,6 +2,7 @@ import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -9,17 +10,10 @@ const useStyles = makeStyles((theme: Theme) =>
       paper: "primary",
       width: "30%",
     },
-    title: {
-      fontSize: "180%",
-      fontWeight: 500,
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(25),
-    },
     closeIcon: {
       cursor: "pointer",
       float: "right",
-      marginTop: theme.spacing(2),
-      marginRight: theme.spacing(3),
+      margin: theme.spacing(2, 2, 0, 0),
     },
     flexContainer: {
       display: "flex",
@@ -30,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ISidebarProps {
-  name: string;
   children?: React.ReactNode | null;
   isVisible: boolean;
   closeSidebar: () => void;
@@ -46,13 +39,13 @@ function Sidebar(props: ISidebarProps) {
         open={props.isVisible}
         onClose={props.closeSidebar}
       >
-        <div>
-          <CloseIcon
+        <span>
+          <IconButton
             onClick={props.closeSidebar}
-            className={styles.closeIcon}
-          />
-        </div>
-        <p className={styles.title}>{props.name}</p>
+            className={styles.closeIcon}>
+            <CloseIcon />
+          </IconButton>
+        </span>
         <div className={styles.flexContainer}>{props.children}</div>
       </Drawer>
     </div>
