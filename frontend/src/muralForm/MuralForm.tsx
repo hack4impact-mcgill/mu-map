@@ -366,7 +366,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onClick={() => setDirectionOpen(true)}
             startIcon={<DirectionsIcon />}
           >
-            Get Directions
+            Directions
           </Button>
         </div>
       </form>
