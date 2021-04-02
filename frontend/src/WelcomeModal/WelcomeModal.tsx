@@ -50,13 +50,13 @@ function WelcomeModal(props: IWelcomeModalProps) {
                             <MULogo width="50%" height="100%" color={LIGHTBLUE}></MULogo>
                         </div>
                         <Typography variant="h4" className={classes.title}>
-                            MU MTL's Open Air Museum
+                            MU MTL's Open-Air Museum
             </Typography>
                         <p>
                             MU's mission is to beautify the city of Montreal by creating
                             murals that are anchored in local communities. At the heart of its
                             approach is the desire to see and experience art on a daily basis,
-                            to trigger a social transformation and to turn Montreal into an
+                            to trigger a social transformation, and to turn Montreal into an
                             open-air MUseum!
             </p>
                     </div>
