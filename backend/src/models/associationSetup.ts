@@ -87,6 +87,7 @@ export class AssociationSetup {
         type: "Point",
         coordinates: [-73.5772, 45.5048],
       },
+      imgURLs: ["https://i.cbc.ca/1.4392450.1510162683!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/cohen-mural-crescent.jpg"],
     };
     await Mural.create<Mural>(muralParams2);
     const createdTour = await Tour.create<Tour>({

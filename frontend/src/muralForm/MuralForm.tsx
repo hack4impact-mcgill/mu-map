@@ -348,9 +348,9 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       <Directions
         open={directionOpen}
         handleClose={() => setDirectionOpen(false)}
-        name={name}
         coordinates={[currentPos, addressCoords]}
         wpNames={[name]}
+        wpPics={[imgUrlsAndPath[0].url]}  // use the first image to display
       ></Directions>
 
       <div>

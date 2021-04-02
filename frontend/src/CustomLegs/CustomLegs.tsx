@@ -6,6 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import CustomSteps from "../CustomSteps/CustomSteps";
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 interface ILegsProps {
   waypoints: any;
@@ -29,6 +30,12 @@ function CustomLegs({ waypoints }: ILegsProps) {
 
   return waypoints.map((wp: any) => (
     <div>
+      <ListItem>
+      <div className={classes.arrowContainer}>
+          <FiberManualRecordIcon />
+        </div>
+        <ListItemText primary="You are here"/>
+      </ListItem>
       <CustomSteps steps={wp[1].steps} />
       <ListItem>
         <div className={classes.arrowContainer}>

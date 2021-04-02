@@ -18,9 +18,9 @@ import axios from "axios";
 interface IDirectionsProps {
   open: boolean;
   handleClose: () => void;
-  name: string;
   coordinates: number[][];
   wpNames: string[]; // waypoint names excluding starting point
+  wpPics: string[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -134,7 +134,7 @@ function Directions(props: IDirectionsProps) {
             </IconButton>
             <div className={classes.nameContainer}>
               <Typography variant="h3" className={classes.title}>
-                {props.name}
+                {props.wpNames[0]}
               </Typography>
               <Typography variant="subtitle1" className={classes.title}>
                 {timingText(timeRequired) + totalDistance + " km"}
