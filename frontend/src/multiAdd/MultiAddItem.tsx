@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
-import TextField from "@material-ui/core/TextField";
 import Context from "context";
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +28,7 @@ function MultiAddItem(props: IMultiAddItemProps) {
   const styles = useStyles();
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  
+
   /**
    * Enable multi-add item editing and deletion for admin users
    */
@@ -38,20 +37,18 @@ function MultiAddItem(props: IMultiAddItemProps) {
 
   return (
     <div className={styles.itemContainer}>
-      <TextField
-        defaultValue={props.name}
-        size="small"
-        disabled={!isAdmin}
-        InputProps={{
-          readOnly: true,
-        }}
-      />
+      {!isAdmin &&
+        <Chip
+          label={props.name}
+        />
+      }
       {
         isAdmin &&
-        <DeleteIcon
-        className={styles.deleteIcon}
-        onClick={() => props.onDelete(props.name)}
-      />
+        <Chip
+          label={props.name}
+          disabled={!isAdmin}
+          onDelete={() => props.onDelete(props.name)}
+        />
       }
     </div>
   );

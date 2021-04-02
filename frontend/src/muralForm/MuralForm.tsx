@@ -182,22 +182,29 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     let existingMural = mural && Object.keys(mural);
     if (existingMural) payload.id = mural.id;
 
+    /**
+     * An axios request to add a new mural to AWS database
+     * Depending on whether the mural exists already
+     * we either update or add a new mural.
+     */
     axios({
-      method: existingMural ? "put" : "post",
-      url: existingMural
-        ? `${CREATE_MURAL_API}/${payload.id}`
-        : CREATE_MURAL_API,
-      data: payload,
-    }).then(
-      (response) => {
-        console.log(response);
-        setPopup(true);
-        setTimeout(() => setPopup(false), 5000);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      method: existingMural ? 'put' : 'post',
+      url: existingMural ?
+        `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
+      data: payload
+    })
+      .then(
+        (response) => {
+          console.log(response);
+          setPopup(true);
+          let context = userContext as any;
+          context.getMural();
+          setTimeout(() => setPopup(false), 5000);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   function handleAddressUpdate(

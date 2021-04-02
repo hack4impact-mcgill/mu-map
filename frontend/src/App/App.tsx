@@ -133,7 +133,7 @@ function App() {
 
   return (
     <div className="App">
-      <Context.Provider value={{ user: user }}>
+      <Context.Provider value={{ user: user, getMural }}>
         <SigninForm
           signInClick={handleSignin}
           cancelClick={handleCancelSignin}
@@ -176,13 +176,13 @@ function App() {
           ) : activeForm === FORM.TOUR ? (
             <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
           ) : (
-            <SearchMenu
-              handleMuralClick={handleSearchedMuralZoom}
-              handleCancel={leaveForm}
-              setSelectedResource={setSelectedResource}
-              setResourceType={setActiveForm}
-            />
-          )}
+                  <SearchMenu
+                    handleMuralClick={handleSearchedMuralZoom}
+                    handleCancel={leaveForm}
+                    setSelectedResource={setSelectedResource}
+                    setResourceType={setActiveForm}
+                  />
+                )}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
