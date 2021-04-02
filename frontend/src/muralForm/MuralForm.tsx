@@ -50,7 +50,8 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "180%",
     },
     directionButton: {
-      width: "100%"
+      width: "100%",
+      marginTop: theme.spacing(2)
     },
   })
 );
