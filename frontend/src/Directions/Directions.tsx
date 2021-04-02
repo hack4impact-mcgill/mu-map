@@ -144,7 +144,7 @@ function Directions(props: IDirectionsProps) {
         </AppBar>
         <Paper style={{ maxHeight: 900, overflow: "auto" }}>
           <List>
-            <CustomLegs waypoints={waypoints} />
+            <CustomLegs waypoints={waypoints} waypointPics={props.wpPics}/>
           </List>
         </Paper>
         <Button

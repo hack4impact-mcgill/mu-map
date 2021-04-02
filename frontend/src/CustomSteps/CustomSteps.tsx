@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// TODO change icon depending on step.maneuver.modifier
+
 function CustomSteps({ steps }: IStepsProps) {
   const classes = useStyles();
   function arrowToDisplay(maneuverModifier: string) {

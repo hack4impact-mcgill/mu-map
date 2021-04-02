@@ -10,6 +10,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 interface ILegsProps {
   waypoints: any;
+  waypointPics: string[]
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,31 +22,40 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       marginRight: theme.spacing(3),
     },
+    imageCard: {
+      borderRadius: '10px',
+      width: '120px',
+      height: '120px',
+      margin: theme.spacing(1),
+      marginRight: theme.spacing(3),
+    }
   })
 );
 
-// TODO change icon to image of mural
-function CustomLegs({ waypoints }: ILegsProps) {
+function CustomLegs({ waypoints, waypointPics }: ILegsProps) {
   const classes = useStyles();
 
-  return waypoints.map((wp: any) => (
+  return (
     <div>
-      <ListItem>
-      <div className={classes.arrowContainer}>
-          <FiberManualRecordIcon />
-        </div>
-        <ListItemText primary="You are here"/>
-      </ListItem>
-      <CustomSteps steps={wp[1].steps} />
-      <ListItem>
+    <ListItem>
         <div className={classes.arrowContainer}>
-          <ArrowUpwardIcon />
-        </div>
-        <ListItemText primary={wp[0]} />
-      </ListItem>
-      <Divider />
+            <FiberManualRecordIcon color="primary"/>
+          </div>
+          <ListItemText primary="You are here"/>
+        </ListItem>
+        <Divider/>
+    {waypoints.map((wp: any, index: number) => (
+      <div>
+        <CustomSteps steps={wp[1].steps} />
+        <ListItem>
+            <img className={classes.imageCard} src={waypointPics[index]} alt=""/>
+          <ListItemText primary={wp[0]} />
+        </ListItem>
+        <Divider />
+      </div>
+    ))}
     </div>
-  ));
+  );
 }
 
 export default React.memo(CustomLegs);
