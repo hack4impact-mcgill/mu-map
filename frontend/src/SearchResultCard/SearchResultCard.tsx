@@ -60,6 +60,11 @@ function SearchResultCard(props: ISearchCardSetProps) {
     }
   }
 
+  /**
+   * When the search result is clicked, pass its type and contents
+   * up to the parent to render the correct form. If the result is
+   * a mural, zoom the map to its location.
+   */
   function handleClick() {
     switch (props.type) {
       case FORM.MURAL:
@@ -76,7 +81,6 @@ function SearchResultCard(props: ISearchCardSetProps) {
         props.setSelectedResource(props.item)
         break;
     }
-    props.handleCancel()
   }
 
   const body = generateBody()

@@ -99,6 +99,7 @@ function App() {
    * After confirmation, close the form and reset state
    */
   const leaveForm = () => {
+    console.log("naw")
     setSidebarOpen(false);
     setFormWarning(false);
     setSelectedResource(null);
