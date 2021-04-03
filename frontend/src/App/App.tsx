@@ -42,7 +42,7 @@ function App() {
     setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
       .then(() => {
-        handleCancelSignin();
+        setSigningIn(false);
         setSignInError("");
       })
       .catch((error: any) => {
@@ -67,12 +67,7 @@ function App() {
       setIsSignedIn(!!user);
       setSigningIn(false);
     });
-
   }, []);
-
-  const openSignin = () => setSigningIn(true);
-
-  const handleCancelSignin = () => setSigningIn(false);
 
   /**
    * If opening the sidebar, set the appropriate form type.
@@ -87,9 +82,13 @@ function App() {
     formName && setActiveForm(formName);
   };
 
+  /**
+   * After confirmation, close the form and reset state
+   */
   const leaveForm = () => {
     setSidebarOpen(false);
     setFormWarning(false);
+    setSelectedResource(null);
   };
 
   const getMural = async () => {
@@ -182,7 +181,7 @@ function App() {
       <Context.Provider value={{ user: user, getMural }}>
         <SigninForm
           signInClick={handleSignin}
-          cancelClick={handleCancelSignin}
+          cancelClick={() => setSigningIn(false)}
           error={signInError}
           open={signingIn}
         />
@@ -206,7 +205,7 @@ function App() {
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
-          signinClick={openSignin}
+          signinClick={() => setSigningIn(true)}
           signoutClick={handleSignout}
           donateClick={() => setDonateOpen(true)}
         />
