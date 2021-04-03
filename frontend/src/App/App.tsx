@@ -38,6 +38,12 @@ function App() {
 
   const mapRef: any = useRef(null);
 
+  /**
+   * Use the Firebase Auth sign-in method email and password to
+   * attempt to authorize the user. If unsuccessful, relay an error
+   * message to the user.
+   * @param creds Email and password passed to the sign-in form
+   */
   const handleSignin = (creds: any) => {
     setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
@@ -57,10 +63,17 @@ function App() {
       });
   };
 
+  /**
+   * Sign the user out of Firebase Auth
+   */
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
   };
 
+  /**
+   * On app startup, add a listener to Firebase Auth to set the
+   * user object and auth status in local state when they change.
+   */
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
       setUser(user);
@@ -91,6 +104,9 @@ function App() {
     setSelectedResource(null);
   };
 
+  /**
+   * Fetch and set murals in local state
+   */
   const getMural = async () => {
     const response = await fetch(CREATE_MURAL_API);
     const data = await response.json();
@@ -98,6 +114,9 @@ function App() {
     setMurals(data.rows);
   };
 
+  /**
+   * Fetch and set tours in local state
+   */
   const getTour = async () => {
     const response = await fetch(GET_ALL_TOUR);
     const data = await response.json();
@@ -171,6 +190,9 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResource]);
 
+  /**
+   * On app startup, load murals and tours to be rendered on the map
+   */
   useEffect(() => {
     getMural();
     getTour();
