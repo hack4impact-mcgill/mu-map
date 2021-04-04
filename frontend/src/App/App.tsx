@@ -38,11 +38,17 @@ function App() {
 
   const mapRef: any = useRef(null);
 
+  /**
+   * Use the Firebase Auth sign-in method email and password to
+   * attempt to authorize the user. If unsuccessful, relay an error
+   * message to the user.
+   * @param creds Email and password passed to the sign-in form
+   */
   const handleSignin = (creds: any) => {
     setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
       .then(() => {
-        handleCancelSignin();
+        setSigningIn(false);
         setSignInError("");
       })
       .catch((error: any) => {
@@ -57,22 +63,24 @@ function App() {
       });
   };
 
+  /**
+   * Sign the user out of Firebase Auth
+   */
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
   };
 
+  /**
+   * On app startup, add a listener to Firebase Auth to set the
+   * user object and auth status in local state when they change.
+   */
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
       setUser(user);
       setIsSignedIn(!!user);
       setSigningIn(false);
     });
-
   }, []);
-
-  const openSignin = () => setSigningIn(true);
-
-  const handleCancelSignin = () => setSigningIn(false);
 
   /**
    * If opening the sidebar, set the appropriate form type.
@@ -87,11 +95,19 @@ function App() {
     formName && setActiveForm(formName);
   };
 
+  /**
+   * After confirmation, close the form and reset state
+   */
   const leaveForm = () => {
+    console.log("naw")
     setSidebarOpen(false);
     setFormWarning(false);
+    setSelectedResource(null);
   };
 
+  /**
+   * Fetch and set murals in local state
+   */
   const getMural = async () => {
     const response = await fetch(CREATE_MURAL_API);
     const data = await response.json();
@@ -99,6 +115,9 @@ function App() {
     setMurals(data.rows);
   };
 
+  /**
+   * Fetch and set tours in local state
+   */
   const getTour = async () => {
     const response = await fetch(GET_ALL_TOUR);
     const data = await response.json();
@@ -172,6 +191,9 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResource]);
 
+  /**
+   * On app startup, load murals and tours to be rendered on the map
+   */
   useEffect(() => {
     getMural();
     getTour();
@@ -182,7 +204,7 @@ function App() {
       <Context.Provider value={{ user: user, getMural }}>
         <SigninForm
           signInClick={handleSignin}
-          cancelClick={handleCancelSignin}
+          cancelClick={() => setSigningIn(false)}
           error={signInError}
           open={signingIn}
         />
@@ -206,7 +228,7 @@ function App() {
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
-          signinClick={openSignin}
+          signinClick={() => setSigningIn(true)}
           signoutClick={handleSignout}
           donateClick={() => setDonateOpen(true)}
         />
