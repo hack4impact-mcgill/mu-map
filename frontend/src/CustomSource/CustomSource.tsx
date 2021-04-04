@@ -34,7 +34,7 @@ function CustomSource({ tours }: ISourceProps) {
   return tours.map((tour: any) => (
     <Source type="geojson" data={geojson(tour)}>
       <Layer
-        id="tour"
+        id={String(tour.id)}
         type="line"
         layout={{
           "line-join": "round",
