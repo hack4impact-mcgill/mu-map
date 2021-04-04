@@ -99,7 +99,8 @@ function Directions(props: IDirectionsProps) {
       .catch(() => {
         console.log("error");
       });
-  }, [props.coordinates, props.wpNames]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function timingText(timeRequired: number[]) {
     if (timeRequired[2] > 30) {

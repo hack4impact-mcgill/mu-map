@@ -247,7 +247,6 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     return path;
   }
 
-  console.log(imgUrlsAndPath);
   return (
     <div>
       <form noValidate autoComplete="off">
