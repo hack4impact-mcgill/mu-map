@@ -69,42 +69,34 @@ function Directions(props: IDirectionsProps) {
   const [waypoints, setWaypoints] = useState<any[]>([]);
 
   useEffect(() => {
-    if (props.open) {
-      let coordString = "";
-      for (let i = 0; i < props.coordinates.length; i++) {
-        coordString += props.coordinates[i][0];
-        coordString += ",";
-        coordString += props.coordinates[i][1];
-        if (i !== props.coordinates.length - 1) coordString += ";";
-      }
-      var url =
-        MAPBOX_DIRECTIONS_API +
-        coordString +
-        "?steps=true&geometries=geojson&access_token=" +
-        process.env.REACT_APP_MAPBOX_TOKEN;
-      axios
-        .get(url)
-        .then((res) => {
-          let timeRequired = new Date(res.data.routes[0].duration * 1000)
-            .toISOString()
-            .substr(11, 8);
-          // Converts "hh:mm:ss" to an array of int type, [hh, mm, ss]
-          setTimeRequired(
-            timeRequired.split(":").map((time) => parseInt(time))
-          );
-          setTotalDistance(Math.round(res.data.routes[0].distance / 1000)); // m -> km
-
-          var zip = props.wpNames.map((n, i) => [
-            n,
-            res.data.routes[0].legs[i],
-          ]);
-          setWaypoints(zip);
-        })
-        .catch(() => {
-          // Unable to get directions from MapBox API
-        });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!props.open) return;
+    let coordString = "";
+    for (let i = 0; i < props.coordinates.length; i++) {
+      coordString += props.coordinates[i][0];
+      coordString += ",";
+      coordString += props.coordinates[i][1];
+      if (i !== props.coordinates.length - 1) coordString += ";";
     }
+    var url =
+      MAPBOX_DIRECTIONS_API +
+      coordString +
+      "?steps=true&geometries=geojson&access_token=" +
+      process.env.REACT_APP_MAPBOX_TOKEN;
+    axios
+      .get(url)
+      .then((res) => {
+        let timeRequired = new Date(res.data.routes[0].duration * 1000)
+          .toISOString()
+          .substr(11, 8);
+        // Converts "hh:mm:ss" to an array of int type, [hh, mm, ss]
+        setTimeRequired(timeRequired.split(":").map((time) => parseInt(time)));
+        setTotalDistance(Math.round(res.data.routes[0].distance / 1000)); // m -> km
+
+        var zip = props.wpNames.map((n, i) => [n, res.data.routes[0].legs[i]]);
+        setWaypoints(zip);
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.coordinates, props.wpNames, props.open]);
 
   function timingText(timeRequired: number[]) {
