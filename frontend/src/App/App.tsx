@@ -18,6 +18,7 @@ import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
 
+
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
@@ -38,11 +39,17 @@ function App() {
 
   const mapRef: any = useRef(null);
 
+  /**
+   * Use the Firebase Auth sign-in method email and password to
+   * attempt to authorize the user. If unsuccessful, relay an error
+   * message to the user.
+   * @param creds Email and password passed to the sign-in form
+   */
   const handleSignin = (creds: any) => {
     setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
       .then(() => {
-        handleCancelSignin();
+        setSigningIn(false);
         setSignInError("");
         setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true))
       })
@@ -58,11 +65,18 @@ function App() {
       });
   };
 
+  /**
+   * Sign the user out of Firebase Auth
+   */
   const handleSignout = async () => {
     await FirebaseAuth.signOut();
     setJWTtoken(null);
   };
 
+  /**
+   * On app startup, add a listener to Firebase Auth to set the
+   * user object and auth status in local state when they change.
+   */
   useEffect(() => {
     FirebaseAuth.onAuthStateChanged((user: any) => {
       setUser(user);
@@ -70,10 +84,6 @@ function App() {
       setSigningIn(false);
     });
   }, []);
-
-  const openSignin = () => setSigningIn(true);
-
-  const handleCancelSignin = () => setSigningIn(false);
 
   /**
    * If opening the sidebar, set the appropriate form type.
@@ -88,11 +98,19 @@ function App() {
     formName && setActiveForm(formName);
   };
 
+  /**
+   * After confirmation, close the form and reset state
+   */
   const leaveForm = () => {
+    console.log("naw")
     setSidebarOpen(false);
     setFormWarning(false);
+    setSelectedResource(null);
   };
 
+  /**
+   * Fetch and set murals in local state
+   */
   const getMural = async () => {
     const response = await fetch(CREATE_MURAL_API);
     const data = await response.json();
@@ -100,6 +118,9 @@ function App() {
     setMurals(data.rows);
   };
 
+  /**
+   * Fetch and set tours in local state
+   */
   const getTour = async () => {
     const response = await fetch(GET_ALL_TOUR);
     const data = await response.json();
@@ -108,13 +129,62 @@ function App() {
   };
 
   /**
-   * Zooms the map to the coordiantes of the clicked searched mural
+   * Zooms the map to the coordinates of the clicked searched mural
    * @param long longitude
    * @param lat latitude
    */
   const handleSearchedMuralZoom = (long: number, lat: number) => {
     mapRef.current.setLongLat(long, lat);
   };
+
+  /**
+   * The mural form supplied with a mural and cancel handler
+   */
+  const muralForm = (
+    <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
+  );
+
+  /**
+   * The collection form supplied with a collection, all murals,
+   * and handlers for cancellation and mural click
+   */
+  const collectionForm = (
+    <CollectionForm
+      collection={selectedResource}
+      muralsData={murals}
+      handleCancel={toggleSidebar}
+      handleMuralClick={handleSearchedMuralZoom}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
+
+  /**
+   * The tour form supplied with a tour, all murals,
+   * and handlers for cancellation and mural click
+   */
+  const tourForm = (
+    <TourForm
+      tour={selectedResource}
+      muralsData={murals}
+      handleCancel={toggleSidebar}
+      handleMuralClick={handleSearchedMuralZoom}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
+
+  /**
+   * The search component which gets passed into the sidebar
+   */
+  const searchMenu = (
+    <SearchMenu
+      handleMuralClick={handleSearchedMuralZoom}
+      handleCancel={leaveForm}
+      setSelectedResource={setSelectedResource}
+      setResourceType={setActiveForm}
+    />
+  );
 
   /**
    * When a resource marker is clicked, open its respective form
@@ -124,19 +194,20 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedResource]);
 
+  /**
+   * On app startup, load murals and tours to be rendered on the map
+   */
   useEffect(() => {
     getMural();
     getTour();
   }, []);
 
-  const sidebarTitle = "";
-
   return (
     <div className="App">
-      <Context.Provider value={{ user: user, token : JWTtoken }}>
+      <Context.Provider value={{ user: user, token : JWTtoken, getMural }}>
         <SigninForm
           signInClick={handleSignin}
-          cancelClick={handleCancelSignin}
+          cancelClick={() => setSigningIn(false)}
           error={signInError}
           open={signingIn}
         />
@@ -160,29 +231,20 @@ function App() {
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
-          signinClick={openSignin}
+          signinClick={() => setSigningIn(true)}
           signoutClick={handleSignout}
           donateClick={() => setDonateOpen(true)}
         />
         <Sidebar
-          name={sidebarTitle}
           isVisible={sidebarOpen}
           closeSidebar={toggleSidebar}
         >
-          {activeForm === FORM.MURAL ? (
-            <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
-          ) : activeForm === FORM.COLLECTION ? (
-            <CollectionForm collection={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
-          ) : activeForm === FORM.TOUR ? (
-            <TourForm tour={selectedResource} muralsData={murals} handleCancel={toggleSidebar} />
-          ) : (
-            <SearchMenu
-              handleMuralClick={handleSearchedMuralZoom}
-              handleCancel={leaveForm}
-              setSelectedResource={setSelectedResource}
-              setResourceType={setActiveForm}
-            />
-          )}
+          {
+            activeForm === FORM.MURAL ? muralForm
+            : activeForm === FORM.COLLECTION ? collectionForm
+            : activeForm === FORM.TOUR ? tourForm
+            : searchMenu
+          }
         </Sidebar>
         <LeaveWarning
           open={formWarning}

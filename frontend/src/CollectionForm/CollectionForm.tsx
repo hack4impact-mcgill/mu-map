@@ -12,9 +12,9 @@ import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import EditIcon from '@material-ui/icons/Edit';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
-import SearchCard from "SideBarSearch/searchCard";
+import SearchResultCard from "SearchResultCard/SearchResultCard";
 import Alert from "@material-ui/lab/Alert";
-import { CREATE_MURAL_API, GET_ALL_COLLECTION } from "constants/constants";
+import { CREATE_MURAL_API, FORM, GET_ALL_COLLECTION } from "constants/constants";
 import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3)
     },
     field: {
@@ -41,9 +41,12 @@ interface ICollectionFormProps {
   collection?: any;
   muralsData?: any;
   handleCancel: () => void;
+  handleMuralClick: (lat: number, long: number) => void;
+  setSelectedResource: (resource: any) => void;
+  setResourceType: (type: FORM) => void;
 };
 
-function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFormProps) {
+function CollectionForm(props: ICollectionFormProps) {
   const [murals, setMurals] = useState<any>([]);
   const [muralsInCollection, setMuralsInCollection] = useState<any>([]);
   const [muralResults, setMuralResults] = useState<any>([]);
@@ -67,20 +70,20 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
    * Populate the form when an existing collection is passed as a prop
    */
   useEffect(() => {
-    if (!collection || !Object.keys(collection)) return;
-    setTitle(collection.name);
-    setDescription(collection.description);
-  }, [collection])
+    if (!props.collection || !Object.keys(props.collection)) return;
+    setTitle(props.collection.name);
+    setDescription(props.collection.description);
+  }, [props.collection])
 
   useEffect(() => {
-    if (!collection || murals.length === 0) return;
+    if (!props.collection || murals.length === 0) return;
     let temp: any[] = [];
-    collection.murals.forEach((tourMural: any) => {
+    props.collection.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
       temp = ([...temp, found]);
     })
     setMuralsInCollection(temp);
-  }, [collection, murals]);
+  }, [props.collection, murals]);
 
   /**
    * Enable editable form fields for admin users
@@ -147,7 +150,7 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
           <InputBase
             className={`${styles.title} ${styles.field}`}
             placeholder="Name the collection"
-            defaultValue={collection?.name}
+            defaultValue={props.collection?.name}
             disabled={!isAdmin}
             onChange={(e: any) => setTitle(e.target.value)}
             inputProps={{ 'aria-label': 'New collection title' }}
@@ -166,7 +169,7 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
             multiline
             rows={4}
             placeholder="Add a description"
-            defaultValue={collection?.description}
+            defaultValue={props.collection?.description}
             disabled={!isAdmin}
             onChange={(e: any) => setDescription(e.target.value)}
             onClick={() => setEditingDesc(true)}
@@ -203,8 +206,24 @@ function CollectionForm({ collection, muralsData, handleCancel }: ICollectionFor
           </div>
         </div>
       </form>
-      <SearchCard searchCards={muralsInCollection} />
-      <ActionButtons saveCallback={handleSave} cancelCallback={handleCancel} />
+      <div className={styles.flexContainer}>
+        {muralsInCollection.map((mural: any) => {
+          return (
+            <SearchResultCard
+              type={FORM.MURAL}
+              item={mural}
+              key={mural.id}
+              handleMuralClick={props.handleMuralClick}
+              handleCancel={props.handleCancel}
+              setSelectedResource={props.setSelectedResource}
+              setResourceType={props.setResourceType}
+            />
+          )
+        })}
+      </div>
+      <ActionButtons
+        saveCallback={handleSave}
+        cancelCallback={props.handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">
           Collection published successfully!

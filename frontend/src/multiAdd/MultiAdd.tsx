@@ -5,6 +5,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import MultiAddItem from "./MultiAddItem";
 import InputBase from "@material-ui/core/InputBase";
 import Context from "context";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,6 +78,9 @@ function MultiAdd(props: IMultiAddProps) {
           }
         />
       }
+      {!isAdmin &&
+        items.length !== 0 &&
+        <Typography variant="caption" color="textSecondary"> {props.title}</Typography>}
       {items.map((item, i) => (
         <MultiAddItem name={item} onDelete={handleItemDelete} key={item} />
       ))}

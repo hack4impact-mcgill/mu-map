@@ -58,7 +58,7 @@ export default function ArtistBoroughSearch(props: IArtistBoroughSearchProps) {
       setDefaultSelectionName(filtered[0].name);
     }
   }, [props.defaultSelection, selections]);
-    
+
   /**
    * Enable editing for admin users
    */
@@ -104,7 +104,7 @@ export default function ArtistBoroughSearch(props: IArtistBoroughSearchProps) {
           />
         ) : (
           <div>
-            <Typography variant="caption" color="textSecondary">Artist</Typography>
+            <Typography variant="caption" color="textSecondary">{props.label}</Typography>
             <Typography variant="body1">{defaultSelectionName}</Typography>
           </div>
         )

@@ -4,6 +4,7 @@ import {
   InputAdornment,
   Typography,
   Snackbar,
+  Button,
 } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AddressSearch from "../AddressSearch/addressSearch";
@@ -11,9 +12,14 @@ import MultiAdd from "../multiAdd/MultiAdd";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
-import { CREATE_MURAL_API, GET_ALL_ARTISTS_API, GET_ALL_BOROUGH_API } from "../constants/constants";
+import {
+  CREATE_MURAL_API,
+  GET_ALL_ARTISTS_API,
+  GET_ALL_BOROUGH_API,
+} from "../constants/constants";
 import Alert from "@material-ui/lab/Alert";
-import ImageUpload from '../ImageUpload/ImageUpload'
+import ImageUpload from "../ImageUpload/ImageUpload";
+import Directions from "../Directions/Directions";
 import ArtistBoroughSearch from "ArtistBoroughSearch";
 import Context from "context";
 
@@ -23,8 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
-      width: "40vw",
-      maxWidth: "500px",
+      width: "500px",
+      maxWidth: "100vw",
       padding: theme.spacing(3),
     },
     element: {
@@ -42,6 +48,9 @@ const useStyles = makeStyles((theme: Theme) =>
     name: {
       fontSize: "180%",
     },
+    directionButton: {
+      width: "100%",
+    },
   })
 );
 
@@ -51,12 +60,11 @@ interface IMuralFormProps {
 }
 
 interface Image {
-  url: string,
-  path: string
+  url: string;
+  path: string;
 }
 
 function MuralForm({ mural, handleCancel }: IMuralFormProps) {
-
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -80,6 +88,9 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [hoveringDesc, setHoveringDesc] = useState<boolean>(false);
 
   const [popup, setPopup] = useState<boolean>(false);
+  const [directionOpen, setDirectionOpen] = useState<boolean>(false);
+
+  const [currentPos, setCurrentPos] = useState<number[]>([]);
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
@@ -88,7 +99,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
    */
   const userContext: any = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
-  
+
   /**
    * Populate the form when an existing mural is passed as a prop
    */
@@ -106,13 +117,30 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     setPartners(mural.partners);
     setArtist(mural.artistId);
     if (mural.imgURLs) {
-      setImgUrlsAndPath(mural.imgURLs.map(
-        (url: string) => {
-          return { url: url, path: pathFromUrl(url) }
-        }
-      ));
+      setImgUrlsAndPath(
+        mural.imgURLs.map((url: string) => {
+          return { url: url, path: pathFromUrl(url) };
+        })
+      );
     }
-  }, [mural])
+  }, [mural]);
+
+  function success(pos: any) {
+    setCurrentPos([pos.coords.longitude, pos.coords.latitude]);
+  }
+
+  function error(err: any) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  useEffect(() => {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 60000,
+      maximumAge: 0,
+    };
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }, []);
 
   function submitForm() {
     if (name === "") {
@@ -147,12 +175,17 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       socialMedia: socialMedia,
       address: address,
       neighbourhood: neighbourhood,
-      imgURLs: imgUrlsAndPath.map(urlAndPath => urlAndPath.url)
+      imgURLs: imgUrlsAndPath.map((urlAndPath) => urlAndPath.url),
     } as any;
 
     let existingMural = mural && Object.keys(mural);
     if (existingMural) payload.id = mural.id;
 
+    /**
+     * An axios request to add a new mural to AWS database
+     * Depending on whether the mural exists already
+     * we either update or add a new mural.
+     */
     axios({
       method: existingMural ? 'put' : 'post',
       url: existingMural ?
@@ -166,6 +199,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         (response) => {
           console.log(response);
           setPopup(true);
+          let context = userContext as any;
+          context.getMural();
           setTimeout(() => setPopup(false), 5000);
         },
         (error) => {
@@ -185,16 +220,21 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   }
 
   function handleImgUrlAdd(urlToAdd: string, pathToAdd: string) {
-    setImgUrlsAndPath([...imgUrlsAndPath, {
-      "url": urlToAdd,
-      "path": pathToAdd
-    }])
+    setImgUrlsAndPath([
+      ...imgUrlsAndPath,
+      {
+        url: urlToAdd,
+        path: pathToAdd,
+      },
+    ]);
   }
 
   function handleImgUrlRemove(pathToRemove: string) {
-    var urlsAndPaths = [...imgUrlsAndPath]
-    const newUrlsAndPaths = urlsAndPaths.filter(urlAndPath => pathToRemove !== urlAndPath.path)
-    setImgUrlsAndPath(newUrlsAndPaths)
+    var urlsAndPaths = [...imgUrlsAndPath];
+    const newUrlsAndPaths = urlsAndPaths.filter(
+      (urlAndPath) => pathToRemove !== urlAndPath.path
+    );
+    setImgUrlsAndPath(newUrlsAndPaths);
   }
 
   /**
@@ -210,6 +250,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     return path;
   }
 
+  console.log(imgUrlsAndPath);
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -228,7 +269,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringName(true)}
             onMouseLeave={() => setHoveringName(false)}
             endAdornment={
-              !editingName && isAdmin && (
+              !editingName &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringName ? "primary" : "action"} />
                 </InputAdornment>
@@ -250,7 +292,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
             endAdornment={
-              !editingDesc && isAdmin && (
+              !editingDesc &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringDesc ? "primary" : "action"} />
                 </InputAdornment>
@@ -278,7 +321,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             callback={(artistId: number | null) => setArtist(artistId)}
             endpoint={GET_ALL_ARTISTS_API}
             label="Artist"
-            placeHolder="Who made it"
+            placeHolder="Who made it?"
           />
           <ArtistBoroughSearch
             defaultSelection={mural?.boroughId}
@@ -315,8 +358,25 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             removeHandler={handleImgUrlRemove}
             imgsUrlAndPath={imgUrlsAndPath}
           />
+          <Button
+            color="primary"
+            size="medium"
+            variant="outlined"
+            disableElevation
+            className={styles.directionButton}
+            onClick={() => setDirectionOpen(true)}
+          >
+            Directions
+          </Button>
         </div>
       </form>
+      <Directions
+        open={directionOpen}
+        handleClose={() => setDirectionOpen(false)}
+        coordinates={[currentPos, addressCoords]}
+        wpNames={[name]}
+        wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]} // use the first image to display
+      />
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>
         <Alert severity="success">Mural published successfully!</Alert>

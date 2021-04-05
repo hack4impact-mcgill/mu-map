@@ -15,8 +15,12 @@ export const MTL_MAX_LONGITUDE = -73.33952;
 export const MTL_MAX_LATITUDE = 45.752154;
 export const MAPBOX_GEOCODING_API =
   "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+export const MAPBOX_DIRECTIONS_API =
+  "https://api.mapbox.com/directions/v5/mapbox/walking/";
 export const MAPBOX_STYLE_URL =
   "mapbox://styles/mumap/ckhb8l6je01ki1ao4tabh8e2q";
+export const PLACEHOLDER_IMAGE =
+  "https://cdn2.lamag.com/wp-content/uploads/sites/6/2020/01/kobe-mural-mr-brainwash-chris-delmas-afp-getty-1068x712.jpg";
 export const GET_ALL_ARTISTS_API = `${process.env.REACT_APP_BACKEND_URL}/artist`;
 export const GET_ALL_BOROUGH_API = `${process.env.REACT_APP_BACKEND_URL}/borough`;
 export const CREATE_MURAL_API = `${process.env.REACT_APP_BACKEND_URL}/mural`;

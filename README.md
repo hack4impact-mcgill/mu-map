@@ -1,4 +1,8 @@
 # MU MTL Open-air Museum Map
+
+![Main CI](https://github.com/hack4impact-mcgill/mu-map/actions/workflows/main.yml/badge.svg)
+![Backend CI](https://github.com/hack4impact-mcgill/mu-map/actions/workflows/deploy_backend.yml/badge.svg)
+
 _For [MU MTL](https://mumtl.org/)'s 15th anniversary_ 🎉
 
 A Progressive Web App for Montrealers and visitors to explore murals.
@@ -20,6 +24,7 @@ A Progressive Web App for Montrealers and visitors to explore murals.
 - [Ted Spare](https://github.com/tedspare)
 
 ## Backend
+
 ### Setup
 - Ensure you have [npm](https://www.npmjs.com/get-npm) and [Docker](https://www.docker.com/products/docker-desktop) installed.
 - Run `npm install` inside the **backend** folder.
@@ -32,6 +37,7 @@ Toolbox instead of Docker Desktop, type `docker-machine ip` into your command li
 ### Running 
 - Make sure docker is running and the Postgres container exists (which was created in the previous section).
 - Run `npm start`. You should see some output about the database tables being created. You are ready to work with the API.
+- Run `npm run start-migrate` to populate the DB with some sample data.
 - Run `npm t` to run unit tests. Unit tests should pass.
 
 ## Frontend

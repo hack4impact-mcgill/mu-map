@@ -10,14 +10,14 @@ import Context from "context";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     bottomButton: {
-      margin: theme.spacing(0, 0, 0, 3)
+      margin: theme.spacing(0, 0, 0, 2)
     },
     bottomButtonContainer: {
       display: "flex",
       justifyContent: "flex-end",
       padding: theme.spacing(3),
-      width: "40vw",
-      maxWidth: "500px",
+      width: "100%",
+      maxWidth: "100vw",
       bottom: 0
     },
   })
@@ -40,39 +40,31 @@ function ActionButtons({ saveCallback, cancelCallback }: IActionButtonsProps) {
   const userContext = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
-  const handleSave = () => {
-    saveCallback()
-  };
-
-  const handleCancel = () => {
-    cancelCallback()
-  };
-
   return (
     <div className={styles.bottomButtonContainer}>
       {
         isAdmin &&
-        <Button
-        color="secondary"
-        size="small"
-        variant="outlined"
-        className={styles.bottomButton}
-        onClick={handleCancel}
-      >
-        Cancel
-        </Button>
-      }
-      {
-        isAdmin &&
-        <Button
-          color="primary"
-          size="small"
-          variant="contained"
-          disableElevation
-          className={styles.bottomButton}
-          onClick={handleSave}>
-          Save
-        </Button>
+        (
+          <div>
+            <Button
+              color="secondary"
+              size="small"
+              className={styles.bottomButton}
+              onClick={cancelCallback}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              size="small"
+              variant="contained"
+              disableElevation
+              className={styles.bottomButton}
+              onClick={saveCallback}>
+              Save
+            </Button>
+          </div>
+        )
       }
     </div>
   )
