@@ -5,7 +5,6 @@ import { TourService } from "../services/tour.service";
 
 export class TourController {
   public tourService: TourService = new TourService();
-
   /**
    * POST /tour to create a new tour associated with murals by id
    * @param req HTTP request containing a "tour" attribute containing TourInterface attributes

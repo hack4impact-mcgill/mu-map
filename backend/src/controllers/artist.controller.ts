@@ -5,7 +5,6 @@ import { ArtistService } from "../services/artist.service";
 
 export class ArtistController {
   public artistService: ArtistService = new ArtistService();
-
   /**
    * POST /artist
    * @param req HTTP request containing ArtistInterface attributes:

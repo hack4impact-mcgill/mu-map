@@ -97,7 +97,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   /**
    * Enable editable form fields for admin users
    */
-  const userContext = useContext(Context);
+  const userContext: any = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   /**
@@ -190,7 +190,10 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       method: existingMural ? 'put' : 'post',
       url: existingMural ?
         `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
-      data: payload
+      data: payload,
+      headers:  {
+          authorization: userContext.token.i
+        }
     })
       .then(
         (response) => {

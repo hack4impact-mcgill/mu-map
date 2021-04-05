@@ -88,7 +88,7 @@ function CollectionForm(props: ICollectionFormProps) {
   /**
    * Enable editable form fields for admin users
    */
-  const userContext = useContext(Context)
+  const userContext: any = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
@@ -108,6 +108,11 @@ function CollectionForm(props: ICollectionFormProps) {
         description: description
       },
       murals: muralsInCollection.map((mural: any) => mural.id)
+    },
+    {
+      headers: {
+        authorization: userContext.token.i
+      }
     })
       .then(() => {
         setPopup(true);

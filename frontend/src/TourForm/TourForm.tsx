@@ -71,7 +71,6 @@ function TourForm(props: ITourFormProps) {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const styles = useStyles();
-
   /**
    * Populate the form when an existing tour is passed as a prop
    */
@@ -94,7 +93,7 @@ function TourForm(props: ITourFormProps) {
   /**
    * Enable editable form fields for admin users
    */
-  const userContext = useContext(Context)
+  const userContext: any = useContext(Context)
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
@@ -108,7 +107,7 @@ function TourForm(props: ITourFormProps) {
 
   const handleSave = () => {
     if (!title.length || !description.length) return;
-
+    
     axios
       .post(GET_ALL_TOUR, {
         tour: {
@@ -116,6 +115,10 @@ function TourForm(props: ITourFormProps) {
           description: description,
         },
         murals: muralsInTour.map((mural: any) => mural.id),
+      }, {
+        headers: {
+          authorization: userContext.token.i
+        }
       })
       .then(() => {
         setPopup(true);
