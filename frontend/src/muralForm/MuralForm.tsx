@@ -91,13 +91,14 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [directionOpen, setDirectionOpen] = useState<boolean>(false);
 
   const [currentPos, setCurrentPos] = useState<number[]>([]);
+  const [isGeoOn, setIsGeoOn] = useState<boolean>(false);
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   /**
    * Enable editable form fields for admin users
    */
-  const userContext: any = useContext(Context)
+  const userContext: any = useContext(Context);
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   /**
@@ -127,10 +128,12 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
   function success(pos: any) {
     setCurrentPos([pos.coords.longitude, pos.coords.latitude]);
+    setIsGeoOn(true);
   }
 
   function error(err: any) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
+    setIsGeoOn(false);
   }
 
   useEffect(() => {
@@ -187,26 +190,26 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
      * we either update or add a new mural.
      */
     axios({
-      method: existingMural ? 'put' : 'post',
-      url: existingMural ?
-        `${CREATE_MURAL_API}/${payload.id}` : CREATE_MURAL_API,
+      method: existingMural ? "put" : "post",
+      url: existingMural
+        ? `${CREATE_MURAL_API}/${payload.id}`
+        : CREATE_MURAL_API,
       data: payload,
-      headers:  {
-          authorization: userContext.token.i
-        }
-    })
-      .then(
-        (response) => {
-          console.log(response);
-          setPopup(true);
-          let context = userContext as any;
-          context.getMural();
-          setTimeout(() => setPopup(false), 5000);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      headers: {
+        authorization: userContext.token.i,
+      },
+    }).then(
+      (response) => {
+        console.log(response);
+        setPopup(true);
+        let context = userContext as any;
+        context.getMural();
+        setTimeout(() => setPopup(false), 5000);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   function handleAddressUpdate(
@@ -248,6 +251,24 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     path = path.replaceAll("%20", " ");
     path = path.replaceAll("%2F", "/");
     return path;
+  }
+
+  function directionsButton() {
+    if (isGeoOn) {
+      return (
+        <Button
+          color="primary"
+          size="medium"
+          variant="outlined"
+          disableElevation
+          className={styles.directionButton}
+          onClick={() => setDirectionOpen(true)}
+        >
+          Directions
+        </Button>
+      );
+    }
+    return null;
   }
 
   return (
@@ -357,16 +378,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             removeHandler={handleImgUrlRemove}
             imgsUrlAndPath={imgUrlsAndPath}
           />
-          <Button
-            color="primary"
-            size="medium"
-            variant="outlined"
-            disableElevation
-            className={styles.directionButton}
-            onClick={() => setDirectionOpen(true)}
-          >
-            Directions
-          </Button>
+          {directionsButton()}
         </div>
       </form>
       <Directions
