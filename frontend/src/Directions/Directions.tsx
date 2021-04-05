@@ -69,7 +69,7 @@ function Directions(props: IDirectionsProps) {
   const [waypoints, setWaypoints] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log(props.coordinates);
+    if (!props.open) return;
     let coordString = "";
     for (let i = 0; i < props.coordinates.length; i++) {
       coordString += props.coordinates[i][0];
@@ -94,13 +94,10 @@ function Directions(props: IDirectionsProps) {
 
         var zip = props.wpNames.map((n, i) => [n, res.data.routes[0].legs[i]]);
         setWaypoints(zip);
-        console.log(zip);
       })
-      .catch(() => {
-        console.log("error");
-      });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.coordinates, props.wpNames, props.open]);
 
   function timingText(timeRequired: number[]) {
     if (timeRequired[2] > 30) {
