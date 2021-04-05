@@ -84,7 +84,12 @@ function DropdownMenu({ isSignedIn, signinClick, signoutClick, donateClick }: ID
         <MenuItem>
           <TranslateIcon /> English (Anglais)
         </MenuItem>
-        <MenuItem component="a" href="https://mumtl.org/" target="_blank">
+        <MenuItem
+          component="a"
+          href="https://mumtl.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Visit MU site
         </MenuItem>
         <MenuItem
