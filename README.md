@@ -7,6 +7,8 @@ _For [MU MTL](https://mumtl.org/)'s 15th anniversary_ 🎉
 
 A Progressive Web App for Montrealers and visitors to explore murals.
 
+![image](https://user-images.githubusercontent.com/36117635/113964769-2c8d2d80-97fa-11eb-96c7-86b2e8714c5c.png)
+
 ### Developers
 - [Lin Xiao Zheng](https://github.com/zhenglinxiao)
 - [Tony Ou](https://github.com/Tony9984)
