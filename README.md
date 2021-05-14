@@ -22,8 +22,9 @@ A Progressive Web App for Montrealers and visitors to explore murals.
 - [Sophearah Suy-Puth](https://github.com/sophearahsp)
 - Pauline Swen
 
-### Project Manager
+### Project Managers
 - [Ted Spare](https://github.com/tedspare)
+- [Celine Huang](https://github.com/celinehuang)
 
 ## Backend
 
@@ -46,6 +47,12 @@ Toolbox instead of Docker Desktop, type `docker-machine ip` into your command li
 
 - `cd` into **frontend**
 - Add a file called **.env** with the appropriate keys from Slack. See **.sample-env** for reference.
-- `yarn install` to install dependencies from npm ([yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) is the same as npm but newer)
+- `yarn install` dependencies ([yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) is the same as npm but [fahttps://www.sitepoint.com/yarn-vs-npm/r](url))
 - `yarn start` and open the browser to **localhost:3000** or go to **192.168.2.20:3000** on your phone on wifi! :rocket:
 - To debug, open Developer Tools in Chrome or Firefox via right click > inspect or `cmd`/`ctrl`+`shift`+`c`.
+
+## Deployment
+
+The client-side and server code both deploy automatically when a PR is merged into [`main`](https://github.com/hack4impact-mcgill/mu-map).
+- The frontend is deployed and hosted by [Vercel](https://vercel.com/).
+- The backend is deployed via our [CD script](https://github.com/hack4impact-mcgill/mu-map/blob/main/.github/workflows/deploy_backend.yml), which generates a [build](https://create-react-app.dev/docs/production-build/), [zip](https://en.wikipedia.org/wiki/ZIP_(file_format))s it, then deploys the artifact to our AWS Elastic Beanstalk (EB). The backend runs on an AWS EC2 instance (which is just a Linux VM). That EC2 is wrapped by an AWS Elastic Load Balancer (ELB) to receive and downgrade incoming HTTPS traffic to HTTP. The ELB's IP address is stored as the [A record](https://support.dnsimple.com/articles/a-record/) of `api.mumap.xyz` in Vercel.
