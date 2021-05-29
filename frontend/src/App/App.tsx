@@ -27,7 +27,7 @@ function App() {
   const [JWTtoken, setJWTtoken] = useState<any>();
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
+  const [activeForm,  setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
   const [donateOpen, setDonateOpen] = useState<boolean>(false);
   const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
@@ -201,6 +201,20 @@ function App() {
     getTour();
   }, []);
 
+  const getSpecificMural = async () => {
+    const muralId = window.location.href.split("/").pop();
+    const response = await fetch(`${CREATE_MURAL_API}/${muralId}`);
+    const data = await response.json();
+    setSelectedResource(data);
+  };
+
+  useEffect(() => {
+    if (window.location.pathname != "/") {
+      setActiveForm(FORM.MURAL);
+      getSpecificMural();
+      setWelcomeOpen(false);
+    }
+  }, []);
   return (
     <div className="App">
       <Context.Provider value={{ user: user, token : JWTtoken, getMural }}>
@@ -225,6 +239,7 @@ function App() {
           muralClick={(mural: any) => {
             setActiveForm(FORM.MURAL);
             setSelectedResource(mural);
+            window.history.pushState("","",`${mural.id}`);
           }}
           ref={mapRef}
         />
