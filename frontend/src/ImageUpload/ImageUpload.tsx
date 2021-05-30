@@ -144,31 +144,44 @@ function ImageUpload({
    */
   const uploadedImages = imgsUrlAndPath.map(
     (urlAndPath: any) => {
-      return (
-        <div
-          className={styles.imageCard}
-          key={urlAndPath.url + "_"}
-        >
-          <img
-            alt="mural"
-            className={styles.muralImage}
-            key={urlAndPath.url}
-            src={urlAndPath.url}
-            />
-          {
-            isAdmin &&
-            <IconButton
-              size="small"
-              onClick={() => handleRemove(urlAndPath.path)}
-              className={styles.deleteButton}
+      const storage = firebase.storage();
+
+      let source = "";
+      storage.ref(urlAndPath.path).getDownloadURL()
+        .then((url) => {
+          source = url;
+          console.log(source);
+          return (
+            <div
+              className={styles.imageCard}
+              key={urlAndPath.path + "_"}
             >
-              <ClearIcon style={{color:"#fff"}} />
-            </IconButton>
-          }
-        </div>
-      );
-    }
-  );
+              {console.log(source)}
+              <img
+                alt="mural"
+                className={styles.muralImage}
+                key={urlAndPath.path}
+                src={source}
+                />
+              {
+                isAdmin &&
+                <IconButton
+                  size="small"
+                  onClick={() => handleRemove(source)}
+                  className={styles.deleteButton}
+                >
+                  <ClearIcon style={{color:"#fff"}} />
+                </IconButton>
+              }
+            </div>
+        )
+      
+    })
+    .catch((e) => {
+      console.log(e)
+      return null
+    } )
+  })
 
   return (
     <div className={styles.imageContainer}>
@@ -185,6 +198,7 @@ function ImageUpload({
           <input type="file" hidden onChange={handleUpload} accept="image/*" />
         </Button>
       }
+      {console.log(uploadedImages)}
       {uploadedImages}
       {dummyImage(imgsUrlAndPath)}
     </div>
