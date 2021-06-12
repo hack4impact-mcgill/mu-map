@@ -10,12 +10,12 @@ interface IMarkerProps {
 
 function CustomMarker({ murals, setInfo }: IMarkerProps) {
   const size = 40;
-
+  console.log(murals)
   return (murals.map((mural: any) => (
     <Marker
       key={mural.name}
-      longitude={mural.coordinates.coordinates[0]}
-      latitude={mural.coordinates.coordinates[1]}
+      longitude={mural.coordinates.coordinates ? mural.coordinates.coordinates[0] : 0}
+      latitude={mural.coordinates.coordinates ? mural.coordinates.coordinates[1] : 0}
       offsetTop={-size+5}
       offsetLeft={-size/2+2}
     >
