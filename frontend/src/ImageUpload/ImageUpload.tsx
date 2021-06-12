@@ -146,9 +146,10 @@ function ImageUpload({
     (urlAndPath: any) => {
       const storage = firebase.storage();
 
-      let source = "";
+      
       storage.ref(urlAndPath.path).getDownloadURL()
         .then((url) => {
+          let source = "";
           source = url;
           console.log(source);
           return (
@@ -156,13 +157,12 @@ function ImageUpload({
               className={styles.imageCard}
               key={urlAndPath.path + "_"}
             >
-              {console.log(source)}
-              <img
+              {source && <img
                 alt="mural"
                 className={styles.muralImage}
                 key={urlAndPath.path}
                 src={source}
-                />
+                />}
               {
                 isAdmin &&
                 <IconButton
