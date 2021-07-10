@@ -17,6 +17,7 @@ import {
   GET_ALL_ARTISTS_API,
   GET_ALL_BOROUGH_API,
 } from "../constants/constants";
+import ShareIcon from '@material-ui/icons/Share';
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import Directions from "../Directions/Directions";
@@ -265,12 +266,49 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           onClick={() => setDirectionOpen(true)}
         >
           Directions
-        </Button>
+      </Button>
       );
     }
     return null;
   }
 
+  function copyLink() {
+    const dummy = document.createElement('p');
+    dummy.textContent = window.location.href;
+    document.body.appendChild(dummy);
+  
+    const range = document.createRange();
+    range.setStartBefore(dummy);
+    range.setEndAfter(dummy);
+  
+    const selection = window.getSelection();
+    // First clear, in case the user already selected some other text
+    if (selection != null) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    
+    }
+
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+  }
+
+  function shareableLink() {
+    return (
+      <Button
+      color="primary"
+      size="medium"
+      variant="outlined"
+      disableElevation
+      className={styles.directionButton}
+      onClick={copyLink}
+      >
+      <ShareIcon>
+      </ShareIcon>
+      <p>Get Shareable Link</p>
+      </Button>
+    )
+  }
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -379,6 +417,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             imgsUrlAndPath={imgUrlsAndPath}
           />
           {directionsButton()}
+          {shareableLink()}
         </div>
       </form>
       <Directions
