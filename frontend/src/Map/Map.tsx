@@ -30,6 +30,7 @@ interface IMapProps {
   muralClick: (mural: any) => void;
   murals: any;
   tours: any;
+  currentTour: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
+const Map = forwardRef(({ muralClick, murals, tours, currentTour }: IMapProps, ref: any) => {
 
   const styles = useStyles();
 
@@ -102,7 +103,7 @@ const Map = forwardRef(({ muralClick, murals, tours }: IMapProps, ref: any) => {
           clickDetail={muralClick}
         />
       )}
-      <CustomSource tours={tours} />
+      <CustomSource tours={tours} currentTour={currentTour}/>
     </ReactMapGL>
   );
 });
