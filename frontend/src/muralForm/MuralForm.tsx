@@ -266,14 +266,13 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
           onClick={() => setDirectionOpen(true)}
         >
           Directions
-        </Button>
+      </Button>
       );
     }
     return null;
   }
 
-  function copy() {
-
+  function copyLink() {
     const dummy = document.createElement('p');
     dummy.textContent = window.location.href;
     document.body.appendChild(dummy);
@@ -284,9 +283,12 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   
     const selection = window.getSelection();
     // First clear, in case the user already selected some other text
-    selection.removeAllRanges();
-    selection.addRange(range);
-  
+    if (selection != null) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    
+    }
+
     document.execCommand('copy');
     document.body.removeChild(dummy);
   }
@@ -299,9 +301,9 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       variant="outlined"
       disableElevation
       className={styles.directionButton}
-      onClick={copy}
+      onClick={copyLink}
       >
-        <ShareIcon >
+      <ShareIcon>
       </ShareIcon>
       <p>Get Shareable Link</p>
       </Button>

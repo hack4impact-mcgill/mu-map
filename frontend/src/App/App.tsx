@@ -27,7 +27,7 @@ function App() {
   const [JWTtoken, setJWTtoken] = useState<any>();
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [activeForm,  setActiveForm] = useState<FORM>(FORM.MURAL);
+  const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
   const [donateOpen, setDonateOpen] = useState<boolean>(false);
   const [welcomeOpen, setWelcomeOpen] = useState<boolean>(true);
@@ -209,7 +209,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (window.location.pathname != "/") {
+    if (window.location.pathname !== "/") {
       setActiveForm(FORM.MURAL);
       getSpecificMural();
       setWelcomeOpen(false);
