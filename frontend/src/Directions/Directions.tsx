@@ -18,9 +18,11 @@ import axios from "axios";
 interface IDirectionsProps {
   open: boolean;
   handleClose: () => void;
+  handleCloseContinue: () => void;
   coordinates: number[][];
   wpNames: string[]; // waypoint names excluding starting point
   wpPics: string[];
+  handleTour: (tour: any) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -112,6 +114,15 @@ function Directions(props: IDirectionsProps) {
     }
   }
 
+  function handleLeave(props: IDirectionsProps) {
+    props.handleClose();
+    props.handleCloseContinue();
+  }
+
+  function handleTour(props:IDirectionsProps, tour: any) {
+    props.handleTour(tour);
+  }
+
   return (
     <div className={classes.container}>
       <Dialog
@@ -150,6 +161,7 @@ function Directions(props: IDirectionsProps) {
           variant="contained"
           color="primary"
           disableElevation
+          onClick={()=>{handleLeave(props); handleTour(props, waypoints) ;}}
         >
           Start
         </Button>
