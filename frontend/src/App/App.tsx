@@ -17,7 +17,7 @@ import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
-
+import VercelLogo from "components/VercelLogo";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -51,7 +51,7 @@ function App() {
       .then(() => {
         setSigningIn(false);
         setSignInError("");
-        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true))
+        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true));
       })
       .catch((error: any) => {
         console.log(error.message);
@@ -203,7 +203,7 @@ function App() {
 
   return (
     <div className="App">
-      <Context.Provider value={{ user: user, token : JWTtoken, getMural }}>
+      <Context.Provider value={{ user: user, token: JWTtoken, getMural }}>
         <SigninForm
           signInClick={handleSignin}
           cancelClick={() => setSigningIn(false)}
@@ -251,6 +251,7 @@ function App() {
           handleLeave={leaveForm}
         />
         <PlusButton isVisible={isSignedIn} handleClick={toggleSidebar} />
+        <VercelLogo />
       </Context.Provider>
     </div>
   );
