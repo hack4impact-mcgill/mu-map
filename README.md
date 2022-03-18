@@ -20,8 +20,9 @@ A Progressive Web App for Montrealers and visitors to explore murals.
 - [Sophearah Suy-Puth](https://github.com/sophearahsp)
 - Pauline Swen
 
-### Project Manager
+### Project Managers
 - [Ted Spare](https://github.com/tedspare)
+- [Celine Huang](https://github.com/celinehuang)
 
 ## Backend
 
