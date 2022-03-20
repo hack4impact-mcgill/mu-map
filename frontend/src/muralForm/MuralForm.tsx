@@ -17,6 +17,7 @@ import {
   GET_ALL_ARTISTS_API,
   GET_ALL_BOROUGH_API,
 } from "../constants/constants";
+import ShareIcon from "@material-ui/icons/Share";
 import Alert from "@material-ui/lab/Alert";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import Directions from "../Directions/Directions";
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     directionButton: {
       width: "100%",
+      margin: theme.spacing(2, 0, 0, 0),
     },
   })
 );
@@ -94,6 +96,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   const [isGeoOn, setIsGeoOn] = useState<boolean>(false);
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  const [linkCopied, setLinkCopied] = useState<boolean>(false);
 
   /**
    * Enable editable form fields for admin users
@@ -271,6 +275,53 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
     return null;
   }
 
+  function copyLink() {
+    try {
+      const dummy = document.createElement("p");
+      dummy.textContent = window.location.href;
+      document.body.appendChild(dummy);
+
+      const range = document.createRange();
+      range.setStartBefore(dummy);
+      range.setEndAfter(dummy);
+
+      const selection = window.getSelection();
+      // First clear, in case the user already selected some other text
+      if (selection != null) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    // Indicate success to the user
+    setLinkCopied(true);
+    setTimeout(() => {
+      setLinkCopied(false);
+    }, 2000);
+  }
+
+  function shareableLink() {
+    return (
+      <Button
+        color="default"
+        size="medium"
+        variant="outlined"
+        disableElevation
+        className={styles.directionButton}
+        onClick={copyLink}
+      >
+        <ShareIcon></ShareIcon>
+        <span>{linkCopied ? "Copied!" : "Copy Link"}</span>
+      </Button>
+    );
+  }
+
   return (
     <div>
       <form noValidate autoComplete="off">
@@ -379,6 +430,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
             imgsUrlAndPath={imgUrlsAndPath}
           />
           {directionsButton()}
+          {shareableLink()}
         </div>
       </form>
       <Directions

@@ -201,6 +201,21 @@ function App() {
     getTour();
   }, []);
 
+  const getSpecificMural = async () => {
+    const muralId = window.location.href.split("/").pop();
+    const response = await fetch(`${CREATE_MURAL_API}/${muralId}`);
+    const data = await response.json();
+    setSelectedResource(data);
+  };
+
+  useEffect(() => {
+    if (window.location.pathname !== "/") {
+      setActiveForm(FORM.MURAL);
+      getSpecificMural();
+      setWelcomeOpen(false);
+    }
+  }, []);
+
   return (
     <div className="App">
       <Context.Provider value={{ user: user, token: JWTtoken, getMural }}>
@@ -225,6 +240,7 @@ function App() {
           muralClick={(mural: any) => {
             setActiveForm(FORM.MURAL);
             setSelectedResource(mural);
+            window.history.pushState("", "", `${mural.id}`);
           }}
           ref={mapRef}
         />
@@ -234,16 +250,14 @@ function App() {
           signoutClick={handleSignout}
           donateClick={() => setDonateOpen(true)}
         />
-        <Sidebar
-          isVisible={sidebarOpen}
-          closeSidebar={toggleSidebar}
-        >
-          {
-            activeForm === FORM.MURAL ? muralForm
-            : activeForm === FORM.COLLECTION ? collectionForm
-            : activeForm === FORM.TOUR ? tourForm
-            : searchMenu
-          }
+        <Sidebar isVisible={sidebarOpen} closeSidebar={toggleSidebar}>
+          {activeForm === FORM.MURAL
+            ? muralForm
+            : activeForm === FORM.COLLECTION
+            ? collectionForm
+            : activeForm === FORM.TOUR
+            ? tourForm
+            : searchMenu}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
