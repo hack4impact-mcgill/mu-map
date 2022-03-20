@@ -47,18 +47,13 @@ function App() {
   const mapRef: any = useRef(null);
 
   /**
-   * At first render, attempt to refresh JWT from Firebase Auth
+   * Attempt to refresh the JWT from Firebase Auth
+   * Then, save or delete the JWT from local storage
    */
   useEffect(() => {
     if (!JWTtoken) {
       FirebaseAuth.currentUser?.getIdToken(true).then(setJWTtoken);
     }
-  }, []);
-
-  /**
-   * At login or logout, save or delete the JWT from local storage
-   */
-  useEffect(() => {
     localStorage.setItem("mu-auth", JSON.stringify(JWTtoken ?? null));
   }, [JWTtoken]);
 
