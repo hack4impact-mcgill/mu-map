@@ -5,16 +5,20 @@ import {
   makeStyles,
   Snackbar,
   TextField,
-  Theme
+  Theme,
 } from "@material-ui/core";
 import axios from "axios";
 import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import SearchResultCard from "SearchResultCard/SearchResultCard";
 import Alert from "@material-ui/lab/Alert";
-import { CREATE_MURAL_API, FORM, GET_ALL_COLLECTION } from "constants/constants";
+import {
+  CREATE_MURAL_API,
+  FORM,
+  GET_ALL_COLLECTION,
+} from "constants/constants";
 import Context from "context";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,11 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "start",
       width: "500px",
       maxWidth: "100vw",
-      padding: theme.spacing(3)
+      padding: theme.spacing(3),
     },
     field: {
       width: "100%",
-      margin: theme.spacing(0, 0, 2, 0)
+      margin: theme.spacing(0, 0, 2, 0),
     },
     title: {
       fontSize: "180%",
@@ -44,7 +48,7 @@ interface ICollectionFormProps {
   handleMuralClick: (lat: number, long: number) => void;
   setSelectedResource: (resource: any) => void;
   setResourceType: (type: FORM) => void;
-};
+}
 
 function CollectionForm(props: ICollectionFormProps) {
   const [murals, setMurals] = useState<any>([]);
@@ -73,28 +77,32 @@ function CollectionForm(props: ICollectionFormProps) {
     if (!props.collection || !Object.keys(props.collection)) return;
     setTitle(props.collection.name);
     setDescription(props.collection.description);
-  }, [props.collection])
+  }, [props.collection]);
 
   useEffect(() => {
     if (!props.collection || murals.length === 0) return;
     let temp: any[] = [];
     props.collection.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
-      temp = ([...temp, found]);
-    })
+      temp = [...temp, found];
+    });
     setMuralsInCollection(temp);
   }, [props.collection, murals]);
 
   /**
    * Enable editable form fields for admin users
    */
-  const userContext: any = useContext(Context)
+  const userContext: any = useContext(Context);
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
-    if (!addedMural) return
-    if (muralsInCollection.some((currMural: any) => currMural.id === addedMural.id))
-      return
+    if (!addedMural) return;
+    if (
+      muralsInCollection.some(
+        (currMural: any) => currMural.id === addedMural.id
+      )
+    )
+      return;
 
     setMuralsInCollection((oldMurals: any) => [...oldMurals, addedMural]);
   };
@@ -102,18 +110,27 @@ function CollectionForm(props: ICollectionFormProps) {
   const handleSave = () => {
     if (!title.length || !description.length) return;
 
-    axios.post(GET_ALL_COLLECTION, {
-      collection: {
-        name: title,
-        description: description
-      },
-      murals: muralsInCollection.map((mural: any) => mural.id)
-    },
-    {
-      headers: {
-        authorization: userContext.token.i
-      }
-    })
+    if (!userContext.token) {
+      alert("Please log in again.");
+      return;
+    }
+
+    axios
+      .post(
+        GET_ALL_COLLECTION,
+        {
+          collection: {
+            name: title,
+            description: description,
+          },
+          murals: muralsInCollection.map((mural: any) => mural.id),
+        },
+        {
+          headers: {
+            authorization: userContext.token,
+          },
+        }
+      )
       .then(() => {
         setPopup(true);
         setTimeout(() => setPopup(false), 5000);
@@ -122,17 +139,18 @@ function CollectionForm(props: ICollectionFormProps) {
   };
 
   useEffect(() => {
-    axios.get(CREATE_MURAL_API)
+    axios
+      .get(CREATE_MURAL_API)
       .then((response) => {
-        if (response.data) setMurals(response.data.rows)
+        if (response.data) setMurals(response.data.rows);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     if (muralQuery) {
       const filtered = murals.filter((mural: any) => {
-      return mural.name.toLowerCase().includes(muralQuery)
+        return mural.name.toLowerCase().includes(muralQuery);
       });
       setMuralResults(filtered);
     } else {
@@ -145,7 +163,11 @@ function CollectionForm(props: ICollectionFormProps) {
       <form
         noValidate
         autoComplete="off"
-        onSubmit={(e: SyntheticEvent) => { e.preventDefault(); handleSave() }}>
+        onSubmit={(e: SyntheticEvent) => {
+          e.preventDefault();
+          handleSave();
+        }}
+      >
         <div className={styles.flexContainer}>
           <InputBase
             className={`${styles.title} ${styles.field}`}
@@ -153,16 +175,19 @@ function CollectionForm(props: ICollectionFormProps) {
             defaultValue={props.collection?.name}
             disabled={!isAdmin}
             onChange={(e: any) => setTitle(e.target.value)}
-            inputProps={{ 'aria-label': 'New collection title' }}
+            inputProps={{ "aria-label": "New collection title" }}
             onClick={() => setEditingTitle(true)}
             onBlur={() => setEditingTitle(false)}
             onMouseEnter={() => setHoveringTitle(true)}
             onMouseLeave={() => setHoveringTitle(false)}
-            endAdornment={!editingTitle && isAdmin && (
-              <InputAdornment position="start">
-                <EditIcon color={hoveringTitle ? "primary" : "action"} />
-              </InputAdornment>
-            )}
+            endAdornment={
+              !editingTitle &&
+              isAdmin && (
+                <InputAdornment position="start">
+                  <EditIcon color={hoveringTitle ? "primary" : "action"} />
+                </InputAdornment>
+              )
+            }
           />
           <InputBase
             className={styles.field}
@@ -176,33 +201,35 @@ function CollectionForm(props: ICollectionFormProps) {
             onBlur={() => setEditingDesc(false)}
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
-            endAdornment={!editingDesc && isAdmin && (
-              <InputAdornment position="start">
-                <EditIcon color={hoveringDesc ? "primary" : "action"} />
-              </InputAdornment>
-            )}
+            endAdornment={
+              !editingDesc &&
+              isAdmin && (
+                <InputAdornment position="start">
+                  <EditIcon color={hoveringDesc ? "primary" : "action"} />
+                </InputAdornment>
+              )
+            }
           />
           <div className={styles.field}>
-            {
-              isAdmin && (
-                <Autocomplete
-                  freeSolo={false}
-                  options={muralResults.map((mural: any) => mural)}
-                  getOptionLabel={(mural: any) => mural.name}
-                  onChange={(e: any, value: any) => handleAddMural(value)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Add a mural"
-                      variant="outlined"
-                      size="small"
-                      onChange={
-                        (e: any) => setMuralQuery(e.target.value.toLowerCase())
-                      }
-                    />
-                  )}
-                />)
-            }
+            {isAdmin && (
+              <Autocomplete
+                freeSolo={false}
+                options={muralResults.map((mural: any) => mural)}
+                getOptionLabel={(mural: any) => mural.name}
+                onChange={(e: any, value: any) => handleAddMural(value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Add a mural"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e: any) =>
+                      setMuralQuery(e.target.value.toLowerCase())
+                    }
+                  />
+                )}
+              />
+            )}
           </div>
         </div>
       </form>
@@ -218,19 +245,18 @@ function CollectionForm(props: ICollectionFormProps) {
               setSelectedResource={props.setSelectedResource}
               setResourceType={props.setResourceType}
             />
-          )
+          );
         })}
       </div>
       <ActionButtons
         saveCallback={handleSave}
-        cancelCallback={props.handleCancel} />
+        cancelCallback={props.handleCancel}
+      />
       <Snackbar open={popup} autoHideDuration={6000}>
-        <Alert severity="success">
-          Collection published successfully!
-        </Alert>
+        <Alert severity="success">Collection published successfully!</Alert>
       </Snackbar>
     </div>
-  )
+  );
 }
 
 export default CollectionForm;

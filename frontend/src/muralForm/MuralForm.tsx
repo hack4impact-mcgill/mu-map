@@ -166,6 +166,10 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       alert("Please check validity of address.");
       return;
     }
+    if (!userContext.token) {
+      alert("Please log in again.");
+      return;
+    }
 
     // TODO: apply a Mural interface to this object
     let payload = {
@@ -200,7 +204,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         : CREATE_MURAL_API,
       data: payload,
       headers: {
-        authorization: userContext.token.i,
+        authorization: userContext.token,
       },
     }).then(
       (response) => {
