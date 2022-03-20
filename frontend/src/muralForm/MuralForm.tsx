@@ -97,6 +97,8 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
+  const [linkCopied, setLinkCopied] = useState<boolean>(false);
+
   /**
    * Enable editable form fields for admin users
    */
@@ -274,29 +276,40 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
   }
 
   function copyLink() {
-    const dummy = document.createElement("p");
-    dummy.textContent = window.location.href;
-    document.body.appendChild(dummy);
+    try {
+      const dummy = document.createElement("p");
+      dummy.textContent = window.location.href;
+      document.body.appendChild(dummy);
 
-    const range = document.createRange();
-    range.setStartBefore(dummy);
-    range.setEndAfter(dummy);
+      const range = document.createRange();
+      range.setStartBefore(dummy);
+      range.setEndAfter(dummy);
 
-    const selection = window.getSelection();
-    // First clear, in case the user already selected some other text
-    if (selection != null) {
-      selection.removeAllRanges();
-      selection.addRange(range);
+      const selection = window.getSelection();
+      // First clear, in case the user already selected some other text
+      if (selection != null) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    } catch (error) {
+      console.error(error);
+      return;
     }
 
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
+    // Indicate success to the user
+    setLinkCopied(true);
+    setTimeout(() => {
+      setLinkCopied(false);
+    }, 2000);
   }
 
   function shareableLink() {
     return (
       <Button
-        color="primary"
+        color="default"
         size="medium"
         variant="outlined"
         disableElevation
@@ -304,7 +317,7 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
         onClick={copyLink}
       >
         <ShareIcon></ShareIcon>
-        <span>Copy Link</span>
+        <span>{linkCopied ? "Copied!" : "Copy Link"}</span>
       </Button>
     );
   }
