@@ -17,6 +17,7 @@ import SearchMenu from "SearchMenu/SearchMenu";
 import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
+import VercelLogo from "components/VercelLogo";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -264,6 +265,7 @@ function App() {
           handleLeave={leaveForm}
         />
         <PlusButton isVisible={isSignedIn} handleClick={toggleSidebar} />
+        <VercelLogo />
       </Context.Provider>
     </div>
   );
