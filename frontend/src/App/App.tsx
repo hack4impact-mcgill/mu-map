@@ -18,7 +18,6 @@ import SearchButton from "SearchButton/SearchButton";
 import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
 
-
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
@@ -51,7 +50,7 @@ function App() {
       .then(() => {
         setSigningIn(false);
         setSignInError("");
-        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true))
+        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true));
       })
       .catch((error: any) => {
         console.log(error.message);
@@ -215,9 +214,10 @@ function App() {
       setWelcomeOpen(false);
     }
   }, []);
+
   return (
     <div className="App">
-      <Context.Provider value={{ user: user, token : JWTtoken, getMural }}>
+      <Context.Provider value={{ user: user, token: JWTtoken, getMural }}>
         <SigninForm
           signInClick={handleSignin}
           cancelClick={() => setSigningIn(false)}
@@ -239,7 +239,7 @@ function App() {
           muralClick={(mural: any) => {
             setActiveForm(FORM.MURAL);
             setSelectedResource(mural);
-            window.history.pushState("","",`${mural.id}`);
+            window.history.pushState("", "", `${mural.id}`);
           }}
           ref={mapRef}
         />
@@ -249,16 +249,14 @@ function App() {
           signoutClick={handleSignout}
           donateClick={() => setDonateOpen(true)}
         />
-        <Sidebar
-          isVisible={sidebarOpen}
-          closeSidebar={toggleSidebar}
-        >
-          {
-            activeForm === FORM.MURAL ? muralForm
-            : activeForm === FORM.COLLECTION ? collectionForm
-            : activeForm === FORM.TOUR ? tourForm
-            : searchMenu
-          }
+        <Sidebar isVisible={sidebarOpen} closeSidebar={toggleSidebar}>
+          {activeForm === FORM.MURAL
+            ? muralForm
+            : activeForm === FORM.COLLECTION
+            ? collectionForm
+            : activeForm === FORM.TOUR
+            ? tourForm
+            : searchMenu}
         </Sidebar>
         <LeaveWarning
           open={formWarning}
