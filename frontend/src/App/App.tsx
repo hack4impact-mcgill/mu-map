@@ -19,13 +19,20 @@ import DonationModal from "DonationModal/DonationModal";
 import WelcomeModal from "WelcomeModal/WelcomeModal";
 import VercelLogo from "components/VercelLogo";
 
+/**
+ * Check local storage for an existing JWT
+ * @returns {string | null} token or "null" parsed by JSON as null
+ */
+const loadToken = (): string | null => {
+  return JSON.parse(localStorage.getItem("mu-auth") ?? "null");
+};
+
 function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [signingIn, setSigningIn] = useState<boolean>(false);
   const [signInError, setSignInError] = useState<string>("");
   const [user, setUser] = useState<any>({});
-  const [JWTtoken, setJWTtoken] = useState<any>();
-
+  const [JWTtoken, setJWTtoken] = useState<string | null>(loadToken());
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [activeForm, setActiveForm] = useState<FORM>(FORM.MURAL);
   const [formWarning, setFormWarning] = useState<boolean>(false);
@@ -40,6 +47,17 @@ function App() {
   const mapRef: any = useRef(null);
 
   /**
+   * Attempt to refresh the JWT from Firebase Auth
+   * Then, save or delete the JWT from local storage
+   */
+  useEffect(() => {
+    if (!JWTtoken) {
+      FirebaseAuth.currentUser?.getIdToken(true).then(setJWTtoken);
+    }
+    localStorage.setItem("mu-auth", JSON.stringify(JWTtoken ?? null));
+  }, [JWTtoken]);
+
+  /**
    * Use the Firebase Auth sign-in method email and password to
    * attempt to authorize the user. If unsuccessful, relay an error
    * message to the user.
@@ -48,10 +66,10 @@ function App() {
   const handleSignin = (creds: any) => {
     setSignInError("");
     FirebaseAuth.signInWithEmailAndPassword(creds.email, creds.password)
-      .then(() => {
+      .then(async () => {
         setSigningIn(false);
         setSignInError("");
-        setJWTtoken(FirebaseAuth.currentUser?.getIdToken(true));
+        setJWTtoken((await FirebaseAuth.currentUser?.getIdToken(true)) ?? null);
       })
       .catch((error: any) => {
         console.log(error.message);

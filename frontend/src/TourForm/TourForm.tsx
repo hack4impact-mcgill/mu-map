@@ -74,26 +74,26 @@ function TourForm(props: ITourFormProps) {
   /**
    * Populate the form when an existing tour is passed as a prop
    */
-   useEffect(() => {
+  useEffect(() => {
     if (!props.tour || !Object.keys(props.tour)) return;
     setTitle(props.tour.name);
     setDescription(props.tour.description);
-  }, [props.tour])
+  }, [props.tour]);
 
   useEffect(() => {
     if (!props.tour || murals.length === 0) return;
     let temp: any[] = [];
     props.tour.murals?.forEach((tourMural: any) => {
       let found = murals.find((mural: any) => mural.id === tourMural.id);
-      temp = ([...temp, found]);
-    })
+      temp = [...temp, found];
+    });
     setMuralsInTour(temp);
-  }, [props.tour, murals])
+  }, [props.tour, murals]);
 
   /**
    * Enable editable form fields for admin users
    */
-  const userContext: any = useContext(Context)
+  const userContext: any = useContext(Context);
   useEffect(() => setIsAdmin(!!(userContext as any).user), [userContext]);
 
   const handleAddMural = (addedMural: any) => {
@@ -107,19 +107,28 @@ function TourForm(props: ITourFormProps) {
 
   const handleSave = () => {
     if (!title.length || !description.length) return;
-    
+
+    if (!userContext.token) {
+      alert("Please log in again.");
+      return;
+    }
+
     axios
-      .post(GET_ALL_TOUR, {
-        tour: {
-          name: title,
-          description: description,
+      .post(
+        GET_ALL_TOUR,
+        {
+          tour: {
+            name: title,
+            description: description,
+          },
+          murals: muralsInTour.map((mural: any) => mural.id),
         },
-        murals: muralsInTour.map((mural: any) => mural.id),
-      }, {
-        headers: {
-          authorization: userContext.token.i
+        {
+          headers: {
+            authorization: userContext.token,
+          },
         }
-      })
+      )
       .then(() => {
         setPopup(true);
         setTimeout(() => setPopup(false), 5000);
@@ -189,7 +198,8 @@ function TourForm(props: ITourFormProps) {
             onMouseEnter={() => setHoveringTitle(true)}
             onMouseLeave={() => setHoveringTitle(false)}
             endAdornment={
-              !editingTitle && isAdmin && (
+              !editingTitle &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringTitle ? "primary" : "action"} />
                 </InputAdornment>
@@ -209,7 +219,8 @@ function TourForm(props: ITourFormProps) {
             onMouseEnter={() => setHoveringDesc(true)}
             onMouseLeave={() => setHoveringDesc(false)}
             endAdornment={
-              !editingDesc && isAdmin && (
+              !editingDesc &&
+              isAdmin && (
                 <InputAdornment position="start">
                   <EditIcon color={hoveringDesc ? "primary" : "action"} />
                 </InputAdornment>
@@ -217,8 +228,7 @@ function TourForm(props: ITourFormProps) {
             }
           />
           <div className={styles.field}>
-            {
-              isAdmin &&
+            {isAdmin && (
               <Autocomplete
                 freeSolo={false}
                 options={muralResults.map((mural: any) => mural)}
@@ -236,42 +246,39 @@ function TourForm(props: ITourFormProps) {
                   />
                 )}
               />
-            }
+            )}
           </div>
-          {
-            isAdmin &&
+          {isAdmin && (
             <p className={styles.muralCount}>
               {muralsInTour.length} / 25 murals added
             </p>
-          }
+          )}
         </div>
       </form>
-      {
-        isAdmin ? (
-          <DragDrop
-            key={muralsInTour}
-            passedItems={muralsInTour}
-            itemsReorderedCallback={reorderMurals}
-            itemDeletedCallback={removeMural}
-          />
-        ) : (
-          <div className={styles.flexContainer}>
-            {muralsInTour.map((mural: any) => {
-              return (
-                <SearchResultCard
-                  type={FORM.MURAL}
-                  item={mural}
-                  key={mural.id}
-                  handleMuralClick={props.handleMuralClick}
-                  handleCancel={props.handleCancel}
-                  setSelectedResource={props.setSelectedResource}
-                  setResourceType={props.setResourceType}
-                />
-              )
-            })}
-          </div>
-        )
-      }
+      {isAdmin ? (
+        <DragDrop
+          key={muralsInTour}
+          passedItems={muralsInTour}
+          itemsReorderedCallback={reorderMurals}
+          itemDeletedCallback={removeMural}
+        />
+      ) : (
+        <div className={styles.flexContainer}>
+          {muralsInTour.map((mural: any) => {
+            return (
+              <SearchResultCard
+                type={FORM.MURAL}
+                item={mural}
+                key={mural.id}
+                handleMuralClick={props.handleMuralClick}
+                handleCancel={props.handleCancel}
+                setSelectedResource={props.setSelectedResource}
+                setResourceType={props.setResourceType}
+              />
+            );
+          })}
+        </div>
+      )}
       <ActionButtons
         saveCallback={handleSave}
         cancelCallback={props.handleCancel}
