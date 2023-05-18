@@ -59,6 +59,8 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IMuralFormProps {
   mural?: any;
   handleCancel: () => void;
+  leaveForm: () => void;
+  handleTour: (tour: any) => void;
 }
 
 interface Image {
@@ -66,7 +68,7 @@ interface Image {
   path: string;
 }
 
-function MuralForm({ mural, handleCancel }: IMuralFormProps) {
+function MuralForm({ mural, handleCancel, leaveForm, handleTour }: IMuralFormProps) {
   const styles = useStyles();
 
   const [name, setName] = useState<string>("");
@@ -440,9 +442,11 @@ function MuralForm({ mural, handleCancel }: IMuralFormProps) {
       <Directions
         open={directionOpen}
         handleClose={() => setDirectionOpen(false)}
+        handleCloseContinue={leaveForm}
         coordinates={[currentPos, addressCoords]}
         wpNames={[name]}
         wpPics={imgUrlsAndPath[0] ? [imgUrlsAndPath[0].url] : [""]} // use the first image to display
+        handleTour={handleTour}
       />
       <ActionButtons saveCallback={submitForm} cancelCallback={handleCancel} />
       <Snackbar open={popup} autoHideDuration={6000}>

@@ -41,8 +41,9 @@ function App() {
 
   const [murals, setMurals] = useState<any>([]);
   const [selectedResource, setSelectedResource] = useState<any>(null);
-
+  const [route, setRoute] = useState<any>([]);
   const [tours, setTours] = useState<any>([]);
+  const [currentTour, setCurrentTour] = useState<any>([]);
 
   const mapRef: any = useRef(null);
 
@@ -141,7 +142,9 @@ function App() {
   const getTour = async () => {
     const response = await fetch(GET_ALL_TOUR);
     const data = await response.json();
-
+    console.log("tours")
+    console.log(data.tours)
+    tours.id = tours[0]
     setTours(data.tours);
   };
 
@@ -154,11 +157,17 @@ function App() {
     mapRef.current.setLongLat(long, lat);
   };
 
+  const handleCurrentTour = (tour: any) => {
+    setCurrentTour(tour);
+    console.log("expect Tours")
+    console.log(tour)
+  }
+
   /**
    * The mural form supplied with a mural and cancel handler
    */
   const muralForm = (
-    <MuralForm mural={selectedResource} handleCancel={toggleSidebar} />
+    <MuralForm mural={selectedResource} handleCancel={toggleSidebar} leaveForm={leaveForm} handleTour={handleCurrentTour}/>
   );
 
   /**
@@ -261,6 +270,7 @@ function App() {
             window.history.pushState("", "", `${mural.id}`);
           }}
           ref={mapRef}
+          currentTour={currentTour}
         />
         <DropdownMenu
           isSignedIn={isSignedIn}
